@@ -1,0 +1,112 @@
+"use client";
+
+import { useParams, useRouter } from "next/navigation";
+import { createContext, useContext, useState, useEffect } from "react";
+import { _axios } from "../api/_axios";
+import { AUTH_ENDPOINTS } from "../constants/endpoints";
+import { getUrl, URLs } from "../constants/urls";
+import { Authentication } from "../types/auth";
+
+type AuthContextType = {
+  user: Authentication | null;
+  loading: boolean;
+  logged: boolean;
+  validating: boolean;
+  logout: (lang: string) => void;
+  checkSession: () => void;
+  setLogged: (val: boolean) => void;
+  setUser: (user: Authentication | null) => void;
+};
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState<Authentication | null>(null);
+  const [logged, setLogged] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [validating, setValidating] = useState(true);
+
+  const TOKEN_KEY = "FMC_token";
+
+  const router = useRouter();
+  const params = useParams();
+  const organization = params.organization as string;
+
+  useEffect(() => {
+    checkSession();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      setLogged(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  const logout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    setUser(null);
+    setLogged(false);
+    router.push(getUrl(URLs.auth.login));
+  };
+
+  const checkSession = async () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+
+    if (!token) {
+      setLoading(false);
+      setValidating(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setValidating(true);
+
+      const parsedToken = JSON.parse(token);
+      const response = await _axios.get(AUTH_ENDPOINTS.VALIDATE, {
+        headers: {
+          Authorization: `Bearer ${parsedToken}`,
+        },
+      });
+
+      setLogged(true);
+      setUser(response.data);
+
+      localStorage.setItem(TOKEN_KEY, JSON.stringify(response.data.token));
+    } catch (error) {
+      console.error("Session verification failed:", error);
+    } finally {
+      setLoading(false);
+      setValidating(false);
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        logged,
+        setLogged,
+        setUser,
+        logout,
+        checkSession,
+        loading,
+        validating,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
+};

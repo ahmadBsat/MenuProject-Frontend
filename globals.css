@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./node_modules/flag-icons/css/flag-icons.min.css";
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --nextui-box-shadow-small: 0 12px 20px 6px rgb(104 112 118 / 0.08);
+  --primary: #a41f13;
+}
+
+body::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: #b6b6b6
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--primary);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 347 77% 50%;
+    --chart-2: 349 77% 62%;
+    --chart-3: 350 80% 72%;
+    --chart-4: 351 83% 82%;
+    --chart-5: 352 83% 91%;
+    --radius: 0.5rem;
+    --toastify-color-info: rgb(20, 47, 122) !important;
+    --toastify-color-success: hsl(143, 80%, 28%) !important;
+    --toastify-color-error: hsl(0, 72%, 40%) !important;
+    --toastify-color-warning: hsl(54, 74%, 45%) !important;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 347 77% 50%;
+    --chart-2: 349 77% 62%;
+    --chart-3: 350 80% 72%;
+    --chart-4: 351 83% 82%;
+    --chart-5: 352 83% 91%;
+    --toastify-color-info: rgb(6, 31, 99) !important;
+    --toastify-color-success: hsl(143, 78%, 16%) !important;
+    --toastify-color-error: hsl(0, 100%, 20%) !important;
+    --toastify-color-warning: hsl(52, 100%, 30%) !important;
+  }
+}
