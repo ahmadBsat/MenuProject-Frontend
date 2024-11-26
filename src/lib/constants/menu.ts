@@ -4,10 +4,9 @@ import {
   InboxIcon,
   RectangleStackIcon,
   UsersIcon,
-  ShoppingCartIcon
+  ShoppingCartIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/outline";
-
-
 
 export const ADMIN_NAVIGATION = [
   {
@@ -30,6 +29,12 @@ export const ADMIN_NAVIGATION = [
         name: "Users",
         link: URLs.admin.users.index,
         icon: UsersIcon,
+      },
+      {
+        key: "plans",
+        name: "Plans",
+        link: URLs.admin.plans.index,
+        icon: DocumentIcon,
       },
     ],
   },

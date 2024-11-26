@@ -54,6 +54,20 @@ const StoreInformation = ({ data, editable, handleChange }) => {
             onValueChange={(e) => handleChange("name", e)}
           />
 
+          <Input
+            label="Domain"
+            type="text"
+            placeholder="Store domain address"
+            isRequired
+            required
+            isDisabled={!editable}
+            value={data.domain}
+            endContent={
+              <span className="text-sm text-default-400">.fmcshops.com</span>
+            }
+            onValueChange={(e) => handleChange("domain", e)}
+          />
+
           <Autocomplete
             label="Owner"
             isLoading={loading}
@@ -62,7 +76,7 @@ const StoreInformation = ({ data, editable, handleChange }) => {
             isRequired
             items={users}
             isDisabled={!editable}
-            selectedKey={data.type}
+            selectedKey={data.owner}
             onSelectionChange={(e) => handleChange("owner", e?.toString())}
           >
             {(item) => (
@@ -72,6 +86,18 @@ const StoreInformation = ({ data, editable, handleChange }) => {
             )}
           </Autocomplete>
         </div>
+
+        <Input
+          label="Renewal Cost"
+          type="text"
+          placeholder="Store renewal cost"
+          isRequired
+          required
+          isDisabled={!editable}
+          value={data.renewal_cost.toString()}
+          startContent={<span className="text-sm text-default-400">$</span>}
+          onValueChange={(e) => handleChange("renewal_cost", Number(e))}
+        />
 
         <Switch
           classNames={SWITCH_STYLE}

@@ -15,12 +15,17 @@ export const URLs = {
   },
   admin: {
     dashboard: "/admin/dashboard/",
-    users: { index: "/admin/users/", get_id: "/admin/users/:user_id" },
+    users: {
+      index: "/admin/users/",
+      get_id: "/admin/users/:user_id",
+      create: "/admin/users/create",
+    },
     stores: {
       index: "/admin/stores/",
       get_id: "/admin/stores/:store_id",
       create: "/admin/stores/create",
     },
+    plans: { index: "/admin/plans" },
   },
   store: {
     index: "/store",

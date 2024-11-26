@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -14,14 +15,13 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { DeleteIcon, EyeIcon } from "@/utils/icons";
-import { IoIosArrowDown } from "react-icons/io";
+import { DeleteIcon, EditIcon, EyeIcon } from "@/utils/icons";
 import { AiOutlineSearch } from "react-icons/ai";
 import ModalInstance from "@/lib/components/Modal/Modal";
 import { getUrl, URLs } from "@/lib/constants/urls";
 import { INPUT_STYLE } from "@/lib/constants/style";
 import { INITIAL_META } from "@/lib/constants/initials";
-import { STORE_COLUMNS, STORE_VISIBLE_COL } from "@/lib/constants/tables";
+import { PLANS_VISIBLE_COL, PLANS_COLUMNS } from "@/lib/constants/tables";
 import { build_path, formatDates } from "@/utils/common";
 import {
   createSerializer,
@@ -33,12 +33,11 @@ import useDebounce from "@/lib/hooks/debounce";
 import GeneralizedTable from "../../Common/GeneralizedTable";
 import { handleServerError } from "@/lib/api/_axios";
 import { ErrorResponse } from "@/lib/types/common";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { Store, StoreTable } from "@/lib/types/store/store";
 import { API_STORE } from "@/lib/services/store/store_service";
 
-const StoresTable = () => {
+const PlansTable = () => {
   const searchParams = {
     page: parseAsInteger,
     limit: parseAsString,
@@ -66,7 +65,7 @@ const StoresTable = () => {
     }
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(STORE_VISIBLE_COL)
+    new Set(PLANS_VISIBLE_COL)
   );
 
   const [loading, setLoading] = useState(true);
@@ -76,10 +75,21 @@ const StoresTable = () => {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [status, setStatus] = useState<Selection>("all");
 
-  const headerColumns = useMemo(() => {
-    if (visibleColumns === "all") return STORE_COLUMNS;
+  const getRenewal = () => {
+    if (!selectedStore) return null;
 
-    return STORE_COLUMNS.filter((column) =>
+    const renewal = new Date(selectedStore?.renewal_date);
+    renewal.setMonth(renewal.getMonth() + 1);
+
+    return renewal;
+  };
+
+  const renewal = getRenewal();
+
+  const headerColumns = useMemo(() => {
+    if (visibleColumns === "all") return PLANS_COLUMNS;
+
+    return PLANS_COLUMNS.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
@@ -152,26 +162,16 @@ const StoresTable = () => {
       const cellValue = store[`${columnKey}`];
 
       switch (columnKey) {
-        case "logo":
-          return (
-            <User
-              avatarProps={{
-                radius: "md",
-                src: cellValue,
-              }}
-              name={""}
-              classNames={{
-                description: "text-sm",
-              }}
-              className="justify-start text-ellipsis overflow-hidden whitespace-nowrap"
-            >
-              {store.name}
-            </User>
-          );
         case "name":
           return (
             <div className="flex flex-col gap-1 min-w-[230px]">
               <p className="font-semibold">{store.name}</p>
+            </div>
+          );
+        case "domain":
+          return (
+            <div className="flex flex-col gap-1 min-w-[230px]">
+              <p className="font-semibold">{`${store.domain}.fmcshops.com`}</p>
             </div>
           );
         case "is_active":
@@ -180,37 +180,54 @@ const StoresTable = () => {
               {store.is_active ? "Active" : "Disabled"}
             </Chip>
           );
-        case "createdAt":
-          return formatDates(cellValue);
-        case "updatedAt":
-          return formatDates(cellValue);
+
+        case "renewal_date":
+          return formatDates(store.renewal_date);
+
+        case "renewal_cost":
+          return (
+            <span className="text-default-600">${store.renewal_cost}</span>
+          );
+
+        case "renewal_status":
+          const today = new Date();
+          const renewal_date = new Date(store.renewal_date);
+
+          const days_diff = Math.ceil(
+            (renewal_date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+          );
+
+          let chip_color = "success"; // Default green
+          let status_message = "Active";
+
+          if (days_diff <= 3) {
+            chip_color = "danger"; // Red for due in 3 days or less
+            status_message = "Due Soon";
+          } else if (days_diff <= 7) {
+            chip_color = "warning"; // Yellow for due in a week or less
+            status_message = "Expiring Soon";
+          }
+
+          return (
+            <Chip variant="flat" color={chip_color as any}>
+              {status_message}
+            </Chip>
+          );
+
         case "actions":
           return (
             <div className="relative flex items-center justify-center gap-2">
               <Tooltip color="primary" content="Details">
                 <Button
-                  as={Link}
-                  href={getUrl(
-                    build_path(URLs.admin.stores.get_id, {
-                      store_id: store._id,
-                    })
-                  )}
                   isIconOnly
                   size="sm"
                   className="text-lg text-default-400 cursor-pointer active:opacity-50 bg-transparent p-0 flex items-center justify-center"
+                  onClick={() => {
+                    setSelectedStore(store);
+                    onOpen();
+                  }}
                 >
-                  <EyeIcon />
-                </Button>
-              </Tooltip>
-
-              <Tooltip color="danger" content="Delete Store">
-                <Button
-                  size="sm"
-                  isIconOnly
-                  className="text-lg text-danger cursor-pointer active:opacity-50 bg-transparent p-0 block"
-                  onClick={() => deleteModal(store)}
-                >
-                  <DeleteIcon />
+                  <EditIcon />
                 </Button>
               </Tooltip>
             </div>
@@ -223,24 +240,21 @@ const StoresTable = () => {
     [onOpen]
   );
 
-  const deleteModal = (store: Store) => {
-    onOpen();
-    setSelectedStore(store);
-  };
-
-  const deleteStore = async () => {
+  const updateRenewal = async () => {
     if (!selectedStore) return;
 
     try {
       setProcessing(true);
-      const result = await API_STORE.deleteStore(selectedStore._id);
+      const result = await API_STORE.renewPlan(selectedStore._id);
 
       if (result.success) {
         getStores();
         onOpenChange();
       }
     } catch (error) {
-      console.log(error);
+      handleServerError(error, (msg) => {
+        toast.error(`${msg}`);
+      });
     } finally {
       setProcessing(false);
     }
@@ -305,19 +319,25 @@ const StoresTable = () => {
       </div>
 
       <ModalInstance
-        title={"Delete Store"}
+        title={"Renew Store Plan"}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        handleClick={deleteStore}
+        handleClick={updateRenewal}
         loading={processing}
       >
         <div className="flex flex-col gap-1 w-full">
-          <p>Are you sure you want to delete this store?</p>
-          <p className="font-bold">{selectedStore?.name}</p>
+          <p>Are you sure you want to renew this store plan?</p>
+          <p>
+            Next renewal for{" "}
+            <span className="font-bold">{selectedStore?.name}</span> will be at{" "}
+            <span className="font-bold">
+              {renewal ? formatDates(renewal.toISOString()) : ""}
+            </span>
+          </p>
         </div>
       </ModalInstance>
     </>
   );
 };
 
-export default StoresTable;
+export default PlansTable;

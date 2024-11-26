@@ -33,7 +33,9 @@ export namespace API_STORE {
 
   export async function getStoreById(id: string) {
     try {
-      const response = await _axios.get(`${STORE_ENDPOINTS.GET_ID}/${id}`);
+      const response = await _axios.get(
+        build_path(STORE_ENDPOINTS.GET_ID, { id })
+      );
       return response.data as Store;
     } catch (error: unknown) {
       throw handleErrors(error);
@@ -61,7 +63,7 @@ export namespace API_STORE {
   export async function updateStoreById(id: string, data: any) {
     try {
       const response = await _axios.patch(
-        `${STORE_ENDPOINTS.ADMIN_UPDATE}/${id}`,
+        build_path(STORE_ENDPOINTS.ADMIN_UPDATE, { id }),
         data
       );
       return response.data as SuccessResponse;
@@ -74,6 +76,17 @@ export namespace API_STORE {
     try {
       const response = await _axios.delete(
         build_path(STORE_ENDPOINTS.DELETE, { id })
+      );
+      return response.data as SuccessResponse;
+    } catch (error: unknown) {
+      throw handleErrors(error);
+    }
+  }
+
+  export async function renewPlan(id: string) {
+    try {
+      const response = await _axios.post(
+        build_path(STORE_ENDPOINTS.RENEW, { id })
       );
       return response.data as SuccessResponse;
     } catch (error: unknown) {

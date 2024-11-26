@@ -28,7 +28,7 @@ const StoresForm = () => {
 
   const params = useParams();
   const router = useRouter();
-  const store_id = params.store_id as string;
+  const store_id = params.id as string;
 
   const { width } = useWindowSize();
   const size = width && width >= 640 ? "md" : "sm";

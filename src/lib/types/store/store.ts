@@ -8,10 +8,16 @@ export type Store = {
   palette: string;
   createdAt: string;
   updatedAt: string;
+  domain: string;
+  renewal_date: string;
   is_active: boolean;
+  renewal_cost: number;
 };
 
-export type StoreForm = Omit<Store, "_id" | "createdAt" | "updatedAt">;
+export type StoreForm = Omit<
+  Store,
+  "_id" | "createdAt" | "updatedAt" | "renewal_date"
+>;
 
 export type StoreBranch = {
   _id: string;

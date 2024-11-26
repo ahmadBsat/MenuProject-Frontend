@@ -34,4 +34,5 @@ export const STORE_ENDPOINTS = {
   ADMIN_UPDATE: "/api/v1/admin/store/:id",
   UPDATE: "/api/v1/store",
   DELETE: "/api/v1/admin/store/:id",
+  RENEW: "/api/v1/admin/renew/:id",
 };

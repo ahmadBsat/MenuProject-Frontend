@@ -29,4 +29,6 @@ export const STORE_INITIAL: StoreForm = {
   name: "",
   palette: "",
   is_active: true,
+  domain: "",
+  renewal_cost: 100,
 };
