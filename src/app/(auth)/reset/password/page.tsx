@@ -7,22 +7,12 @@ import { API_AUTH } from "@/lib/services/auth_service";
 import { ErrorResponse } from "@/lib/types/common";
 import { handleServerError } from "@/lib/api/_axios";
 import { FadeIn } from "@/lib/components/Motion/FadeIn";
-import { LanguagePageProps, LanguageParams } from "@/lib/types/page";
-import { useTranslation } from "@/lib/i18n/client";
-import { checkRTL } from "@/utils/common";
 
-const ForgotPassword = ({ params }: LanguagePageProps) => {
-  const { lang } = use<LanguageParams>(
-    params as unknown as Usable<LanguageParams>
-  );
-
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const { t } = useTranslation(lang, "auth");
-
-  const rtl = checkRTL(lang);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,34 +36,30 @@ const ForgotPassword = ({ params }: LanguagePageProps) => {
   };
 
   return (
-    <div
-      className={cn(
-        "w-full h-screen flex items-center justify-center",
-        rtl && "text-right"
-      )}
-    >
+    <div className={cn("w-full h-screen flex items-center justify-center")}>
       <FadeIn className="lg:max-w-[40%] max-w-[90%] w-full">
         <Card shadow="none" className="w-full bg-transparent p-3 sm:p-5">
-          <CardBody className={cn("overflow-hidden", rtl && "text-right")}>
+          <CardBody className={cn("overflow-hidden")}>
             <div className="h-full flex flex-col gap-2">
               <form
                 className="h-full flex flex-col gap-2"
                 onSubmit={(e) => handleSubmit(e)}
               >
-                <h1 className="mb-4 text-2xl font-semibold uppercase">
-                  {t("FMC")}
-                </h1>
+                <h1 className="mb-4 text-2xl font-semibold uppercase">FMC</h1>
 
                 <div className="flex flex-col gap-2 mb-2">
                   <h2 className="text-2xl font-semibold">
-                    {t("reset-password")}
+                    Reset your account password
                   </h2>
-                  <p>{t("reset-password-desc")}</p>
+                  <p>
+                    Please enter your agent registered email address to receive
+                    password reset link.
+                  </p>
                 </div>
 
                 <Input
                   type="email"
-                  label={t("email")}
+                  label="Email"
                   required
                   isRequired
                   isDisabled={loading || success}
@@ -92,7 +78,7 @@ const ForgotPassword = ({ params }: LanguagePageProps) => {
                   isLoading={loading}
                   isDisabled={success}
                 >
-                  {success ? t("email-sent") : t("reset-btn")}
+                  {success ? "Email Sent" : "Reset Password"}
                 </Button>
               </form>
             </div>

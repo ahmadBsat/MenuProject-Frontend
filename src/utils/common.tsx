@@ -92,5 +92,5 @@ export const to12HourFormat = (isoString: string) => {
 };
 
 export const redirect = (url: string, callback: string) => {
-  return `${getUrl(url, lang)}?callback=${callback}`;
+  return `${getUrl(url)}?callback=${callback}`;
 };

@@ -1,4 +1,5 @@
 import PanelSidebar from "@/lib/components/Navigations/Panel/PanelSidebar";
+import AuthGuardProvider from "../provider-guard";
 
 type Props = {
   children: React.ReactNode;

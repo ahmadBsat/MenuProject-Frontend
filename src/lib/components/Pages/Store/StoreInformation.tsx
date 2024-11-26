@@ -1,9 +1,42 @@
 "use client";
 
-import { Card, Input, Switch, Textarea } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Card,
+  Input,
+  Switch,
+} from "@nextui-org/react";
 import { CARD_STYLE, SWITCH_STYLE } from "@/lib/constants/style";
+import { useEffect, useState } from "react";
+import { User } from "@/lib/types/user/user";
+import { handleServerError } from "@/lib/api/_axios";
+import { toast } from "sonner";
+import { API_USER } from "@/lib/services/user/user_service";
 
 const StoreInformation = ({ data, editable, handleChange }) => {
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const getUsers = async () => {
+    setLoading(true);
+
+    try {
+      const res = await API_USER.getAllUsers();
+      setUsers(res.data);
+    } catch (error) {
+      handleServerError(error, (msg) => {
+        toast.error(`${msg}`);
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <Card shadow="none" className={CARD_STYLE}>
@@ -21,21 +54,24 @@ const StoreInformation = ({ data, editable, handleChange }) => {
             onValueChange={(e) => handleChange("name", e)}
           />
 
-          <Textarea
-            label="Description"
-            type="text"
-            placeholder="Detailed description on what can this action do..."
-            isRequired
+          <Autocomplete
+            label="Owner"
+            isLoading={loading}
+            placeholder="Select a user as owner"
             required
+            isRequired
+            items={users}
             isDisabled={!editable}
-            value={data.description}
-            onValueChange={(e) => handleChange("description", e)}
-          />
+            selectedKey={data.type}
+            onSelectionChange={(e) => handleChange("owner", e?.toString())}
+          >
+            {(item) => (
+              <AutocompleteItem key={item._id}>
+                {`${item.firstname} ${item.lastname}`}
+              </AutocompleteItem>
+            )}
+          </Autocomplete>
         </div>
-      </Card>
-
-      <Card shadow="none" className={CARD_STYLE}>
-        <div className="text-lg sm:text-xl px-1">Status</div>
 
         <Switch
           classNames={SWITCH_STYLE}

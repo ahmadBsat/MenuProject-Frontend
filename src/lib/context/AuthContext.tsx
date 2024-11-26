@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useState, useEffect } from "react";
 import { _axios } from "../api/_axios";
 import { AUTH_ENDPOINTS } from "../constants/endpoints";
@@ -29,8 +29,6 @@ export const AuthProvider = ({ children }) => {
   const TOKEN_KEY = "FMC_token";
 
   const router = useRouter();
-  const params = useParams();
-  const organization = params.organization as string;
 
   useEffect(() => {
     checkSession();

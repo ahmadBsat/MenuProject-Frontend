@@ -10,13 +10,12 @@ import localFont from "next/font/local";
 
 import { AuthProvider } from "@/lib/context/AuthContext";
 import type { Viewport } from "next";
-import { LanguagePageProps } from "@/lib/types/page";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/lib/components/Common/Toaster";
 
 type Props = {
   children: React.ReactNode;
-} & LanguagePageProps;
+};
 
 const neue = localFont({
   src: "../../public/fonts/neue-montreal.woff2",
@@ -34,7 +33,7 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata() {
-  const metadataBase = new URL("https://FMC.com");
+  const metadataBase = new URL("https://fmcshops.com");
 
   return {
     title: "FMC",
@@ -60,7 +59,7 @@ export async function generateMetadata() {
   };
 }
 
-export default async function RootLayout({ children, params }: Props) {
+export default async function RootLayout({ children }: Props) {
   return (
     <html
       suppressHydrationWarning

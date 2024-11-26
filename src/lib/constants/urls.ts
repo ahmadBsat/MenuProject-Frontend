@@ -15,7 +15,7 @@ export const URLs = {
   },
   admin: {
     dashboard: "/admin/dashboard/",
-    users: { index: "/admin/users/" },
+    users: { index: "/admin/users/", get_id: "/admin/users/:user_id" },
     stores: {
       index: "/admin/stores/",
       get_id: "/admin/stores/:store_id",

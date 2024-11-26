@@ -9,7 +9,7 @@ export namespace API_USER {
   export async function getAllUsers(query?: string) {
     try {
       let request = `${USER_ENDPOINTS.GET_ALL}`;
-      
+
       if (query) {
         request = request + `${query}`;
       }
@@ -63,15 +63,6 @@ export namespace API_USER {
   export async function deleteUser() {
     try {
       const response = await _axios.delete(USER_ENDPOINTS.DELETE);
-      return response.data as SuccessResponse;
-    } catch (error: unknown) {
-      throw handleErrors(error);
-    }
-  }
-
-  export async function verifyPhone(data: any) {
-    try {
-      const response = await _axios.post(AUTH_ENDPOINTS.VERIFY_PHONE, data);
       return response.data as SuccessResponse;
     } catch (error: unknown) {
       throw handleErrors(error);

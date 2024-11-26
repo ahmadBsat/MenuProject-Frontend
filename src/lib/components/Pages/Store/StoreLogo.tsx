@@ -5,25 +5,17 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { DeleteIcon } from "@/utils/icons";
 import { useDropzone } from "react-dropzone";
-import { AgentFormProps } from "@/lib/types/agent";
 import { ErrorResponse } from "@/lib/types/common";
 import { Button, Spinner } from "@nextui-org/react";
 import { handleServerError } from "@/lib/api/_axios";
 import { API_UPLOAD } from "@/lib/services/upload_service";
 
-type Props = { path: string } & AgentFormProps;
-
-export default function AgentLogo({
-  data,
-  editable,
-  path,
-  handleChange,
-}: Props) {
+export default function StoreLogo({ data, path, handleChange }) {
   const [loading, setLoading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
-    disabled: !editable || loading || data.logo ? true : false,
+    disabled: loading || data.logo ? true : false,
     accept: {
       "image/*": [],
     },
@@ -110,7 +102,6 @@ export default function AgentLogo({
             </Button>
           </div>
         )}
-        <p>250x250 Min size/ 5 MB Max</p>
       </div>
     );
   };

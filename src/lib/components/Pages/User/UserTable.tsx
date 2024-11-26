@@ -5,27 +5,21 @@
 import {
   Button,
   Input,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Tooltip,
   SortDescriptor,
   Selection,
   useDisclosure,
-  User,
   Chip,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { DeleteIcon, EyeIcon } from "@/utils/icons";
-import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineSearch } from "react-icons/ai";
 import ModalInstance from "@/lib/components/Modal/Modal";
 import { getUrl, URLs } from "@/lib/constants/urls";
 import { INPUT_STYLE } from "@/lib/constants/style";
 import { INITIAL_META } from "@/lib/constants/initials";
-import { STORE_COLUMNS, STORE_VISIBLE_COL } from "@/lib/constants/tables";
+import { USER_COLUMNS, USER_VISIBLE_COL } from "@/lib/constants/tables";
 import { build_path, formatDates } from "@/utils/common";
 import {
   createSerializer,
@@ -37,12 +31,11 @@ import useDebounce from "@/lib/hooks/debounce";
 import GeneralizedTable from "../../Common/GeneralizedTable";
 import { handleServerError } from "@/lib/api/_axios";
 import { ErrorResponse } from "@/lib/types/common";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { Store, StoreTable } from "@/lib/types/store/store";
-import { API_STORE } from "@/lib/services/store/store_service";
+import { User, UserTable } from "@/lib/types/user/user";
+import { API_USER } from "@/lib/services/user/user_service";
 
-const StoresTable = () => {
+const UsersTable = () => {
   const searchParams = {
     page: parseAsInteger,
     limit: parseAsString,
@@ -53,7 +46,7 @@ const StoresTable = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [stores, setStores] = useState<StoreTable>({
+  const [users, setUsers] = useState<UserTable>({
     data: [],
     meta: INITIAL_META,
   });
@@ -70,20 +63,20 @@ const StoresTable = () => {
     }
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(STORE_VISIBLE_COL)
+    new Set(USER_VISIBLE_COL)
   );
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
-  const [selectedStore, setSelectedStore] = useState<Store>();
+  const [selectedUser, setSelectedUser] = useState<User>();
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [status, setStatus] = useState<Selection>("all");
 
   const headerColumns = useMemo(() => {
-    if (visibleColumns === "all") return STORE_COLUMNS;
+    if (visibleColumns === "all") return USER_COLUMNS;
 
-    return STORE_COLUMNS.filter((column) =>
+    return USER_COLUMNS.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
@@ -109,16 +102,16 @@ const StoresTable = () => {
   };
 
   const handleSelectionChange = (newSelection: Selection) => {
-    if (newSelection === "all" && stores) {
-      const currentPageKeys = stores.data.map((store) => store._id);
+    if (newSelection === "all" && users) {
+      const currentPageKeys = users.data.map((user) => user._id);
 
       setSelectedKeys((prevKeys) => {
         const updatedKeys = new Set(prevKeys);
         currentPageKeys.forEach((key) => updatedKeys.add(key));
         return updatedKeys;
       });
-    } else if (Array.from(newSelection).length === 0 && stores) {
-      const currentPageKeys = stores.data.map((store) => store._id);
+    } else if (Array.from(newSelection).length === 0 && users) {
+      const currentPageKeys = users.data.map((user) => user._id);
 
       setSelectedKeys((prevKeys) => {
         const updatedKeys = new Set(prevKeys);
@@ -152,36 +145,20 @@ const StoresTable = () => {
   }, [query.search, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
-    (store: Store, columnKey: React.Key) => {
-      const cellValue = store[`${columnKey}`];
+    (user: User, columnKey: React.Key) => {
+      const cellValue = user[`${columnKey}`];
 
       switch (columnKey) {
-        case "logo":
-          return (
-            <User
-              avatarProps={{
-                radius: "md",
-                src: cellValue,
-              }}
-              name={""}
-              classNames={{
-                description: "text-sm",
-              }}
-              className="justify-start text-ellipsis overflow-hidden whitespace-nowrap"
-            >
-              {store.name}
-            </User>
-          );
-        case "name":
+        case "firstname":
           return (
             <div className="flex flex-col gap-1 min-w-[230px]">
-              <p className="font-semibold">{store.name}</p>
+              <p className="font-semibold">{`${user.firstname} ${user.lastname}`}</p>
             </div>
           );
         case "is_active":
           return (
-            <Chip variant="flat" color={store.is_active ? "success" : "danger"}>
-              {store.is_active ? "Active" : "Disabled"}
+            <Chip variant="flat" color={user.is_active ? "success" : "danger"}>
+              {user.is_active ? "Active" : "Disabled"}
             </Chip>
           );
         case "createdAt":
@@ -195,8 +172,8 @@ const StoresTable = () => {
                 <Button
                   as={Link}
                   href={getUrl(
-                    build_path(URLs.admin.stores.get_id, {
-                      store_id: store._id,
+                    build_path(URLs.admin.users.get_id, {
+                      user_id: user._id,
                     })
                   )}
                   isIconOnly
@@ -207,12 +184,12 @@ const StoresTable = () => {
                 </Button>
               </Tooltip>
 
-              <Tooltip color="danger" content="Delete Store">
+              <Tooltip color="danger" content="Delete User">
                 <Button
                   size="sm"
                   isIconOnly
                   className="text-lg text-danger cursor-pointer active:opacity-50 bg-transparent p-0 block"
-                  onClick={() => deleteModal(store)}
+                  onClick={() => deleteModal(user)}
                 >
                   <DeleteIcon />
                 </Button>
@@ -227,20 +204,20 @@ const StoresTable = () => {
     [onOpen]
   );
 
-  const deleteModal = (store: Store) => {
+  const deleteModal = (user: User) => {
     onOpen();
-    setSelectedStore(store);
+    setSelectedUser(user);
   };
 
-  const deleteStore = async () => {
-    if (!selectedStore) return;
+  const deleteUser = async () => {
+    if (!selectedUser) return;
 
     try {
       setProcessing(true);
-      const result = await API_STORE.deleteStore(selectedStore._id);
+      const result = await API_USER.adminDeleteUser(selectedUser._id);
 
       if (result.success) {
-        getStores();
+        getUsers();
         onOpenChange();
       }
     } catch (error) {
@@ -250,15 +227,15 @@ const StoresTable = () => {
     }
   };
 
-  const getStores = async () => {
+  const getUsers = async () => {
     try {
       setLoading(true);
       const serialize = createSerializer(searchParams);
       const request = serialize(query);
 
-      const res = await API_STORE.getAllStores(request);
+      const res = await API_USER.getAllUsers(request);
 
-      setStores(res);
+      setUsers(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
         toast.error(err_msg);
@@ -271,14 +248,14 @@ const StoresTable = () => {
 
   useDebounce(
     () => {
-      getStores();
+      getUsers();
     },
     [query.search],
     1200
   );
 
   useEffect(() => {
-    getStores();
+    getUsers();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query.page, query.sortField, query.sortOrder]);
@@ -287,15 +264,15 @@ const StoresTable = () => {
     <>
       <div className="flex flex-col gap-4 w-full">
         <GeneralizedTable
-          name="Store Table"
-          emptyContent={`No stores added yet!`}
+          name="User Table"
+          emptyContent={`No users added yet!`}
           selectionMode="multiple"
           loading={loading}
-          page={stores.meta.page}
-          total={stores.meta.total_pages}
+          page={users.meta.page}
+          total={users.meta.total_pages}
           setPage={(v) => setQuery({ page: v })}
           columns={headerColumns}
-          data={stores?.data}
+          data={users?.data}
           topContent={topContent}
           selectedKeys={selectedKeys}
           sortDescriptor={{
@@ -309,19 +286,19 @@ const StoresTable = () => {
       </div>
 
       <ModalInstance
-        title={"Delete Store"}
+        title={"Delete User"}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        handleClick={deleteStore}
+        handleClick={deleteUser}
         loading={processing}
       >
         <div className="flex flex-col gap-1 w-full">
-          <p>Are you sure you want to delete this store?</p>
-          <p className="font-bold">{selectedStore?.name}</p>
+          <p>Are you sure you want to delete this user?</p>
+          <p className="font-bold">{selectedUser?.firstname}</p>
         </div>
       </ModalInstance>
     </>
   );
 };
 
-export default StoresTable;
+export default UsersTable;

@@ -10,24 +10,16 @@ import { useParams, useRouter } from "next/navigation";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { getUrl, URLs } from "@/lib/constants/urls";
 import { FadeIn } from "@/lib/components/Motion/FadeIn";
-import { checkRTL } from "@/utils/common";
-import { useTranslation } from "@/lib/i18n/client";
 
 const ResetPassword = () => {
   const params = useParams();
   const router = useRouter();
-
-  const lang = params.lang as string;
 
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  const rtl = checkRTL(lang);
-
-  const { t } = useTranslation(lang, "auth");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,27 +53,27 @@ const ResetPassword = () => {
     <div className="w-full h-screen flex items-center justify-center">
       <FadeIn className="lg:max-w-[40%] max-w-[90%] w-full">
         <Card shadow="none" className="w-full bg-transparent p-3 sm:p-5">
-          <CardBody className={cn("overflow-hidden", rtl && "text-right")}>
+          <CardBody className={cn("overflow-hidden")}>
             <div className="h-full flex flex-col gap-2">
               <form
                 className="h-full flex flex-col gap-2"
                 onSubmit={(e) => handleSubmit(e)}
               >
-                <h1 className="mb-4 text-2xl font-semibold uppercase">
-                  {t("FMC")}
-                </h1>
+                <h1 className="mb-4 text-2xl font-semibold uppercase">FMC</h1>
 
                 <div className="flex flex-col gap-2 mb-2">
                   <h2 className="text-2xl font-semibold flex items-center justify-between">
-                    {t("new-password")}
+                    New account password
                   </h2>
 
-                  <p>{t("new-password-desc")}</p>
+                  <p>
+                    Please enter a new password to reset your agent account.
+                  </p>
                 </div>
 
                 <Input
                   type={isVisible ? "text" : "password"}
-                  label={t("password")}
+                  label="Password"
                   required
                   isRequired
                   isDisabled={loading || success}
@@ -112,7 +104,7 @@ const ResetPassword = () => {
                   isLoading={loading}
                   isDisabled={success}
                 >
-                  {success ? t("password-changed") : t("change-password")}
+                  {success ? "Password Changed" : "Update Password"}
                 </Button>
               </form>
             </div>

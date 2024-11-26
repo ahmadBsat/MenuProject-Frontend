@@ -8,6 +8,7 @@ export type Store = {
   palette: string;
   createdAt: string;
   updatedAt: string;
+  is_active: boolean;
 };
 
 export type StoreForm = Omit<Store, "_id" | "createdAt" | "updatedAt">;

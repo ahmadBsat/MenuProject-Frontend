@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { STORE_INITIAL } from "@/lib/constants/initials";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StoreForm } from "@/lib/types/store/store";
+import StoreLogo from "./StoreLogo";
 
 const StoresForm = () => {
   const [store, setStore] = useState<StoreForm>(STORE_INITIAL);
@@ -28,8 +29,6 @@ const StoresForm = () => {
   const params = useParams();
   const router = useRouter();
   const store_id = params.store_id as string;
-  const agent_id = params.id as string;
-  const organization = params.organization as string;
 
   const { width } = useWindowSize();
   const size = width && width >= 640 ? "md" : "sm";
@@ -37,7 +36,7 @@ const StoresForm = () => {
   useEffect(() => {
     getStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [store_id, organization]);
+  }, [store_id]);
 
   const getStore = async () => {
     if (!store_id) {
@@ -63,8 +62,6 @@ const StoresForm = () => {
   const saveStore = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!organization) return;
-
     const id = "store-create";
 
     setProcessing(true);
@@ -87,8 +84,6 @@ const StoresForm = () => {
 
   const updateStore = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!organization) return;
 
     const id = "store-update";
 
@@ -156,24 +151,24 @@ const StoresForm = () => {
         <HeaderContent />
       </HeaderContainer>
 
+      <StoreLogo data={store} path={"store"} handleChange={handleChange} />
+
       <StoreInformation
         data={store}
         editable={editable}
         handleChange={handleChange}
       />
 
-      <div className="w-full flex justify-end mt-6">
-        {editable && (
-          <Button
-            type="submit"
-            isLoading={processing}
-            isDisabled={processing}
-            color="primary"
-            className="text-white"
-          >
-            {store_id ? "Update" : "Save"}
-          </Button>
-        )}
+      <div className="w-full flex justify-end mt-6 px-4">
+        <Button
+          type="submit"
+          isLoading={processing}
+          isDisabled={processing}
+          color="primary"
+          className="text-white"
+        >
+          {store_id ? "Update" : "Save"}
+        </Button>
       </div>
     </form>
   );

@@ -52,7 +52,7 @@ export default function LoginCallback() {
     localStorage.setItem("FMC_token", JSON.stringify(token));
     setLoading(false);
 
-    router.push(getUrl(URLs.organization.dashboard));
+    router.push(getUrl(URLs.admin.dashboard));
   };
 
   if (loading) {

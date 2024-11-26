@@ -8,15 +8,10 @@ export interface User {
   phone: string;
   country_code: string;
   role: number;
-  email_verified: boolean;
-  phone_verified: boolean;
-  is_two_factor_enabled: boolean;
   confirmation_code: string;
-  banned_until: string;
   is_archived: boolean;
   is_active: boolean;
   is_super_admin: boolean;
-  last_sign_in_at: string;
   provider: string;
   authentication: {
     password: string;

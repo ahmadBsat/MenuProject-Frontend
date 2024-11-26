@@ -17,15 +17,13 @@ import DotsLoader from "@/lib/components/Loader/DotsLoader";
 import ListCard, {
   ListCardProps,
 } from "@/lib/components/Common/Cards/ListCard";
-import { useParams } from "next/navigation";
+import { API_STORE } from "@/lib/services/store/store_service";
 
 const DashboardPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>(null);
-
-  const params = useParams();
-  const organization = params.organization as string;
 
   const checkTrend = (val: number) => {
     if (val < 0) {
@@ -43,14 +41,14 @@ const DashboardPage = () => {
     try {
       setLoading(true);
 
-      const res = await API_ORGANIZATION.getOrganizationDashboard(organization);
+      const res = await API_STORE.getStore();
       setData(res);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  }, [organization]);
+  }, []);
 
   useEffect(() => {
     getDashboard();

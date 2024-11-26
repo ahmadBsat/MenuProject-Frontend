@@ -18,7 +18,7 @@ export const UPLOAD_ENDPOINTS = {
 
 export const USER_ENDPOINTS = {
   ME: "/api/v1/user",
-  GET_ALL: "/api/v1/admin/user",
+  GET_ALL: "/api/v1/admin/users",
   GET_ID: "/api/v1/admin/user/:id",
   CREATE: "/api/v1/admin/user",
   ADMIN_UPDATE: "/api/v1/admin/user",

@@ -28,4 +28,5 @@ export const STORE_INITIAL: StoreForm = {
   logo: "",
   name: "",
   palette: "",
+  is_active: true,
 };

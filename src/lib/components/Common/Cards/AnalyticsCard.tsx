@@ -1,9 +1,8 @@
 "use client";
 
-import { TrendingDownIcon } from "@/utils/icons/trending-down";
-import { TrendingUpIcon } from "@/utils/icons/trending-up";
 import { CheckBadgeIcon } from "@heroicons/react/24/outline";
 import { Card, CardBody, CardHeader, cn } from "@nextui-org/react";
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 
 type ItemProps = {
   title: string;

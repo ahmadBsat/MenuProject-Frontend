@@ -1,15 +1,9 @@
-import HeaderContainer from "@/lib/components/Containers/HeaderContainer";
-import StoresTable from "@/lib/components/Pages/Store/StoreTable";
+import StoresForm from "@/lib/components/Pages/Store/StoreForm";
 
 const Page = () => {
   return (
     <div className="w-full h-full flex flex-col gap-4">
-      <HeaderContainer
-        title="Stores"
-        description="Manage platform stores from here"
-      />
-
-      <StoresTable />
+      <StoresForm />
     </div>
   );
 };

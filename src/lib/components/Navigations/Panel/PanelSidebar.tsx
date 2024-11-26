@@ -9,28 +9,20 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import { ADMIN_NAVIGATION } from "@/lib/constants/menu";
 import PanelSidebarItem from "./PanelSidebarItem";
 import { Button, cn } from "@nextui-org/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import PanelSidebarMobile from "./PanelSidebarMobile";
 import { URLs, getUrl } from "@/lib/constants/urls";
-import { useDocumentDirection } from "@/lib/hooks/useDocumentDirection";
 
-const PanelSidebar = ({ children, lang }) => {
+const PanelSidebar = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapse, setCollapse] = useState(false);
 
   // const timeoutRef = useRef<number | null>(null);
 
   const { width } = useWindowSize();
-  const { rtl } = useDocumentDirection(lang);
 
   const navigations = ADMIN_NAVIGATION;
-  const padding_class = collapse
-    ? rtl
-      ? "lg:pr-20"
-      : "lg:pl-20"
-    : rtl
-    ? "lg:pr-64"
-    : "lg:pl-64";
+  const padding_class = collapse ? "lg:pl-20" : "lg:pl-64";
 
   return (
     <div className="h-full min-h-screen bg-background">
@@ -51,7 +43,7 @@ const PanelSidebar = ({ children, lang }) => {
       >
         <div
           className={cn(
-            rtl ? "lg:border-l" : "lg:border-r",
+            "lg:border-r",
             "flex grow flex-col gap-y-5 overflow-y-auto bg-background dark:border-black/20 dark:bg-mediumgray px-6 overflow-x-hidden"
           )}
         >
@@ -61,7 +53,7 @@ const PanelSidebar = ({ children, lang }) => {
               "flex gap-3 pt-6 items-center dark:text-white text-2xl font-semibold outline-none ring-0 select-none mb-4"
             )}
           >
-            <Link href={getUrl(URLs.admin.dashboard, lang)}>FMC</Link>
+            <Link href={getUrl(URLs.admin.dashboard)}>FMC</Link>
           </div>
 
           <nav className="flex flex-1 flex-col justify-between">
@@ -99,11 +91,11 @@ const PanelSidebar = ({ children, lang }) => {
           onClick={() => setCollapse(!collapse)}
           className={cn(
             !collapse && "rotate-180",
-            rtl ? "-left-4" : "-right-4",
+            "-right-4",
             "absolute top-5 bg-primary text-white"
           )}
         >
-          {rtl ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <ChevronRightIcon />
         </Button>
       </div>
 
