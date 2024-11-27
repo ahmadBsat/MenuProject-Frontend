@@ -7,7 +7,7 @@ export interface User {
   email: string;
   phone: string;
   country_code: string;
-  role: number;
+  role: string;
   confirmation_code: string;
   is_archived: boolean;
   is_active: boolean;
@@ -29,10 +29,23 @@ export type UserAuthenticated = Omit<
   | "banned_until"
   | "is_archived"
   | "is_active"
-  | "is_super_admin"
   | "last_sign_in_at"
   | "provider"
   | "authentication"
 >;
+
+export type UserForm = Omit<
+  User,
+  | "createdAt"
+  | "updatedAt"
+  | "__v"
+  | "_id"
+  | "confirmation_code"
+  | "banned_until"
+  | "is_archived"
+  | "last_sign_in_at"
+  | "provider"
+  | "authentication"
+> & { password: string };
 
 export type UserTable = { data: User[]; meta: Meta };

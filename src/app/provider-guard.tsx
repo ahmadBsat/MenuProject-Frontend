@@ -5,8 +5,8 @@ import NotFound from "@/lib/components/Pages/NotFound";
 import { URLs, getUrl } from "@/lib/constants/urls";
 import { useAuth } from "@/lib/context/AuthContext";
 
-const AuthGuardProvider = ({ children }) => {
-  const { validating, logged } = useAuth();
+const AuthGuardProvider = ({ children, is_admin = false }) => {
+  const { validating, logged, isAdmin } = useAuth();
 
   if (validating) {
     return (
@@ -21,6 +21,17 @@ const AuthGuardProvider = ({ children }) => {
       <NotFound
         error="Not Authenticated!"
         description="Please login or register to be able to access this page."
+        title="Login"
+        url={getUrl(URLs.auth.login)}
+      />
+    );
+  }
+
+  if (!validating && isAdmin !== is_admin) {
+    return (
+      <NotFound
+        error="Not Authorized!"
+        description="You do not have access to view this page."
         title="Login"
         url={getUrl(URLs.auth.login)}
       />

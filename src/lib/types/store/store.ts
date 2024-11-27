@@ -22,6 +22,7 @@ export type StoreForm = Omit<
 export type StoreBranch = {
   _id: string;
   name: string;
+  address: string;
   phone_number: string;
 };
 

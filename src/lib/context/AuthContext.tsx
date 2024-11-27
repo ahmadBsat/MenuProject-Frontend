@@ -12,6 +12,7 @@ type AuthContextType = {
   loading: boolean;
   logged: boolean;
   validating: boolean;
+  isAdmin: boolean;
   logout: (lang: string) => void;
   checkSession: () => void;
   setLogged: (val: boolean) => void;
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }) => {
   const [logged, setLogged] = useState(false);
   const [loading, setLoading] = useState(true);
   const [validating, setValidating] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const TOKEN_KEY = "FMC_token";
 
@@ -38,6 +40,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       setLogged(true);
+      setIsAdmin(user.user.is_super_admin);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -86,6 +89,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         logged,
+        isAdmin,
         setLogged,
         setUser,
         logout,

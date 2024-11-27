@@ -29,9 +29,10 @@ export const URLs = {
   },
   store: {
     index: "/store",
+    dashboard: "/store/dashboard",
     customize: "/store/customize",
-    products: "/products",
-    product_items: "/products-items",
+    products: { index: "/store/products", get_id: "/store/products/:id" },
+    product_items: "/store/products-items",
   },
 };
 

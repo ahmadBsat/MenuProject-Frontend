@@ -84,3 +84,21 @@ export const handleServerError = (
     handleMessage([detailedError.message ?? "An unknown error occurred"]);
   }
 };
+
+export function getCookie(name: string, default_val?: string): string {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+
+  if (parts && parts.length === 2) {
+    const cookieValue = parts.pop()?.split(";").shift();
+    if (cookieValue) {
+      return cookieValue;
+    }
+  }
+
+  if (default_val) {
+    return default_val;
+  }
+
+  return "";
+}

@@ -1,18 +1,6 @@
 import { StoreForm } from "../types/store/store";
-
-export const USER_INITIAL = {
-  _id: "",
-  firstname: "",
-  lastname: "",
-  email: "",
-  phone: "",
-  countryCode: "",
-  type: 0,
-  verified: false,
-  two_factor_enabled: false,
-  createdAt: "",
-  updatedAt: "",
-};
+import { UserForm } from "../types/user/user";
+import { USER_ROLES } from "./variables";
 
 export const INITIAL_META = {
   count: 0,
@@ -31,4 +19,16 @@ export const STORE_INITIAL: StoreForm = {
   is_active: true,
   domain: "",
   renewal_cost: 100,
+};
+
+export const USER_INITIAL: UserForm = {
+  email: "",
+  password: "",
+  firstname: "",
+  country_code: "961",
+  phone: "",
+  is_active: true,
+  is_super_admin: false,
+  lastname: "",
+  role: USER_ROLES.OWNER,
 };

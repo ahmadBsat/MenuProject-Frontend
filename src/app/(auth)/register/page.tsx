@@ -37,7 +37,6 @@ export default function Register() {
 
   useEffect(() => {
     if (user?.user) {
-      setLogged(true);
       checkCallback();
     }
 
@@ -90,17 +89,12 @@ export default function Register() {
     setSuccess(true);
 
     if (data) {
+      if (!data.user.is_super_admin) return;
+
       setUser(data);
+      setLogged(true);
       localStorage.setItem("FMC_token", JSON.stringify(data.token));
     }
-
-    setTimeout(() => {
-      if (callback) {
-        router.push(callback);
-      } else {
-        router.push(getUrl(URLs.admin.dashboard));
-      }
-    }, 500);
   };
 
   if (validating || user) {
@@ -151,6 +145,22 @@ export default function Register() {
                     }}
                   >
                     {error}
+                  </Chip>
+                )}
+
+                {success && (
+                  <Chip
+                    size="lg"
+                    radius="md"
+                    variant="flat"
+                    color="success"
+                    className="py-6 px-2 w-full"
+                    classNames={{
+                      base: "max-w-full w-full",
+                      content: "font-semibold text-sm",
+                    }}
+                  >
+                    Thanks for registering we will activate your account soon
                   </Chip>
                 )}
 
@@ -261,7 +271,8 @@ export default function Register() {
                     type="submit"
                     isLoading={loading}
                     isDisabled={
-                      credentials.password !== credentials.confirm_password
+                      credentials.password !== credentials.confirm_password ||
+                      success
                     }
                     className="w-full px-4 py-4 text-base font-semibold"
                   >

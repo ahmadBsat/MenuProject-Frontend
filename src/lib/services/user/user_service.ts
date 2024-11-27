@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { build_path } from "@/utils/common";
 import { handleErrors, _axios } from "../../api/_axios";
 import { AUTH_ENDPOINTS, USER_ENDPOINTS } from "../../constants/endpoints";
 import { SuccessResponse } from "../../types/common";
@@ -23,7 +24,9 @@ export namespace API_USER {
 
   export async function getUserById(id: string) {
     try {
-      const response = await _axios.get(`${USER_ENDPOINTS.GET_ID}/${id}`);
+      const response = await _axios.get(
+        build_path(USER_ENDPOINTS.GET_ID, { id })
+      );
       return response.data as User;
     } catch (error: unknown) {
       throw handleErrors(error);
@@ -33,16 +36,7 @@ export namespace API_USER {
   export async function createUser(data: any) {
     try {
       const response = await _axios.post(USER_ENDPOINTS.CREATE, data);
-      return response.data as User;
-    } catch (error: unknown) {
-      throw handleErrors(error);
-    }
-  }
-
-  export async function updateUser(data: any) {
-    try {
-      const response = await _axios.patch(USER_ENDPOINTS.UPDATE, data);
-      return response.data as User;
+      return response.data as SuccessResponse;
     } catch (error: unknown) {
       throw handleErrors(error);
     }
@@ -51,10 +45,10 @@ export namespace API_USER {
   export async function updateUserById(id: string, data: any) {
     try {
       const response = await _axios.patch(
-        `${USER_ENDPOINTS.ADMIN_UPDATE}/${id}`,
+        build_path(USER_ENDPOINTS.ADMIN_UPDATE, { id }),
         data
       );
-      return response.data as User;
+      return response.data as SuccessResponse;
     } catch (error: unknown) {
       throw handleErrors(error);
     }
@@ -80,7 +74,9 @@ export namespace API_USER {
 
   export async function adminDeleteUser(id: string) {
     try {
-      const response = await _axios.delete(`${USER_ENDPOINTS.DELETE}/${id}`);
+      const response = await _axios.delete(
+        build_path(USER_ENDPOINTS.DELETE, { id })
+      );
       return response.data as SuccessResponse;
     } catch (error: unknown) {
       throw handleErrors(error);

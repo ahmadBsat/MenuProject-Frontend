@@ -25,7 +25,7 @@ export default function Login() {
   const searchparams = useSearchParams();
   const callback = searchparams.get("callback");
 
-  const { user, setUser, setLogged, validating } = useAuth();
+  const { user, setUser, setLogged, validating, isAdmin } = useAuth();
 
   useEffect(() => {
     if (user?.user) {
@@ -75,7 +75,13 @@ export default function Login() {
       if (callback) {
         router.push(callback);
       } else {
-        router.push(getUrl(URLs.admin.dashboard));
+        router.push(
+          getUrl(
+            user?.user.is_super_admin || isAdmin
+              ? URLs.admin.dashboard
+              : URLs.store.dashboard
+          )
+        );
       }
     }, 500);
   };

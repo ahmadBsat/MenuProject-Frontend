@@ -17,13 +17,11 @@ export const UPLOAD_ENDPOINTS = {
 };
 
 export const USER_ENDPOINTS = {
-  ME: "/api/v1/user",
   GET_ALL: "/api/v1/admin/users",
-  GET_ID: "/api/v1/admin/user/:id",
-  CREATE: "/api/v1/admin/user",
-  ADMIN_UPDATE: "/api/v1/admin/user",
-  UPDATE: "/api/v1/user",
-  DELETE: "/api/v1/user/:id",
+  GET_ID: "/api/v1/admin/users/:id",
+  CREATE: "/api/v1/admin/users",
+  ADMIN_UPDATE: "/api/v1/admin/users/:id",
+  DELETE: "/api/v1/admin/users/:id",
 };
 
 export const STORE_ENDPOINTS = {
@@ -35,4 +33,12 @@ export const STORE_ENDPOINTS = {
   UPDATE: "/api/v1/store",
   DELETE: "/api/v1/admin/store/:id",
   RENEW: "/api/v1/admin/renew/:id",
+};
+
+export const PRODUCT_ENDPOINTS = {
+  GET_ALL: "/api/v1/store/products",
+  GET_ID: "/api/v1/store/products/:id",
+  CREATE: "/api/v1/store/products",
+  UPDATE: "/api/v1/store/products/:id",
+  DELETE: "/api/v1/store/products/:id",
 };
