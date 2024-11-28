@@ -24,6 +24,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 
+ARG NEXT_PUBLIC_BACKEND_HOST
+ENV NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
+
 # Build the Next.js application.
 RUN npm run build
 

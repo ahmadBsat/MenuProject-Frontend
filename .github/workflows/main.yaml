@@ -1,9 +1,9 @@
-name: Frontend  CI/CD
+name: Frontend CI/CD
 
 on:
   push:
     branches:
-      - 'main'
+      - "main"
 
 permissions:
   packages: write
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: "20.x"
 
       - name: Install dependencies
         run: npm install
@@ -28,6 +28,7 @@ jobs:
   build-and-push-image:
     needs: build-and-test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -53,3 +54,5 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/ahmadbsat/menuproject-frontend:production
+          build-args: |
+            NEXT_PUBLIC_BACKEND_HOST=${{ secrets.NEXT_PUBLIC_BACKEND_HOST }}
