@@ -25,6 +25,7 @@ export const USER_ENDPOINTS = {
 };
 
 export const STORE_ENDPOINTS = {
+  GET_DOMAIN: "/api/v1/store/:domain",
   GET: "/api/v1/store",
   GET_ALL: "/api/v1/admin/store",
   GET_ID: "/api/v1/admin/store/:id",

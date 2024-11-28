@@ -1,4 +1,6 @@
 import { Meta } from "../common";
+import { CategoryPolulated } from "./category";
+import { Currency } from "./currency";
 
 export type Store = {
   _id: string;
@@ -27,3 +29,11 @@ export type StoreBranch = {
 };
 
 export type StoreTable = { data: Store[]; meta: Meta };
+
+export type StorePopulated = {
+  logo: string;
+  palette: string;
+  categories: CategoryPolulated[];
+  currencies: Currency[];
+  branches: StoreBranch[];
+};

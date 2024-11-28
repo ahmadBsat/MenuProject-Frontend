@@ -10,7 +10,7 @@ const StoreCurrency = dynamic(() => import("./StoreCurrency"), {
 const StoreHeader = () => {
   return (
     <div className="flex items-center justify-center w-full h-14 border-b">
-      <div className="flex items-center justify-between max-w-screen-lg w-full">
+      <div className="flex items-center justify-between max-w-screen-lg px-8 w-full">
         <div>
           <StoreBranches />
         </div>

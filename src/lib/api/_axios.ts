@@ -12,10 +12,15 @@ export const _axios = axios.create({
 _axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("FMC_token");
+    const preferredCurrency = getCookie("preferredCurrency");
 
     if (token) {
       const parsedToken = JSON.parse(token);
       config.headers["Authorization"] = `Bearer ${parsedToken}`;
+    }
+
+    if (preferredCurrency) {
+      config.headers["X-Currency-Id"] = preferredCurrency;
     }
 
     return config;

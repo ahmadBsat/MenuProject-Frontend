@@ -42,6 +42,17 @@ export namespace API_STORE {
     }
   }
 
+  export async function getStoreByDomain(domain: string) {
+    try {
+      const response = await _axios.get(
+        build_path(STORE_ENDPOINTS.GET_DOMAIN, { domain })
+      );
+      return response.data as Store;
+    } catch (error: unknown) {
+      throw handleErrors(error);
+    }
+  }
+
   export async function createStore(data: any) {
     try {
       const response = await _axios.post(STORE_ENDPOINTS.CREATE, data);
