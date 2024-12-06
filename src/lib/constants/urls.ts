@@ -31,8 +31,26 @@ export const URLs = {
     index: "/store",
     dashboard: "/store/dashboard",
     customize: "/store/customize",
-    products: { index: "/store/products", get_id: "/store/products/:id" },
-    product_items: "/store/products-items",
+    branch: {
+      index: "/store/branches",
+      get_id: "/store/branches/:id",
+      create: "/store/branches/create",
+    },
+    products: {
+      index: "/store/products",
+      get_id: "/store/products/:id",
+      create: "/store/products/create",
+    },
+    category: {
+      index: "/store/categories",
+      get_id: "/store/categories/:id",
+      create: "/store/categories/create",
+    },
+    product_items: {
+      index: "/store/products-items",
+      get_id: "/store/products-items/:id",
+      create: "/store/products-items/create",
+    },
   },
 };
 

@@ -8,10 +8,10 @@ const Page = () => {
   return (
     <>
       <HeaderContainer
-        title="Products"
-        description="Manage your products from here"
+        title="Store Branches"
+        description="Manage your branches from here"
       >
-        <Button as={Link} href={URLs.store.products.create} color="primary">
+        <Button as={Link} href={URLs.store.branch.create} color="primary">
           Add
         </Button>
       </HeaderContainer>

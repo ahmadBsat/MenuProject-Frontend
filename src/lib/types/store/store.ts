@@ -26,7 +26,16 @@ export type StoreBranch = {
   name: string;
   address: string;
   phone_number: string;
+  createdAt: string;
+  updatedAt: string;
 };
+
+export type StoreBranchForm = Omit<
+  StoreBranch,
+  "_id" | "createdAt" | "updatedAt"
+>;
+
+export type StoreBranchTable = { data: StoreBranch[]; meta: Meta };
 
 export type StoreTable = { data: Store[]; meta: Meta };
 

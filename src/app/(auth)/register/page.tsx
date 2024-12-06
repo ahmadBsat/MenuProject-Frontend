@@ -11,7 +11,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { API_AUTH } from "@/lib/services/auth_service";
 import { handleServerError } from "@/lib/api/_axios";
 import { ErrorResponse } from "@/lib/types/common";
-import { Authentication } from "@/lib/types/auth";
 import { redirect } from "@/utils/common";
 
 export default function Register() {
@@ -26,7 +25,6 @@ export default function Register() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const [data, setData] = useState<Authentication>();
 
   const router = useRouter();
   const searchparams = useSearchParams();
@@ -37,7 +35,9 @@ export default function Register() {
 
   useEffect(() => {
     if (user?.user) {
-      checkCallback();
+      if (user.user.is_super_admin) {
+        router.push(getUrl(URLs.admin.dashboard));
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,39 +61,26 @@ export default function Register() {
     try {
       const response = await API_AUTH.register(credentials);
 
-      setData(response);
-      setSuccess(true);
-
       if (response) {
         setUser(response);
-        localStorage.setItem("FMC_token", JSON.stringify(response.token));
-      }
+        setSuccess(true);
 
-      setTimeout(() => {
-        if (callback) {
-          router.push(callback);
-        } else {
-          router.push(getUrl(URLs.admin.dashboard));
-        }
-      }, 500);
+        localStorage.setItem("FMC_token", JSON.stringify(response.token));
+
+        router.push(
+          getUrl(
+            response.user.is_super_admin
+              ? URLs.admin.dashboard
+              : URLs.store.branch.index
+          )
+        );
+      }
     } catch (e) {
       handleServerError(e as ErrorResponse, (err_msg) => {
         setError(err_msg as string);
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const checkCallback = () => {
-    setSuccess(true);
-
-    if (data) {
-      if (!data.user.is_super_admin) return;
-
-      setUser(data);
-      setLogged(true);
-      localStorage.setItem("FMC_token", JSON.stringify(data.token));
     }
   };
 

@@ -6,22 +6,26 @@ import Link from "next/link";
 import { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useWindowSize } from "@uidotdev/usehooks";
-import { ADMIN_NAVIGATION } from "@/lib/constants/menu";
+import { ADMIN_NAVIGATION, STORE_NAVIGATION } from "@/lib/constants/menu";
 import PanelSidebarItem from "./PanelSidebarItem";
 import { Button, cn } from "@nextui-org/react";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import PanelSidebarMobile from "./PanelSidebarMobile";
 import { URLs, getUrl } from "@/lib/constants/urls";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const PanelSidebar = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapse, setCollapse] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // const timeoutRef = useRef<number | null>(null);
-
+  const { logout, isAdmin, validating } = useAuth();
   const { width } = useWindowSize();
 
-  const navigations = ADMIN_NAVIGATION;
+  const navigations = validating
+    ? []
+    : isAdmin
+    ? ADMIN_NAVIGATION
+    : STORE_NAVIGATION;
   const padding_class = collapse ? "lg:pl-20" : "lg:pl-64";
 
   return (
@@ -83,6 +87,14 @@ const PanelSidebar = ({ children }) => {
                 );
               })}
             </div>
+
+            {!collapse && (
+              <div className="py-4 w-full">
+                <Button color="danger" onClick={logout} className="w-full">
+                  Logout
+                </Button>
+              </div>
+            )}
           </nav>
         </div>
 

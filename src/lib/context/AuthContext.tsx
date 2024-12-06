@@ -13,7 +13,7 @@ type AuthContextType = {
   logged: boolean;
   validating: boolean;
   isAdmin: boolean;
-  logout: (lang: string) => void;
+  logout: () => void;
   checkSession: () => void;
   setLogged: (val: boolean) => void;
   setUser: (user: Authentication | null) => void;

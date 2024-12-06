@@ -1,4 +1,5 @@
-import { StoreForm } from "../types/store/store";
+import { ProductForm } from "../types/store/product";
+import { StoreBranchForm, StoreForm } from "../types/store/store";
 import { UserForm } from "../types/user/user";
 import { USER_ROLES } from "./variables";
 
@@ -31,4 +32,21 @@ export const USER_INITIAL: UserForm = {
   is_super_admin: false,
   lastname: "",
   role: USER_ROLES.OWNER,
+};
+
+export const PRODUCT_INITIAL: ProductForm = {
+  additions: [],
+  branch: [],
+  category: [],
+  description: "",
+  images: [],
+  is_active: true,
+  name: "",
+  price: 0,
+};
+
+export const BRANCH_INITIAL: StoreBranchForm = {
+  address: "",
+  name: "",
+  phone_number: "",
 };

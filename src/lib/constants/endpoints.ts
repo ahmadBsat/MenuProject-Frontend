@@ -37,9 +37,25 @@ export const STORE_ENDPOINTS = {
 };
 
 export const PRODUCT_ENDPOINTS = {
-  GET_ALL: "/api/v1/store/products",
-  GET_ID: "/api/v1/store/products/:id",
-  CREATE: "/api/v1/store/products",
-  UPDATE: "/api/v1/store/products/:id",
-  DELETE: "/api/v1/store/products/:id",
+  GET_ALL: "/api/v1/products",
+  GET_ID: "/api/v1/products/:id",
+  CREATE: "/api/v1/products",
+  UPDATE: "/api/v1/products/:id",
+  DELETE: "/api/v1/products/:id",
+};
+
+export const CATEGORY_ENDPOINTS = {
+  GET_ALL: "/api/v1/categories",
+  GET_ID: "/api/v1/categories/:id",
+  CREATE: "/api/v1/categories",
+  UPDATE: "/api/v1/categories/:id",
+  DELETE: "/api/v1/categories/:id",
+};
+
+export const BRANCH_ENDPOINTS = {
+  GET_ALL: "/api/v1/branches",
+  GET_ID: "/api/v1/branches/:id",
+  CREATE: "/api/v1/branches",
+  UPDATE: "/api/v1/branches/:id",
+  DELETE: "/api/v1/branches/:id",
 };

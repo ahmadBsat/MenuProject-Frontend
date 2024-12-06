@@ -7,7 +7,7 @@ const StoreCategory = () => {
   return (
     <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-12">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
-        <p className="text-4xl font-bold px-1 mb-1">Menu</p>
+        <p className="text-4xl font-bold px-1 mb-3">Menu</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 items-center justify-between max-w-screen-lg w-full">
           {data.map((item, idx) => {

@@ -25,12 +25,17 @@ export default function Login() {
   const searchparams = useSearchParams();
   const callback = searchparams.get("callback");
 
-  const { user, setUser, setLogged, validating, isAdmin } = useAuth();
+  const { user, setUser, validating, isAdmin } = useAuth();
 
   useEffect(() => {
     if (user?.user) {
-      setLogged(true);
-      checkCallback();
+      router.push(
+        getUrl(
+          user.user.is_super_admin || isAdmin
+            ? URLs.admin.dashboard
+            : URLs.store.dashboard
+        )
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -53,10 +58,20 @@ export default function Login() {
     try {
       const response = await API_AUTH.login(credentials);
 
-      setUser(response);
+      if (response) {
+        setUser(response);
+        setSuccess(true);
 
-      localStorage.setItem("FMC_token", JSON.stringify(response.token));
-      checkCallback();
+        localStorage.setItem("FMC_token", JSON.stringify(response.token));
+
+        router.push(
+          getUrl(
+            response.user.is_super_admin || isAdmin
+              ? URLs.admin.dashboard
+              : URLs.store.dashboard
+          )
+        );
+      }
     } catch (e) {
       handleServerError(e as ErrorResponse, (err_msg) => {
         setError(err_msg as string);
@@ -64,26 +79,6 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const checkCallback = () => {
-    setSuccess(true);
-
-    if (user) localStorage.setItem("FMC_token", JSON.stringify(user.token));
-
-    setTimeout(() => {
-      if (callback) {
-        router.push(callback);
-      } else {
-        router.push(
-          getUrl(
-            user?.user.is_super_admin || isAdmin
-              ? URLs.admin.dashboard
-              : URLs.store.dashboard
-          )
-        );
-      }
-    }, 500);
   };
 
   if (validating || user) {

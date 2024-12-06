@@ -1,3 +1,4 @@
+import { Meta } from "../common";
 import { Product } from "./product";
 
 export type Category = {
@@ -11,3 +12,5 @@ export type Category = {
 export type CategoryPolulated = Pick<Category, "_id" | "name"> & {
   products: Product[];
 };
+
+export type CategoryTable = { data: Category[]; meta: Meta };

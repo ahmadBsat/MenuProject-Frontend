@@ -6,6 +6,10 @@ import {
   UsersIcon,
   ShoppingCartIcon,
   DocumentIcon,
+  BuildingOfficeIcon,
+  SquaresPlusIcon,
+  ArchiveBoxIcon,
+  TagIcon,
 } from "@heroicons/react/24/outline";
 
 export const ADMIN_NAVIGATION = [
@@ -35,6 +39,38 @@ export const ADMIN_NAVIGATION = [
         name: "Plans",
         link: URLs.admin.plans.index,
         icon: DocumentIcon,
+      },
+    ],
+  },
+];
+
+export const STORE_NAVIGATION = [
+  {
+    title: "General",
+    data: [
+      {
+        key: "branches",
+        name: "Branches",
+        link: URLs.store.branch.index,
+        icon: BuildingOfficeIcon,
+      },
+      {
+        key: "products",
+        name: "Products",
+        link: URLs.store.products.index,
+        icon: ArchiveBoxIcon,
+      },
+      {
+        key: "additions",
+        name: "Additions",
+        link: URLs.store.product_items.index,
+        icon: SquaresPlusIcon,
+      },
+      {
+        key: "categories",
+        name: "Categories",
+        link: URLs.store.category.index,
+        icon: TagIcon,
       },
     ],
   },

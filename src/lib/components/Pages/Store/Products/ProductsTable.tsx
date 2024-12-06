@@ -150,28 +150,24 @@ const ProductsTable = () => {
       const cellValue = product[`${columnKey}`];
 
       switch (columnKey) {
-        case "logo":
+        case "name":
           return (
             <User
               avatarProps={{
                 radius: "md",
-                src: cellValue,
+                src: product.images.length > 0 ? product.images[0] : "",
               }}
-              name={""}
+              name={product.name}
+              description={product.description}
               classNames={{
-                description: "text-sm",
+                description: "text-sm line-clamp-1",
               }}
               className="justify-start text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {product.name}
             </User>
           );
-        case "name":
-          return (
-            <div className="flex flex-col gap-1 min-w-[230px]">
-              <p className="font-semibold">{product.name}</p>
-            </div>
-          );
+
         case "is_active":
           return (
             <Chip

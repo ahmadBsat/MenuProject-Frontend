@@ -1,5 +1,21 @@
 import { Meta } from "../common";
 
+export type Product = {
+  _id: string;
+  additions: string[];
+  branch: string[];
+  category: string[];
+  createdAt: string;
+  updatedAt: string;
+  price: number;
+  images: string[];
+  description: string;
+  name: string;
+  is_active: boolean;
+};
+
+export type ProductForm = Omit<Product, "_id" | "createdAt" | "updatedAt">;
+
 export type ProductAddition = {
   group: string;
   name: string;
@@ -7,18 +23,8 @@ export type ProductAddition = {
   is_multiple: boolean;
 };
 
-export type Product = {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  images: string[];
-  category: string[];
-  is_active: boolean;
-  branch: string[];
+export type ProductPopulated = Omit<Product, "additions"> & {
   additions: ProductAdditionGroup[];
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type ProductItem = {

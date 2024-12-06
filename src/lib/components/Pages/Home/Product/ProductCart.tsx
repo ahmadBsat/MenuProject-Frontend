@@ -54,7 +54,7 @@ const ProductCart = ({ product }: { product: Product }) => {
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
 
-          <div className="py-8 flex flex-col gap-2">
+          <div className="py-8 px-4 flex flex-col gap-2">
             {additions.map((group) => {
               const { is_multiple, group: _id } = group;
 
