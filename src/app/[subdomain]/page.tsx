@@ -7,6 +7,8 @@ import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import NotFound from "@/lib/components/Pages/NotFound";
 import { API_STORE } from "@/lib/services/store/store_service";
+import { StorePopulated } from "@/lib/types/store/store";
+import { usePreference } from "@/store/account";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -14,7 +16,8 @@ const Page = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [store, setStore] = useState<any>(null);
+  const [store, setStore] = useState<StorePopulated | null>(null);
+  const { setPalette, branch } = usePreference();
 
   const params = useParams();
   const domain = params.subdomain as string;
@@ -24,19 +27,26 @@ const Page = () => {
       setLoading(true);
       setError(false);
 
-      const res = await API_STORE.getStoreByDomain(domain);
+      let query;
+
+      if (branch._id) {
+        query = `?branch=${branch._id}`;
+      }
+
+      const res = await API_STORE.getStoreByDomain(domain, query);
       setStore(res);
+      setPalette(res.palette);
     } catch (error) {
       console.log(error);
       setError(true);
     } finally {
       setLoading(false);
     }
-  }, [domain]);
+  }, [branch, domain, setPalette]);
 
   useEffect(() => {
     getStore();
-  }, [domain, getStore]);
+  }, [domain, getStore, branch]);
 
   if (loading) {
     return (
@@ -55,85 +65,16 @@ const Page = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <StoreHeader />
-      <StoreCategory />
-      <StoreProductList
-        data={[
-          {
-            _id: "1",
-            name: "Combos",
-            products: [
-              {
-                _id: "1",
-                name: "Cloud Burger",
-                price: 6.5,
-                description: "lorem ipsum saftinh san xjj test gss",
-                images: [
-                  "https://cloudybites.moviyum.com/storage/product/2024-09-05-66d8e79bdb4fd.png",
-                ],
-                additions: [
-                  {
-                    name: "test",
-                    is_multiple: false,
-                    items: [
-                      {
-                        _id: "1",
-                        name: "Mayo",
-                        image: "",
-                        additional_price: 0,
-                      },
-                      {
-                        _id: "2",
-                        name: "Ketchup",
-                        image: "",
-                        additional_price: 0,
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                _id: "1",
-                name: "Cloud Burger",
-                price: 6.5,
-                description: "lorem ipsum saftinh san xjj test gss",
-                images: [
-                  "https://cloudybites.moviyum.com/storage/product/2024-09-05-66d8e79bdb4fd.png",
-                ],
-                additions: [{ name: "test", is_multiple: true, items: [] }],
-              },
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ] as any,
-          },
-          {
-            _id: "1",
-            name: "Sandwiches",
-            products: [
-              {
-                _id: "1",
-                name: "Cloud Burger",
-                price: 6.5,
-                description: "lorem ipsum saftinh san xjj test gss",
-                images: [
-                  "https://cloudybites.moviyum.com/storage/product/2024-09-05-66d8e79bdb4fd.png",
-                ],
-                additions: [{ name: "test", is_multiple: true, items: [] }],
-              },
-              {
-                _id: "1",
-                name: "Cloud Burger",
-                price: 6.5,
-                description: "lorem ipsum saftinh san xjj test gss",
-                images: [
-                  "https://cloudybites.moviyum.com/storage/product/2024-09-05-66d8e79bdb4fd.png",
-                ],
-                additions: [{ name: "testtt", is_multiple: false, items: [] }],
-              },
-            ],
-          },
-        ]}
-      />
+    <div
+      style={{
+        background: store.palette.background,
+        color: store.palette.color,
+      }}
+      className="w-full h-full flex flex-col"
+    >
+      <StoreHeader store={store} />
+      <StoreCategory store={store} />
+      <StoreProductList data={store.products} />
     </div>
   );
 };

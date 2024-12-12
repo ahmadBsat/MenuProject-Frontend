@@ -23,8 +23,9 @@ export type ProductAddition = {
   is_multiple: boolean;
 };
 
-export type ProductPopulated = Omit<Product, "additions"> & {
+export type ProductPopulated = Omit<Product, "additions" | "category"> & {
   additions: ProductAdditionGroup[];
+  category: { _id: string; name: string }[];
 };
 
 export type ProductItem = {

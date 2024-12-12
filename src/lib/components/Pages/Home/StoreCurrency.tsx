@@ -21,7 +21,7 @@ const StoreCurrency = () => {
   const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [selected, setSelected] = useState<Selection>(new Set([preferred]));
 
-  const { setCurrency } = usePreference();
+  const { setCurrency, palette } = usePreference();
 
   const handleCurrencyChange = (currency: string) => {
     if (currency) {
@@ -51,6 +51,7 @@ const StoreCurrency = () => {
       <DropdownTrigger>
         <Button
           endContent={<ChevronDown size={16} />}
+          style={{ color: palette.color }}
           className="bg-transparent text-base uppercase font-medium p-1"
         >
           {selected}

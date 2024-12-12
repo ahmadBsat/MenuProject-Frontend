@@ -13,11 +13,14 @@ import {
   DrawerFooter,
   DrawerClose,
 } from "../../../Common/drawer";
-import { Product } from "@/lib/types/store/product";
+import { ProductPopulated } from "@/lib/types/store/product";
 import { useState } from "react";
+import { usePreference } from "@/store/account";
 
-const ProductCart = ({ product }: { product: Product }) => {
+const ProductCart = ({ product }: { product: ProductPopulated }) => {
+  const { palette } = usePreference();
   const { name, description, additions } = product;
+
   const [selected, setSelected] = useState<Record<string, string[]>>({});
 
   const handle_change = (
@@ -40,7 +43,7 @@ const ProductCart = ({ product }: { product: Product }) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button isIconOnly className="bg-primary">
+        <Button isIconOnly style={{ background: palette.primary }}>
           <ShoppingCartIcon
             size={20}
             className="stroke-white font-bold size-5"

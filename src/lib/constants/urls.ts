@@ -36,6 +36,11 @@ export const URLs = {
       get_id: "/store/branches/:id",
       create: "/store/branches/create",
     },
+    currencies: {
+      index: "/store/currencies",
+      get_id: "/store/currencies/:id",
+      create: "/store/currencies/create",
+    },
     products: {
       index: "/store/products",
       get_id: "/store/products/:id",

@@ -5,7 +5,6 @@ import { StoreBranch } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { Button, cn } from "@nextui-org/react";
 import { ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerTrigger,
@@ -14,6 +13,7 @@ import {
   DrawerTitle,
   DrawerHeader,
 } from "../../Common/drawer";
+import { useEffect, useState } from "react";
 
 const BranchCard = ({ branch }: { branch: StoreBranch }) => {
   const { branch: selected, setBranch } = usePreference();
@@ -32,36 +32,26 @@ const BranchCard = ({ branch }: { branch: StoreBranch }) => {
   );
 };
 
-const StoreBranches = () => {
-  const { branch, setBranch } = usePreference();
-  const [branches, setBranches] = useState<StoreBranch[]>([]);
-  const data = [
-    {
-      name: "Branch1",
-      address:
-        "المعمورة - الشارع العام - قرب صيدلية المعمورة - مقابل محطة الامانة",
-      _id: "1",
-    },
-    { name: "Branch2", address: "Badaro Main Street", _id: "2" },
-  ];
+const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
+  const { branch, palette } = usePreference();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setBranches(data as any);
-
     if (!branch._id) {
-      setBranch(data[0] as any);
+      setOpen(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branch._id, setBranch]);
+  }, [branch]);
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button
           size="sm"
           radius="full"
           endContent={<ChevronRight size={16} />}
           className="bg-transparent text-sm font-medium p-1 px-3 border"
+          style={{ color: palette.color }}
+          onClick={() => setOpen(!open)}
         >
           {branch.name}
         </Button>
@@ -76,7 +66,7 @@ const StoreBranches = () => {
           </DrawerHeader>
 
           <div className="p-4 pb-8 flex flex-col gap-6">
-            {branches.map((branch, idx) => {
+            {data.map((branch, idx) => {
               return <BranchCard key={idx} branch={branch} />;
             })}
           </div>

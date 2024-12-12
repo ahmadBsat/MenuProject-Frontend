@@ -9,17 +9,17 @@ import { Card, Spinner, Button } from "@nextui-org/react";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import ProductInformation from "./ProductInformation";
+import CategoryInformation from "./CategoryInformation";
 import { CARD_STYLE } from "@/lib/constants/style";
-import { API_PRODUCT } from "@/lib/services/store/product_service";
+import { API_CATEGORY } from "@/lib/services/store/category_service";
 import NotFound from "../../NotFound";
 import HeaderContainer from "@/lib/components/Containers/HeaderContainer";
 import { toast } from "sonner";
-import { ProductForm } from "@/lib/types/store/product";
-import { PRODUCT_INITIAL } from "@/lib/constants/initials";
+import { CategoryForm } from "@/lib/types/store/category";
+import { CATEGORY_INITIAL } from "@/lib/constants/initials";
 
-const FormProduct = () => {
-  const [product, setProduct] = useState<ProductForm>(PRODUCT_INITIAL);
+const FormCategory = () => {
+  const [category, setCategory] = useState<CategoryForm>(CATEGORY_INITIAL);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -29,39 +29,35 @@ const FormProduct = () => {
   const buttonSize = width && width >= 640 ? "md" : "sm";
 
   useEffect(() => {
-    getProduct();
+    getCategory();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
-  const handleChange = (field: keyof ProductForm, value: any) => {
-    if (product) {
-      const updatedProduct = {
-        ...product,
+  const handleChange = (field: keyof CategoryForm, value: any) => {
+    if (category) {
+      const updatedCategory = {
+        ...category,
         [field]: value,
       };
 
-      setProduct(updatedProduct);
+      setCategory(updatedCategory);
     }
   };
 
-  const getProduct = async () => {
+  const getCategory = async () => {
     if (!params.id) {
       setLoading(false);
       return;
     }
 
-    const productID = params.id as string;
+    const categoryID = params.id as string;
 
     try {
       setLoading(true);
-      const result = await API_PRODUCT.getProductById(productID);
+      const result = await API_CATEGORY.getCategoryById(categoryID);
 
-      if (result.category === null) {
-        result.category = [];
-      }
-
-      setProduct(result);
+      setCategory(result);
     } catch (error) {
       console.log(error);
     } finally {
@@ -69,19 +65,19 @@ const FormProduct = () => {
     }
   };
 
-  const saveProduct = async (e: FormEvent<HTMLFormElement>) => {
+  const saveCategory = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const id = "product-create";
+    const id = "category-create";
 
     setIsProcessing(true);
-    toast.loading("Creating product...", { id });
+    toast.loading("Creating category...", { id });
 
     try {
-      await API_PRODUCT.createProduct(product);
+      await API_CATEGORY.createCategory(category);
 
-      toast.success("Product created", { id });
-      router.push(getUrl(URLs.store.products.index));
+      toast.success("Category created", { id });
+      router.push(getUrl(URLs.store.category.index));
     } catch (error) {
       handleServerError(error as ErrorResponse, (msg) => {
         toast.error(`${msg}`, { id });
@@ -91,19 +87,19 @@ const FormProduct = () => {
     }
   };
 
-  const updateProduct = async (e: FormEvent<HTMLFormElement>) => {
+  const updateCategory = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const id = "product-updating";
+    const id = "category-updating";
 
     setIsProcessing(true);
-    toast.loading("Updating product...", { id });
+    toast.loading("Updating category...", { id });
 
     try {
-      await API_PRODUCT.updateProduct(params.id as string, product);
+      await API_CATEGORY.updateCategory(params.id as string, category);
 
-      toast.success("Product updated", { id });
-      router.push(getUrl(URLs.store.products.index));
+      toast.success("Category updated", { id });
+      router.push(getUrl(URLs.store.category.index));
     } catch (error) {
       handleServerError(error as ErrorResponse, (msg) => {
         toast.error(`${msg}`, { id });
@@ -136,23 +132,25 @@ const FormProduct = () => {
     );
   }
 
-  if (!product) {
+  if (!category) {
     return (
-      <NotFound url={getUrl(URLs.store.products.index)} title="Products" />
+      <NotFound url={getUrl(URLs.store.category.index)} title="Categories" />
     );
   }
 
   return (
     <form
       className="w-full h-full flex flex-col justify-center gap-4"
-      onSubmit={(e) => (params.id ? updateProduct(e) : saveProduct(e))}
+      onSubmit={(e) => (params.id ? updateCategory(e) : saveCategory(e))}
     >
-      <HeaderContainer title={params.id ? "Update Product" : "Create Product"}>
+      <HeaderContainer
+        title={params.id ? "Update Category" : "Create Category"}
+      >
         <HeaderContent />
       </HeaderContainer>
 
       <Card shadow="none" className={CARD_STYLE}>
-        <ProductInformation product={product} handleChange={handleChange} />
+        <CategoryInformation category={category} handleChange={handleChange} />
       </Card>
 
       <div className="w-full flex justify-end mt-2 px-4">
@@ -170,4 +168,4 @@ const FormProduct = () => {
   );
 };
 
-export default FormProduct;
+export default FormCategory;

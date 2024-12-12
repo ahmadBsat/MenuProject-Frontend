@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Store, StoreTable } from "@/lib/types/store/store";
+import { Store, StorePopulated, StoreTable } from "@/lib/types/store/store";
 import { handleErrors, _axios } from "../../api/_axios";
 import { STORE_ENDPOINTS } from "../../constants/endpoints";
 import { SuccessResponse } from "../../types/common";
@@ -42,12 +42,17 @@ export namespace API_STORE {
     }
   }
 
-  export async function getStoreByDomain(domain: string) {
+  export async function getStoreByDomain(domain: string, query?: string) {
     try {
-      const response = await _axios.get(
-        build_path(STORE_ENDPOINTS.GET_DOMAIN, { domain })
-      );
-      return response.data as Store;
+      let endpoint = build_path(STORE_ENDPOINTS.GET_DOMAIN, { domain });
+
+      if (query) {
+        endpoint += query;
+      }
+
+      const response = await _axios.get(endpoint);
+
+      return response.data as StorePopulated;
     } catch (error: unknown) {
       throw handleErrors(error);
     }

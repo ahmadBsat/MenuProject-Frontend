@@ -1,19 +1,52 @@
 import ProductList from "./Product/ProductList";
-import { CategoryPolulated } from "@/lib/types/store/category";
+import { usePreference } from "@/store/account";
+import { ProductPopulated } from "@/lib/types/store/product";
 
-const StoreProductList = ({ data }: { data: CategoryPolulated[] }) => {
+export type GroupedCategory = {
+  _id: string;
+  name: string;
+  products: ProductPopulated[];
+};
+
+const StoreProductList = ({ data }: { data: ProductPopulated[] }) => {
+  const { palette } = usePreference();
+
+  const group_products = (products: ProductPopulated[]): GroupedCategory[] => {
+    const category_map: { [key: string]: GroupedCategory } = {};
+
+    products.forEach((product) => {
+      product.category.forEach((category) => {
+        if (!category_map[category._id]) {
+          category_map[category._id] = {
+            _id: category._id,
+            name: category.name,
+            products: [],
+          };
+        }
+        category_map[category._id].products.push(product);
+      });
+    });
+
+    return Object.values(category_map);
+  };
+
+  const groups = group_products(data);
+
   return (
     <div className="flex items-center px-4 sm:px-8 justify-center w-full pb-8">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
         <div className="flex flex-col gap-3 w-full">
-          {data.map((category, idx) => {
+          {groups.map((category, idx) => {
             return (
               <div
                 id={category.name}
                 key={idx}
                 className="flex flex-col gap-2 w-full"
               >
-                <div className="w-full p-3 mb-4 bg-primary text-white rounded-2xl flex items-center justify-center text-center text-lg font-semibold">
+                <div
+                  style={{ color: palette.color, background: palette.primary }}
+                  className="w-full p-3 mb-4 rounded-2xl flex items-center justify-center text-center text-lg font-semibold"
+                >
                   {category.name}
                 </div>
 

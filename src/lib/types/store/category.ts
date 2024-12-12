@@ -9,6 +9,8 @@ export type Category = {
   updatedAt: string;
 };
 
+export type CategoryForm = Pick<Category, "name">;
+
 export type CategoryPolulated = Pick<Category, "_id" | "name"> & {
   products: Product[];
 };

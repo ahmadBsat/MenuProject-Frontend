@@ -1,3 +1,4 @@
+import { CategoryForm } from "../types/store/category";
 import { ProductForm } from "../types/store/product";
 import { StoreBranchForm, StoreForm } from "../types/store/store";
 import { UserForm } from "../types/user/user";
@@ -49,4 +50,8 @@ export const BRANCH_INITIAL: StoreBranchForm = {
   address: "",
   name: "",
   phone_number: "",
+};
+
+export const CATEGORY_INITIAL: CategoryForm = {
+  name: "",
 };

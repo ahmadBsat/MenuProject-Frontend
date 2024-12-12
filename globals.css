@@ -12,7 +12,7 @@
   --primary: #a41f13;
 }
 
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   width: 0.45rem;
 }
 
@@ -22,7 +22,7 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
   background: var(--primary);
-}
+} */
 
 html {
   scroll-behavior: smooth;

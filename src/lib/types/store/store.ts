@@ -1,6 +1,7 @@
 import { Meta } from "../common";
 import { CategoryPolulated } from "./category";
 import { Currency } from "./currency";
+import { ProductPopulated } from "./product";
 
 export type Store = {
   _id: string;
@@ -39,10 +40,29 @@ export type StoreBranchTable = { data: StoreBranch[]; meta: Meta };
 
 export type StoreTable = { data: Store[]; meta: Meta };
 
-export type StorePopulated = {
+export type StorePopulatedOLD = {
   logo: string;
   palette: string;
   categories: CategoryPolulated[];
   currencies: Currency[];
   branches: StoreBranch[];
+};
+
+export type StorePopulated = {
+  _id: string;
+  name: string;
+  logo: string;
+  palette: StorePalette;
+  background_image: string;
+  branches: StoreBranch[];
+  products: ProductPopulated[];
+  currencies: { name: string }[];
+  categories: [];
+};
+
+export type StorePalette = {
+  background: string;
+  color: string;
+  border: string;
+  primary: string;
 };

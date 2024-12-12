@@ -1,11 +1,11 @@
-import { Product } from "@/lib/types/store/product";
+import { ProductPopulated } from "@/lib/types/store/product";
 import ProductCard from "./ProductCard";
 
 const ProductList = ({
   data,
   category,
 }: {
-  data: Product[];
+  data: ProductPopulated[];
   category: string;
 }) => {
   return (

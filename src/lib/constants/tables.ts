@@ -36,6 +36,33 @@ export const PRODUCT_VISIBLE_COL = [
   "actions",
 ];
 
+export const CATEGORY_COLUMNS = [
+  { name: "id", uid: "_id", sortable: true },
+  { name: "name", uid: "name", sortable: true },
+  // { name: "status", uid: "is_active", sortable: true },
+  { name: "Created", uid: "createdAt", sortable: true },
+  { name: "Updated", uid: "updatedAt", sortable: true },
+  { name: "actions", uid: "actions" },
+];
+
+export const CATEGORY_VISIBLE_COL = [
+  "name",
+  // "is_active",
+  "createdAt",
+  "updatedAt",
+  "actions",
+];
+
+export const BRANCH_COLUMNS = [
+  { name: "id", uid: "_id", sortable: true },
+  { name: "name", uid: "name", sortable: true },
+  { name: "Created", uid: "createdAt", sortable: true },
+  { name: "Updated", uid: "updatedAt", sortable: true },
+  { name: "actions", uid: "actions" },
+];
+
+export const BRANCH_VISIBLE_COL = ["name", "createdAt", "updatedAt", "actions"];
+
 export const PLANS_COLUMNS = [
   { name: "id", uid: "_id", sortable: true },
   { name: "name", uid: "name", sortable: true },

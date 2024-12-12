@@ -1,6 +1,9 @@
 "use client";
 
 import { Input, Textarea } from "@nextui-org/react";
+import ProductRelation from "./ProductRelation";
+import ProductPricing from "./ProductPricing";
+import ProductUpload from "./ProductUpload";
 
 const ProductInformation = ({ product, handleChange }) => {
   return (
@@ -24,6 +27,16 @@ const ProductInformation = ({ product, handleChange }) => {
         required
         value={product.description}
         onValueChange={(e) => handleChange("description", e)}
+      />
+
+      <ProductPricing product={product} handleChange={handleChange} />
+
+      <ProductRelation product={product} handleChange={handleChange} />
+
+      <ProductUpload
+        product={product}
+        type="product"
+        handleChange={handleChange}
       />
     </div>
   );

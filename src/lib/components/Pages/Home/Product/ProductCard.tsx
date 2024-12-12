@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@/lib/types/store/product";
+import { ProductPopulated } from "@/lib/types/store/product";
 import { usePreference } from "@/store/account";
 import { Image } from "@nextui-org/react";
 import ProductCart from "./ProductCart";
@@ -9,7 +9,7 @@ const ProductCard = ({
   product,
   category,
 }: {
-  product: Product;
+  product: ProductPopulated;
   category: string;
 }) => {
   const { currency } = usePreference();
