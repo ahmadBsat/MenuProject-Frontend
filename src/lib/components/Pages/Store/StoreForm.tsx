@@ -47,7 +47,6 @@ const StoresForm = () => {
 
     try {
       setLoading(true);
-      const id = store_id as string;
 
       const result = await API_STORE.getStoreById(store_id);
 

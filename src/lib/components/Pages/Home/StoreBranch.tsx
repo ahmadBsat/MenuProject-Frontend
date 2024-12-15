@@ -43,7 +43,11 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
   }, [branch]);
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer
+      open={open}
+      onOpenChange={setOpen}
+      dismissible={branch._id ? true : false}
+    >
       <DrawerTrigger asChild>
         <Button
           size="sm"

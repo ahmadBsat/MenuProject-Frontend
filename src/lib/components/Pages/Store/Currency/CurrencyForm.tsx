@@ -4,23 +4,22 @@
 
 import { handleServerError } from "@/lib/api/_axios";
 import { getUrl, URLs } from "@/lib/constants/urls";
-import { ErrorResponse, NestedKeyOf } from "@/lib/types/common";
+import { ErrorResponse } from "@/lib/types/common";
 import { Card, Spinner, Button } from "@nextui-org/react";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import ProductInformation from "./ProductInformation";
+import CurrencyInformation from "./CurrencyInformation";
 import { CARD_STYLE } from "@/lib/constants/style";
-import { API_PRODUCT } from "@/lib/services/store/product_service";
 import NotFound from "../../NotFound";
 import HeaderContainer from "@/lib/components/Containers/HeaderContainer";
 import { toast } from "sonner";
-import { ProductForm } from "@/lib/types/store/product";
-import { PRODUCT_INITIAL } from "@/lib/constants/initials";
-import { set } from "lodash";
+import { CURRENCY_INITIAL } from "@/lib/constants/initials";
+import { API_CURRENCY } from "@/lib/services/store/currency_service";
+import { CurrencyForm } from "@/lib/types/store/currency";
 
-const FormProduct = () => {
-  const [product, setProduct] = useState<ProductForm>(PRODUCT_INITIAL);
+const CurrencyFormPage = () => {
+  const [currency, setCurrency] = useState<CurrencyForm>(CURRENCY_INITIAL);
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -30,37 +29,35 @@ const FormProduct = () => {
   const buttonSize = width && width >= 640 ? "md" : "sm";
 
   useEffect(() => {
-    getProduct();
+    getCurrency();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
-  const handleChange = (field: NestedKeyOf<ProductForm>, value: any) => {
-    if (!product) return;
-    const temp = { ...product };
+  const handleChange = (field: keyof CurrencyForm, value: any) => {
+    if (currency) {
+      const updatedCurrency = {
+        ...currency,
+        [field]: value,
+      };
 
-    set(temp, field, value);
-
-    setProduct(temp);
+      setCurrency(updatedCurrency);
+    }
   };
 
-  const getProduct = async () => {
+  const getCurrency = async () => {
     if (!params.id) {
       setLoading(false);
       return;
     }
 
-    const productID = params.id as string;
+    const currencyID = params.id as string;
 
     try {
       setLoading(true);
-      const result = await API_PRODUCT.getProductById(productID);
+      const result = await API_CURRENCY.getCurrencyById(currencyID);
 
-      if (result.category === null) {
-        result.category = [];
-      }
-
-      setProduct(result);
+      setCurrency(result);
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,19 +65,19 @@ const FormProduct = () => {
     }
   };
 
-  const saveProduct = async (e: FormEvent<HTMLFormElement>) => {
+  const saveCurrency = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const id = "product-create";
+    const id = "currency-create";
 
     setIsProcessing(true);
-    toast.loading("Creating product...", { id });
+    toast.loading("Creating currency...", { id });
 
     try {
-      await API_PRODUCT.createProduct(product);
+      await API_CURRENCY.createCurrency(currency);
 
-      toast.success("Product created", { id });
-      router.push(getUrl(URLs.store.products.index));
+      toast.success("Currency created", { id });
+      router.push(getUrl(URLs.store.currencies.index));
     } catch (error) {
       handleServerError(error as ErrorResponse, (msg) => {
         toast.error(`${msg}`, { id });
@@ -90,19 +87,19 @@ const FormProduct = () => {
     }
   };
 
-  const updateProduct = async (e: FormEvent<HTMLFormElement>) => {
+  const updateCurrency = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const id = "product-updating";
+    const id = "currency-updating";
 
     setIsProcessing(true);
-    toast.loading("Updating product...", { id });
+    toast.loading("Updating currency...", { id });
 
     try {
-      await API_PRODUCT.updateProduct(params.id as string, product);
+      await API_CURRENCY.updateCurrency(params.id as string, currency);
 
-      toast.success("Product updated", { id });
-      router.push(getUrl(URLs.store.products.index));
+      toast.success("Currency updated", { id });
+      router.push(getUrl(URLs.store.currencies.index));
     } catch (error) {
       handleServerError(error as ErrorResponse, (msg) => {
         toast.error(`${msg}`, { id });
@@ -135,23 +132,25 @@ const FormProduct = () => {
     );
   }
 
-  if (!product) {
+  if (!currency) {
     return (
-      <NotFound url={getUrl(URLs.store.products.index)} title="Products" />
+      <NotFound url={getUrl(URLs.store.currencies.index)} title="Currencys" />
     );
   }
 
   return (
     <form
       className="w-full h-full flex flex-col justify-center gap-4"
-      onSubmit={(e) => (params.id ? updateProduct(e) : saveProduct(e))}
+      onSubmit={(e) => (params.id ? updateCurrency(e) : saveCurrency(e))}
     >
-      <HeaderContainer title={params.id ? "Update Product" : "Create Product"}>
+      <HeaderContainer
+        title={params.id ? "Update Currency" : "Create Currency"}
+      >
         <HeaderContent />
       </HeaderContainer>
 
       <Card shadow="none" className={CARD_STYLE}>
-        <ProductInformation product={product} handleChange={handleChange} />
+        <CurrencyInformation currency={currency} handleChange={handleChange} />
       </Card>
 
       <div className="w-full flex justify-end mt-2 px-4">
@@ -169,4 +168,4 @@ const FormProduct = () => {
   );
 };
 
-export default FormProduct;
+export default CurrencyFormPage;

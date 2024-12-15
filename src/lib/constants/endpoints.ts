@@ -44,12 +44,28 @@ export const PRODUCT_ENDPOINTS = {
   DELETE: "/api/v1/products/:id",
 };
 
+export const PRODUCT_ITEMS_ENDPOINTS = {
+  GET_ALL: "/api/v1/items",
+  GET_ID: "/api/v1/items/:id",
+  CREATE: "/api/v1/items",
+  UPDATE: "/api/v1/items/:id",
+  DELETE: "/api/v1/items/:id",
+};
+
 export const CATEGORY_ENDPOINTS = {
   GET_ALL: "/api/v1/categories",
   GET_ID: "/api/v1/categories/:id",
   CREATE: "/api/v1/categories",
   UPDATE: "/api/v1/categories/:id",
   DELETE: "/api/v1/categories/:id",
+};
+
+export const CURRENCY_ENDPOINTS = {
+  GET_ALL: "/api/v1/currencies",
+  GET_ID: "/api/v1/currencies/:id",
+  CREATE: "/api/v1/currencies",
+  UPDATE: "/api/v1/currencies/:id",
+  DELETE: "/api/v1/currencies/:id",
 };
 
 export const BRANCH_ENDPOINTS = {

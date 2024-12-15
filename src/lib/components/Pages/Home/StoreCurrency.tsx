@@ -1,7 +1,6 @@
 "use client";
 
 import { getCookie } from "@/lib/api/_axios";
-import { Currency } from "@/lib/types/store/currency";
 import { usePreference } from "@/store/account";
 import {
   Button,
@@ -12,13 +11,12 @@ import {
   Selection,
 } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const StoreCurrency = () => {
+const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
   const flags = { USD: "us", LBP: "lb" };
   const preferred = getCookie("preferredCurrency", "USD");
 
-  const [currencies, setCurrencies] = useState<Currency[]>([]);
   const [selected, setSelected] = useState<Selection>(new Set([preferred]));
 
   const { setCurrency, palette } = usePreference();
@@ -31,20 +29,6 @@ const StoreCurrency = () => {
       window.location.reload();
     }
   };
-
-  const getCurrencies = async () => {
-    try {
-      //   const currencies = await API_CURRENCY.getActiveCurrencies();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setCurrencies([{ name: "USD" }, { name: "LBP" }] as any);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getCurrencies();
-  }, []);
 
   return (
     <Dropdown placement="bottom">
@@ -64,7 +48,7 @@ const StoreCurrency = () => {
         selectedKeys={selected}
         onSelectionChange={setSelected}
       >
-        {currencies.map((currency) => (
+        {[{ name: "USD" }, ...currencies].map((currency) => (
           <DropdownItem
             key={currency.name}
             value={currency.name}

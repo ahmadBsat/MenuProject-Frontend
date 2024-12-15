@@ -2,7 +2,7 @@ import { Meta } from "../common";
 
 export type Product = {
   _id: string;
-  additions: string[];
+  additions: ProductAddition[];
   branch: string[];
   category: string[];
   createdAt: string;
@@ -19,7 +19,7 @@ export type ProductForm = Omit<Product, "_id" | "createdAt" | "updatedAt">;
 export type ProductAddition = {
   group: string;
   name: string;
-  item: string[];
+  items: string[];
   is_multiple: boolean;
 };
 
@@ -34,6 +34,9 @@ export type ProductItem = {
   image: string;
   additional_price: number;
 };
+
+export type ProductItemForm = Omit<ProductItem, "_id">;
+export type ProductItemTable = { data: ProductItem[]; meta: Meta };
 
 export type ProductAdditionGroup = {
   group: string;

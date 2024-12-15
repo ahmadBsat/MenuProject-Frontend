@@ -1,5 +1,6 @@
 import { CategoryForm } from "../types/store/category";
-import { ProductForm } from "../types/store/product";
+import { CurrencyForm } from "../types/store/currency";
+import { ProductForm, ProductItemForm } from "../types/store/product";
 import { StoreBranchForm, StoreForm } from "../types/store/store";
 import { UserForm } from "../types/user/user";
 import { USER_ROLES } from "./variables";
@@ -17,7 +18,13 @@ export const STORE_INITIAL: StoreForm = {
   background_image: "",
   logo: "",
   name: "",
-  palette: "",
+  owner: "",
+  palette: {
+    background: "#fff",
+    border: "#fff",
+    color: "#000",
+    primary: "#a41f13",
+  },
   is_active: true,
   domain: "",
   renewal_cost: 100,
@@ -54,4 +61,16 @@ export const BRANCH_INITIAL: StoreBranchForm = {
 
 export const CATEGORY_INITIAL: CategoryForm = {
   name: "",
+};
+
+export const CURRENCY_INITIAL: CurrencyForm = {
+  name: "",
+  rate_change: 0.0,
+  is_active: true,
+};
+
+export const ITEM_INITIAL: ProductItemForm = {
+  name: "",
+  additional_price: 0,
+  image: "",
 };

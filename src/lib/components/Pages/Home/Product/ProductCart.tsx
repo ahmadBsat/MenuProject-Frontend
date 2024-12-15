@@ -58,11 +58,11 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
           </DrawerHeader>
 
           <div className="py-8 px-4 flex flex-col gap-2">
-            {additions.map((group) => {
+            {additions.map((group, idx) => {
               const { is_multiple, group: _id } = group;
 
               return (
-                <div key={group.name}>
+                <div key={idx}>
                   <div className="">
                     <CheckboxGroup
                       label={group.name}

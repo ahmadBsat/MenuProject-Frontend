@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem(TOKEN_KEY);
     setUser(null);
     setLogged(false);
+    setIsAdmin(false);
     router.push(getUrl(URLs.auth.login));
   };
 

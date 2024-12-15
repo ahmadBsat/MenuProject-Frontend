@@ -1,7 +1,7 @@
-import BranchFormPage from "@/lib/components/Pages/Store/Branch/BranchForm";
+import CurrencyFormPage from "@/lib/components/Pages/Store/Currency/CurrencyForm";
 
 const Page = () => {
-  return <BranchFormPage />;
+  return <CurrencyFormPage />;
 };
 
 export default Page;

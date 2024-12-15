@@ -7,8 +7,9 @@ export type Store = {
   _id: string;
   name: string;
   logo: string;
+  owner: string;
   background_image: string;
-  palette: string;
+  palette: StorePalette;
   createdAt: string;
   updatedAt: string;
   domain: string;

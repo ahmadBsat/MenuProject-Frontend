@@ -13,8 +13,20 @@ import { User } from "@/lib/types/user/user";
 import { handleServerError } from "@/lib/api/_axios";
 import { toast } from "sonner";
 import { API_USER } from "@/lib/services/user/user_service";
+import { HexColorPicker } from "react-colorful";
+import { StoreForm } from "@/lib/types/store/store";
+import { NestedKeyOf } from "@/lib/types/common";
 
-const StoreInformation = ({ data, editable, handleChange }) => {
+const StoreInformation = ({
+  data,
+  editable,
+  handleChange,
+}: {
+  data: StoreForm;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleChange: (field: NestedKeyOf<StoreForm>, value: any) => void;
+  editable: boolean;
+}) => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -112,6 +124,30 @@ const StoreInformation = ({ data, editable, handleChange }) => {
             </p>
           </div>
         </Switch>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-lg">Background Color</p>{" "}
+          <HexColorPicker
+            color={data.palette.background}
+            onChange={(c) => handleChange("palette.background", c)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-lg">Buttons Color</p>{" "}
+          <HexColorPicker
+            color={data.palette.primary}
+            onChange={(c) => handleChange("palette.primary", c)}
+          />{" "}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <p className="text-lg">Font Color</p>{" "}
+          <HexColorPicker
+            color={data.palette.color}
+            onChange={(c) => handleChange("palette.color", c)}
+          />{" "}
+        </div>
       </Card>
     </div>
   );
