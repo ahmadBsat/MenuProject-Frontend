@@ -1,4 +1,5 @@
 export const URLs = {
+  checkout: "/checkout",
   account: {
     profile: "/settings/account",
     setting: "/settings/account",

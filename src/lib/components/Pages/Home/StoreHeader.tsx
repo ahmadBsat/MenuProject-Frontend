@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import StoreBranches from "./StoreBranch";
 import { StorePopulated } from "@/lib/types/store/store";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import StoreCart from "./StoreCart";
 
 const StoreCurrency = dynamic(() => import("./StoreCurrency"), {
   ssr: false,
@@ -18,7 +18,7 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
         </div>
         <div className="flex items-center gap-2 justify-center">
           <StoreCurrency currencies={store.currencies} />
-          <ShoppingCartIcon className="size-5"/>
+          <StoreCart />
         </div>
       </div>
     </div>

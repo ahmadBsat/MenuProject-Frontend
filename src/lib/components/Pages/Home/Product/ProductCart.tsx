@@ -16,12 +16,17 @@ import {
 import { ProductPopulated } from "@/lib/types/store/product";
 import { useState } from "react";
 import { usePreference } from "@/store/account";
+import { useCart } from "@/lib/context/CartContext";
 
 const ProductCart = ({ product }: { product: ProductPopulated }) => {
-  const { palette } = usePreference();
+  const { palette, store } = usePreference();
   const { name, description, additions } = product;
+  const { addToCart } = useCart();
 
+  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Record<string, string[]>>({});
+
+  const flattened_values = Object.values(selected).flat();
 
   const handle_change = (
     group_id: string,
@@ -40,10 +45,14 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
     });
   };
 
-  return (
-    <Drawer>
+  return additions.length > 0 ? (
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button isIconOnly style={{ background: palette.primary }}>
+        <Button
+          isIconOnly
+          style={{ background: palette.primary }}
+          onClick={() => setOpen(true)}
+        >
           <ShoppingCartIcon
             size={20}
             className="stroke-white font-bold size-5"
@@ -87,11 +96,38 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
             <DrawerClose asChild>
               <Button color="danger">Cancel</Button>
             </DrawerClose>
-            <Button color="success">Confirm</Button>
+            <Button
+              color="success"
+              onClick={() =>
+                addToCart({
+                  product_id: product._id,
+                  product_additions: flattened_values,
+                  quantity: 1,
+                  store: store,
+                })
+              }
+            >
+              Confirm
+            </Button>
           </DrawerFooter>
         </div>
       </DrawerContent>
     </Drawer>
+  ) : (
+    <Button
+      isIconOnly
+      style={{ background: palette.primary }}
+      onPress={() =>
+        addToCart({
+          product_id: product._id,
+          product_additions: [],
+          quantity: 1,
+          store: store,
+        })
+      }
+    >
+      <ShoppingCartIcon size={20} className="stroke-white font-bold size-5" />
+    </Button>
   );
 };
 

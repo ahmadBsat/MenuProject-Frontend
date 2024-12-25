@@ -11,6 +11,8 @@ type PreferenceState = {
   setPalette: (val: StorePalette) => void;
   setBranch: (val: StoreBranch) => void;
   setCurrency: (val: string) => void;
+  store: string;
+  setStore: (val: string) => void;
 };
 
 export const usePreference = create<PreferenceState>()(
@@ -23,7 +25,9 @@ export const usePreference = create<PreferenceState>()(
         border: "",
         primary: "#a41f13",
       },
+      store: "",
       branch: { _id: "", name: "", address: "", phone_number: "" },
+      setStore: (val) => set({ store: val }),
       setBranch: (val) => set({ branch: val }),
       setCurrency: (val) => set({ currency: val }),
       setPalette: (val) => set({ palette: val }),

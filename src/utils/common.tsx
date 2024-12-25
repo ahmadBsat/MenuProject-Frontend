@@ -94,3 +94,7 @@ export const to12HourFormat = (isoString: string) => {
 export const redirect = (url: string, callback: string) => {
   return `${getUrl(url)}?callback=${callback}`;
 };
+
+export const format_pricing = (price: number) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

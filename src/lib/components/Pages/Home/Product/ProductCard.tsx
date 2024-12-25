@@ -4,6 +4,7 @@ import { ProductPopulated } from "@/lib/types/store/product";
 import { usePreference } from "@/store/account";
 import { Image } from "@nextui-org/react";
 import ProductCart from "./ProductCart";
+import { format_pricing } from "@/utils/common";
 
 const ProductCard = ({
   product,
@@ -34,7 +35,7 @@ const ProductCard = ({
               {currencies[currency]}{" "}
               {currency === "USD"
                 ? product.price.toFixed(2)
-                : product.price.toFixed(0)}
+                : format_pricing(product.price)}
             </p>
           </div>
         </div>

@@ -75,3 +75,9 @@ export const BRANCH_ENDPOINTS = {
   UPDATE: "/api/v1/branches/:id",
   DELETE: "/api/v1/branches/:id",
 };
+
+export const CART_ENDPOINTS = {
+  GET: "/api/v1/cart/:store",
+  ADD: "/api/v1/cart/add",
+  REMOVE: "/api/v1/cart/remove",
+};

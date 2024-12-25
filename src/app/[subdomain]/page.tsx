@@ -6,6 +6,7 @@ import StoreCategory from "@/lib/components/Pages/Home/StoreCategory.tsx";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import NotFound from "@/lib/components/Pages/NotFound";
+import { CartProvider } from "@/lib/context/CartContext";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
@@ -17,7 +18,12 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [store, setStore] = useState<StorePopulated | null>(null);
-  const { setPalette, branch } = usePreference();
+  const {
+    setPalette,
+    branch,
+    currency,
+    setStore: setCurrentStore,
+  } = usePreference();
 
   const params = useParams();
   const domain = params.subdomain as string;
@@ -35,6 +41,7 @@ const Page = () => {
 
       const res = await API_STORE.getStoreByDomain(domain, query);
       setStore(res);
+      setCurrentStore(res._id);
       setPalette(res.palette);
     } catch (error) {
       console.log(error);
@@ -42,13 +49,14 @@ const Page = () => {
     } finally {
       setLoading(false);
     }
-  }, [branch, domain, setPalette]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [branch, domain, setPalette, currency]);
 
   useEffect(() => {
     getStore();
-  }, [domain, getStore, branch]);
+  }, [domain, getStore, branch, currency]);
 
-  if (loading) {
+  if (loading && store?.products.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <DotsLoader />
@@ -72,9 +80,11 @@ const Page = () => {
       }}
       className="w-full h-full flex flex-col"
     >
-      <StoreHeader store={store} />
-      <StoreCategory store={store} />
-      <StoreProductList data={store.products} />
+      <CartProvider>
+        <StoreHeader store={store} />
+        <StoreCategory store={store} />
+        <StoreProductList data={store.products} />
+      </CartProvider>
     </div>
   );
 };

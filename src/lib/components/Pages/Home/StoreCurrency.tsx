@@ -26,7 +26,7 @@ const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
       const maxExpiryDate = new Date(2147483647 * 1000).toUTCString();
       document.cookie = `preferredCurrency=${currency}; path=/; expires=${maxExpiryDate}`;
       setCurrency(currency);
-      window.location.reload();
+      // window.location.reload();
     }
   };
 

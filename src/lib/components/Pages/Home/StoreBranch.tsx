@@ -15,12 +15,21 @@ import {
 } from "../../Common/drawer";
 import { useEffect, useState } from "react";
 
-const BranchCard = ({ branch }: { branch: StoreBranch }) => {
+const BranchCard = ({
+  branch,
+  setOpen,
+}: {
+  branch: StoreBranch;
+  setOpen: (val: boolean) => void;
+}) => {
   const { branch: selected, setBranch } = usePreference();
 
   return (
     <div
-      onClick={() => setBranch(branch)}
+      onClick={() => {
+        setBranch(branch);
+        setOpen(false);
+      }}
       className={cn(
         selected._id === branch._id && "border-primary",
         "flex flex-col font-medium gap-1 w-full items-center justify-center text-center p-4 rounded-2xl border-3"
@@ -71,7 +80,7 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
 
           <div className="p-4 pb-8 flex flex-col gap-6">
             {data.map((branch, idx) => {
-              return <BranchCard key={idx} branch={branch} />;
+              return <BranchCard key={idx} branch={branch} setOpen={setOpen} />;
             })}
           </div>
         </div>
