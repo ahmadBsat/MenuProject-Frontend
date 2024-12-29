@@ -46,10 +46,14 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!branch._id) {
+    const exist = data.some(
+      (stored_branch) => stored_branch._id === branch._id
+    );
+
+    if (!branch._id || !exist) {
       setOpen(true);
     }
-  }, [branch]);
+  }, [branch, data]);
 
   return (
     <Drawer

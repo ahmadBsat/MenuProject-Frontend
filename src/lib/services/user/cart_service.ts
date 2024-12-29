@@ -17,6 +17,15 @@ export namespace API_CART {
     }
   }
 
+  export async function resetCart(store: string) {
+    try {
+      const response = await _axios.post(CART_ENDPOINTS.RESET, { store });
+      return response.data as Cart;
+    } catch (error: unknown) {
+      throw handleErrors(error);
+    }
+  }
+
   export async function addItem(data: any) {
     try {
       const response = await _axios.patch(CART_ENDPOINTS.ADD, data);

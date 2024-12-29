@@ -34,7 +34,10 @@ export const usePreference = create<PreferenceState>()(
     }),
     {
       name: "preferences-storage",
-      partialize: (state) => ({ currency: state.currency }),
+      partialize: (state) => ({
+        currency: state.currency,
+        branch: state.branch,
+      }),
     }
   )
 );

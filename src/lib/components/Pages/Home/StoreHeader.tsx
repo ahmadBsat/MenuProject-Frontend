@@ -18,7 +18,7 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
         </div>
         <div className="flex items-center gap-2 justify-center">
           <StoreCurrency currencies={store.currencies} />
-          <StoreCart />
+          <StoreCart store={store} />
         </div>
       </div>
     </div>

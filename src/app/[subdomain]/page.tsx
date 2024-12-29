@@ -6,7 +6,6 @@ import StoreCategory from "@/lib/components/Pages/Home/StoreCategory.tsx";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import NotFound from "@/lib/components/Pages/NotFound";
-import { CartProvider } from "@/lib/context/CartContext";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
@@ -17,7 +16,17 @@ const Page = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [store, setStore] = useState<StorePopulated | null>(null);
+  const [store, setStore] = useState<StorePopulated>({
+    _id: "",
+    background_image: "",
+    branches: [],
+    categories: [],
+    currencies: [],
+    logo: "",
+    name: "",
+    palette: { background: "", border: "", color: "", primary: "" },
+    products: [],
+  });
   const {
     setPalette,
     branch,
@@ -64,7 +73,7 @@ const Page = () => {
     );
   }
 
-  if (error || !store) {
+  if (error) {
     return (
       <div className="h-screen max-h-[calc(100vh-50px)] w-full">
         <NotFound show_btn={false} />;
@@ -80,11 +89,9 @@ const Page = () => {
       }}
       className="w-full h-full flex flex-col"
     >
-      <CartProvider>
-        <StoreHeader store={store} />
-        <StoreCategory store={store} />
-        <StoreProductList data={store.products} />
-      </CartProvider>
+      <StoreHeader store={store} />
+      <StoreCategory store={store} />
+      <StoreProductList data={store.products} />
     </div>
   );
 };

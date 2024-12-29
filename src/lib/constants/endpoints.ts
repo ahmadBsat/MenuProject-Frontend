@@ -80,4 +80,5 @@ export const CART_ENDPOINTS = {
   GET: "/api/v1/cart/:store",
   ADD: "/api/v1/cart/add",
   REMOVE: "/api/v1/cart/remove",
+  RESET: "/api/v1/cart/reset",
 };

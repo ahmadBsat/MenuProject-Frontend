@@ -30,6 +30,7 @@ type CartContextType = {
     quantity: number;
     store: string;
   }) => void;
+  resetCart: (data: { store: string }) => Promise<void>;
   removeFromCart: (product_id: string, options?: any[]) => void;
 };
 
@@ -51,6 +52,8 @@ export const CartProvider = ({ children }) => {
   const { store, currency } = usePreference();
 
   const getUserCart = useCallback(async () => {
+    if (!store) return;
+
     setProcessing(true);
 
     try {
@@ -81,12 +84,28 @@ export const CartProvider = ({ children }) => {
     setSubLoading(true);
 
     try {
-      const updatedCart = await API_CART.addItem({ product: { ...item } });
+      const updatedCart = await API_CART.addItem({
+        product: { ...item },
+        store: item.store,
+      });
       setCart(updatedCart);
     } catch (error) {
       console.log(error);
     } finally {
       handleOpenClose();
+    }
+  };
+
+  const resetCart = async (data: { store: string }) => {
+    setSubLoading(true);
+
+    try {
+      const updatedCart = await API_CART.resetCart(data.store);
+      setCart(updatedCart);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubLoading(false);
     }
   };
 
@@ -121,6 +140,7 @@ export const CartProvider = ({ children }) => {
         subLoading,
         processing,
         setSubLoading,
+        resetCart,
         setCart,
         setCartOpen,
         getUserCart,

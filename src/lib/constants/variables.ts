@@ -1,3 +1,5 @@
+export const WHATSAPP_URI = "https://api.whatsapp.com/send";
+
 export const USER_ROLES = {
   ADMIN: "admin",
   OWNER: "owner",

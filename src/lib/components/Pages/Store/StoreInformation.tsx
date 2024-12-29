@@ -74,8 +74,8 @@ const StoreInformation = ({
             required
             isDisabled={!editable}
             value={data.domain}
-            endContent={
-              <span className="text-sm text-default-400">.fmcshops.com</span>
+            startContent={
+              <span className="text-sm text-default-400">fmcshops.com/</span>
             }
             onValueChange={(e) => handleChange("domain", e)}
           />

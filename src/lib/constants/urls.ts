@@ -15,7 +15,8 @@ export const URLs = {
     waitlist: "/waitlist/",
   },
   admin: {
-    dashboard: "/admin/dashboard/",
+    // dashboard: "/admin/dashboard/",
+    dashboard: "/admin/stores/",
     users: {
       index: "/admin/users/",
       get_id: "/admin/users/:user_id",
@@ -30,7 +31,8 @@ export const URLs = {
   },
   store: {
     index: "/store",
-    dashboard: "/store/dashboard",
+    // dashboard: "/store/dashboard",
+    dashboard: "/store/products",
     customize: "/store/customize",
     branch: {
       index: "/store/branches",
