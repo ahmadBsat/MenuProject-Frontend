@@ -25,8 +25,8 @@ export const getInitials = (userName?: string) => {
   return "";
 };
 
-export const isLinkActive = (url: string, pathname: string, lang?: string) => {
-  return `${pathname}/`.includes(lang ? `/${lang}${url}` : `${url}`);
+export const isLinkActive = (url: string, pathname: string) => {
+  return `${pathname}/`.includes(url) && pathname.length === url.length;
 };
 
 export const formatDates = (date: string) => {

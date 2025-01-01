@@ -63,7 +63,9 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
         <div className="mx-auto w-full max-w-2xl">
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
-            <DrawerDescription>{description}</DrawerDescription>
+            <DrawerDescription className="flex flex-col gap-1">
+              <p>{description}</p>
+            </DrawerDescription>
           </DrawerHeader>
 
           <div className="py-8 px-4 flex flex-col gap-2">
@@ -98,14 +100,16 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
             </DrawerClose>
             <Button
               color="success"
-              onClick={() =>
+              onClick={() => {
+                setOpen(false);
                 addToCart({
                   product_id: product._id,
-                  product_additions: flattened_values,
+                  product_additions:
+                    Object.values(selected).length > 0 ? flattened_values : [],
                   quantity: 1,
                   store: store,
-                })
-              }
+                });
+              }}
             >
               Confirm
             </Button>
@@ -117,14 +121,15 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
     <Button
       isIconOnly
       style={{ background: palette.primary }}
-      onPress={() =>
+      onPress={() => {
+        setOpen(false);
         addToCart({
           product_id: product._id,
           product_additions: [],
           quantity: 1,
           store: store,
-        })
-      }
+        });
+      }}
     >
       <ShoppingCartIcon size={20} className="stroke-white font-bold size-5" />
     </Button>

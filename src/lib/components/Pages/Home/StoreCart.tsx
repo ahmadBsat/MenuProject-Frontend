@@ -70,6 +70,22 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
                     <div className="flex flex-col gap-2 w-full">
                       <p className="text-lg font-bold">{product.name}</p>
+                      <div className="flex flex-col">
+                        {product.additions.map((group, index) => {
+                          return (
+                            <div
+                              key={`g${index}`}
+                              className="flex flex-row gap-1 text-sm text-default-400"
+                            >
+                              <span className="text-black font-medium">
+                                {group.name}
+                              </span>
+
+                              {group.items.map((item) => item.name).join(", ")}
+                            </div>
+                          );
+                        })}
+                      </div>
 
                       <div className="flex items-center gap-2">
                         <p>
