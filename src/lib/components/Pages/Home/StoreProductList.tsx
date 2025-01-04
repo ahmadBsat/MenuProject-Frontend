@@ -33,7 +33,7 @@ const StoreProductList = ({ data }: { data: ProductPopulated[] }) => {
   const groups = group_products(data);
 
   return (
-    <div className="flex items-center px-4 sm:px-8 justify-center w-full pb-8">
+    <div className="flex items-center px-4 sm:px-8 justify-center w-full h-full pb-8">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
         <div className="flex flex-col gap-3 w-full">
           {groups.map((category, idx) => {

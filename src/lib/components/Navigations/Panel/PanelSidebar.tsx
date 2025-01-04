@@ -18,7 +18,7 @@ const PanelSidebar = ({ children }) => {
   const [collapse, setCollapse] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const { logout, isAdmin, validating } = useAuth();
+  const { logout, isAdmin, validating, user } = useAuth();
   const { width } = useWindowSize();
 
   const navigations = validating
@@ -60,6 +60,11 @@ const PanelSidebar = ({ children }) => {
             <Link href={getUrl(URLs.admin.dashboard)}>FMC</Link>
           </div>
 
+          {!collapse && (
+            <div className="bg-primary p-1 px-3 rounded-full text-sm text-white font-semibold">
+              {user?.user.email}
+            </div>
+          )}
           <nav className="flex flex-1 flex-col justify-between">
             <div className={cn("gap-y-7", "flex flex-1 flex-col")}>
               {navigations.map((item, idx) => {

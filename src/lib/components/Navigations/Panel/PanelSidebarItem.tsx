@@ -30,7 +30,7 @@ const PanelSidebarItem = ({
         content={item.name}
         isDisabled={!collapse}
         placement="right"
-        className="bg-primary dark:text-white"
+        className="bg-primary text-white"
       >
         <Link href={getUrl(item.link)}>
           <div

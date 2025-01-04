@@ -3,6 +3,7 @@
 
 import DotsLoader from "@/lib/components/Loader/DotsLoader";
 import StoreCategory from "@/lib/components/Pages/Home/StoreCategory.tsx";
+import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import NotFound from "@/lib/components/Pages/NotFound";
@@ -32,6 +33,8 @@ const Page = () => {
     branch,
     currency,
     setStore: setCurrentStore,
+    setBranch,
+    has_hydrated,
   } = usePreference();
 
   const params = useParams();
@@ -52,6 +55,13 @@ const Page = () => {
       setStore(res);
       setCurrentStore(res._id);
       setPalette(res.palette);
+
+      if (branch._id) {
+        const current_branch = res.branches.find((x) => x._id === branch._id);
+        if (current_branch) {
+          setBranch(current_branch);
+        }
+      }
     } catch (error) {
       console.log(error);
       setError(true);
@@ -59,11 +69,13 @@ const Page = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branch, domain, setPalette, currency]);
+  }, [branch._id, domain, setPalette, currency]);
 
   useEffect(() => {
-    getStore();
-  }, [domain, getStore, branch, currency]);
+    if (has_hydrated) {
+      getStore();
+    }
+  }, [domain, getStore, branch._id, has_hydrated, currency]);
 
   if (loading && store?.products.length === 0) {
     return (
@@ -87,11 +99,15 @@ const Page = () => {
         background: store.palette.background,
         color: store.palette.color,
       }}
-      className="w-full h-full flex flex-col"
+      className="w-full min-h-screen grid grid-cols-1"
     >
       <StoreHeader store={store} />
       <StoreCategory store={store} />
       <StoreProductList data={store.products} />
+
+      <div className="flex items-end justify-end h-full">
+        <StoreFooter store={store} />
+      </div>
     </div>
   );
 };

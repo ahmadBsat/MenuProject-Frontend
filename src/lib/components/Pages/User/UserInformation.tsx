@@ -97,7 +97,7 @@ const UserInformation = ({
           </div>
         </Switch>
 
-        <Switch
+        {/* <Switch
           classNames={SWITCH_STYLE}
           isSelected={data.is_super_admin}
           onValueChange={(val) => handleChange("is_super_admin", val)}
@@ -106,7 +106,7 @@ const UserInformation = ({
             <p className="text-medium">User Admin</p>
             <p className="text-sm">Enable to make this user platform admin</p>
           </div>
-        </Switch>
+        </Switch> */}
       </Card>
     </div>
   );

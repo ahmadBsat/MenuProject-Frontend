@@ -62,8 +62,6 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
     // Build the message
     const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${data.name}\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region}\n\nThank you!`;
 
-    resetCart({ store });
-
     return `${WHATSAPP_URI}?phone=${
       branch.phone_number
     }&text=${encodeURIComponent(message)}`;
@@ -74,6 +72,8 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
     set(temp, field, value);
     setData(temp);
   };
+
+  const whatsapp_uri = getWhatsappMessage();
 
   return (
     <Modal
@@ -147,7 +147,10 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                 color="success"
                 isDisabled={!Object.values(data).every((value) => value)}
                 as={Link}
-                href={getWhatsappMessage()}
+                href={whatsapp_uri}
+                onClick={async () => {
+                  await resetCart({ store });
+                }}
               >
                 Order
               </Button>

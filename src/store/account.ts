@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { StoreBranch, StorePalette } from "@/lib/types/store/store";
@@ -13,6 +14,8 @@ type PreferenceState = {
   setCurrency: (val: string) => void;
   store: string;
   setStore: (val: string) => void;
+  has_hydrated: boolean;
+  set_has_hydrated: (val: boolean) => void;
 };
 
 export const usePreference = create<PreferenceState>()(
@@ -31,6 +34,8 @@ export const usePreference = create<PreferenceState>()(
       setBranch: (val) => set({ branch: val }),
       setCurrency: (val) => set({ currency: val }),
       setPalette: (val) => set({ palette: val }),
+      has_hydrated: false,
+      set_has_hydrated: (val) => set({ has_hydrated: val }),
     }),
     {
       name: "preferences-storage",
@@ -38,6 +43,9 @@ export const usePreference = create<PreferenceState>()(
         currency: state.currency,
         branch: state.branch,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.set_has_hydrated(true);
+      },
     }
   )
 );
