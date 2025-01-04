@@ -17,16 +17,17 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
         <div className="w-40">
           <StoreBranches data={store.branches} />
         </div>
-
-        <div className="rounded-lg lg:flex hidden">
-          <Image
-            src={store.logo}
-            alt={store.name}
-            width={200}
-            height={200}
-            className="max-h-32 p-3 object-cover rounded-2xl"
-          />
-        </div>
+        {store.logo && (
+          <div className="rounded-lg lg:flex hidden">
+            <Image
+              src={store.logo}
+              alt={store.name}
+              width={200}
+              height={200}
+              className="max-h-32 p-3 object-cover rounded-2xl"
+            />
+          </div>
+        )}
 
         <div className="flex items-center gap-2 justify-center">
           <StoreCurrency currencies={store.currencies} />

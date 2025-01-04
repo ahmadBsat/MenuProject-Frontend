@@ -33,15 +33,17 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
   return (
     <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-12">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
-        <div className="rounded-lg max-lg:flex items-center w-full justify-center hidden">
-          <Image
-            src={store.logo}
-            alt={store.name}
-            width={200}
-            height={200}
-            className="max-h-32 p-3 object-cover rounded-2xl"
-          />
-        </div>
+        {store.logo && (
+          <div className="rounded-lg max-lg:flex items-center w-full justify-center hidden">
+            <Image
+              src={store.logo}
+              alt={store.name}
+              width={200}
+              height={200}
+              className="max-h-32 p-3 object-cover rounded-2xl"
+            />
+          </div>
+        )}
 
         <p className="text-4xl font-bold px-1 mb-3">Menu</p>
 
