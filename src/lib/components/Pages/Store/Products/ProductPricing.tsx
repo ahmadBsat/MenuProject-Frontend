@@ -1,11 +1,18 @@
 "use client";
 
-import { toString } from "lodash";
 import { Input } from "@nextui-org/react";
 import { ProductForm } from "@/lib/types/store/product";
 
 const ProductPricing = ({ product, handleChange }) => {
   const validate_price = (key: keyof ProductForm, value: string) => {
+    // Allow the input of valid numbers including decimals
+    if (/^\d*\.?\d*$/.test(value)) {
+      handleChange(key, value);
+    }
+  };
+
+  const handle_blur = (key: keyof ProductForm, value: string) => {
+    // Ensure the value is converted to a valid number on blur
     const numeric_value = parseFloat(value);
     const decimal_value =
       isNaN(numeric_value) || numeric_value < 0 ? 0 : numeric_value;
@@ -25,8 +32,9 @@ const ProductPricing = ({ product, handleChange }) => {
         }
         isRequired
         required
-        value={toString(product.price)}
+        value={product.price.toString()}
         onValueChange={(val) => validate_price("price", val)}
+        onBlur={(e) => handle_blur("price", e.target.value)}
       />
     </div>
   );
