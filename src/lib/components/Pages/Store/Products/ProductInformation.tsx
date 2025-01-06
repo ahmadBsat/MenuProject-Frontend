@@ -23,8 +23,6 @@ const ProductInformation = ({ product, handleChange }) => {
       <Textarea
         label="Description"
         placeholder="Enter your description"
-        isRequired
-        required
         value={product.description}
         onValueChange={(e) => handleChange("description", e)}
       />
