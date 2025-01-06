@@ -25,7 +25,15 @@ const Page = () => {
     currencies: [],
     logo: "",
     name: "",
-    palette: { background: "", border: "", color: "", primary: "" },
+    palette: {
+      background: "",
+      border: "",
+      color: "",
+      primary: "",
+      header_background: "",
+      header_text_color: "",
+      price_color: "",
+    },
     products: [],
   });
   const {

@@ -8,7 +8,6 @@ const StoreFooter = ({ store }: { store: StorePopulated }) => {
   return (
     <div className="flex items-center justify-center w-full min-h-14 max-h-32 border-t">
       <div className="flex items-center justify-center max-w-screen-lg px-8 w-full text-xl">
-        Powered by{" "}
         <Button
           as={Link}
           href="http://www.facilitymanagementcorporation.com/"
@@ -16,7 +15,7 @@ const StoreFooter = ({ store }: { store: StorePopulated }) => {
           className="px-2 bg-transparent text-xl w-fit min-w-fit underline"
           style={{ color: store.palette.color }}
         >
-          FMC
+          Create your digital menu
         </Button>
       </div>
     </div>
