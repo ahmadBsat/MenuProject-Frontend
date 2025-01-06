@@ -92,7 +92,7 @@ export const CartProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     } finally {
-      handleOpenClose();
+      setSubLoading(false);
     }
   };
 

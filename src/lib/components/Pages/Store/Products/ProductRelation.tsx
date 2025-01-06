@@ -55,7 +55,7 @@ const ProductRelation = ({
   };
 
   const getCategories = useCallback(async () => {
-    const query = `?page=${1}&limit=${10000}`;
+    const query = `?page=${1}&limit=${10000}&sortField=createdAt&sortOrder=ASC`;
     setLoading(true);
 
     try {

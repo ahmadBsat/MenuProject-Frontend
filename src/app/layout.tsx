@@ -4,6 +4,7 @@ import "../lib/assets/css/loaders.css";
 import "../lib/assets/css/navbar.css";
 import "../lib/assets/css/style.css";
 import "../lib/assets/css/editor.css";
+import "../lib/assets/css/swiperr.css";
 
 import NextTopLoader from "nextjs-toploader";
 import localFont from "next/font/local";

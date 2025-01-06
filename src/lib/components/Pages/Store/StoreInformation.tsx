@@ -125,28 +125,54 @@ const StoreInformation = ({
           </div>
         </Switch>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-lg">Background Color</p>{" "}
-          <HexColorPicker
-            color={data.palette.background}
-            onChange={(c) => handleChange("palette.background", c)}
-          />
-        </div>
+        <div className="grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Header Background Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.header_background}
+              onChange={(c) => handleChange("palette.header_background", c)}
+            />{" "}
+          </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-lg">Buttons Color</p>{" "}
-          <HexColorPicker
-            color={data.palette.primary}
-            onChange={(c) => handleChange("palette.primary", c)}
-          />{" "}
-        </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Header Text Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.header_text_color}
+              onChange={(c) => handleChange("palette.header_text_color", c)}
+            />{" "}
+          </div>
 
-        <div className="flex flex-col gap-2">
-          <p className="text-lg">Font Color</p>{" "}
-          <HexColorPicker
-            color={data.palette.color}
-            onChange={(c) => handleChange("palette.color", c)}
-          />{" "}
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Background Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.background}
+              onChange={(c) => handleChange("palette.background", c)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Buttons Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.primary}
+              onChange={(c) => handleChange("palette.primary", c)}
+            />{" "}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Pricing Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.price_color}
+              onChange={(c) => handleChange("palette.price_color", c)}
+            />{" "}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <p className="text-lg">Font Color</p>{" "}
+            <HexColorPicker
+              color={data.palette.color}
+              onChange={(c) => handleChange("palette.color", c)}
+            />{" "}
+          </div>
         </div>
       </Card>
     </div>

@@ -96,5 +96,5 @@ export const redirect = (url: string, callback: string) => {
 };
 
 export const format_pricing = (price: number) => {
-  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return price.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };

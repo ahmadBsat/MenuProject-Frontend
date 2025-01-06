@@ -21,11 +21,11 @@ const ProductCard = ({
     <div className="flex flex-col gap-1 w-full py-4">
       <div className="flex items-center justify-between w-full">
         <div className="flex gap-3">
-          <div>
+          <div className="max-w-24 max-h-24 w-full h-full aspect-square">
             <Image
               src={product.images[0]}
               alt={product.name}
-              className="max-w-24 max-h-24 w-full h-full aspect-square"
+              className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square"
             />
           </div>
           <div className="font-medium">

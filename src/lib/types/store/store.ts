@@ -63,6 +63,9 @@ export type StorePopulated = {
 
 export type StorePalette = {
   background: string;
+  header_background: string;
+  header_text_color: string;
+  price_color: string;
   color: string;
   border: string;
   primary: string;
