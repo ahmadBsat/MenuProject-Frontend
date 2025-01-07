@@ -64,15 +64,15 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
                 return (
                   <div key={idx} className="flex gap-4 w-full items-center">
-                    {/* {product.images.length > 0 && ( */}
-                    <Image
-                      src={product.images[0]}
-                      alt={product.name}
-                      width={400}
-                      height={400}
-                      className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
-                    />
-                    {/* // )} */}
+                    {product.images.length > 0 && (
+                      <Image
+                        src={product.images[0]}
+                        alt={product.name}
+                        width={400}
+                        height={400}
+                        className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
+                      />
+                    )}
 
                     <div className="flex flex-col gap-2 w-full">
                       <p className="text-lg font-bold">{product.name}</p>
