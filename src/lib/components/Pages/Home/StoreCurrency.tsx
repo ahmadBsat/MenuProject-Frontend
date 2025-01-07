@@ -35,7 +35,7 @@ const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
       <DropdownTrigger>
         <Button
           endContent={<ChevronDown size={16} />}
-          style={{ color: palette.color }}
+          style={{ color: palette.header_text_color || palette.color }}
           className="bg-transparent text-base uppercase font-medium p-1"
         >
           {selected}

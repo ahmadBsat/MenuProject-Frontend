@@ -67,7 +67,10 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
           radius="full"
           endContent={<ChevronRight size={16} />}
           className="bg-transparent text-sm font-medium p-1 px-3 border"
-          style={{ color: palette.color }}
+          style={{
+            color: palette.header_text_color || palette.color,
+            borderColor: palette.header_text_color || palette.color,
+          }}
           onClick={() => setOpen(!open)}
         >
           {branch.name}

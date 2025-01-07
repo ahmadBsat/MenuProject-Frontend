@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import DotsLoader from "@/lib/components/Loader/DotsLoader";
 import StoreCategory from "@/lib/components/Pages/Home/StoreCategory.tsx";
 import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
@@ -12,6 +11,7 @@ import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { BounceLoader } from "react-spinners";
 
 const Page = () => {
   const [error, setError] = useState(false);
@@ -88,7 +88,7 @@ const Page = () => {
   if (loading && store?.products.length === 0) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
-        <DotsLoader />
+        <BounceLoader color="#a41f13" />
       </div>
     );
   }
@@ -111,7 +111,7 @@ const Page = () => {
     >
       <StoreHeader store={store} />
       <StoreCategory store={store} />
-      <StoreProductList data={store.products} />
+      <StoreProductList store={store} />
 
       <div className="flex items-end justify-end h-full">
         <StoreFooter store={store} />

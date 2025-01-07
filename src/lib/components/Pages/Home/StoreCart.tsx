@@ -2,7 +2,7 @@
 "use client";
 
 import { Badge, Button, useDisclosure } from "@nextui-org/react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Minus, Plus } from "lucide-react";
 import {
   Drawer,
   DrawerTrigger,
@@ -22,7 +22,7 @@ import { StorePopulated } from "@/lib/types/store/store";
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
-  const { cart, setCartOpen, cartOpen } = useCart();
+  const { cart, setCartOpen, cartOpen, addToCart, removeFromCart } = useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const currencies = { USD: "$", LBP: "LBP" };
@@ -58,8 +58,13 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
             <div className="p-4 pb-8 flex flex-col gap-6">
               {cart.products.map((product, idx) => {
+                const additions = product.additions
+                  .map((a) => a.items.map((i) => i._id))
+                  .flat();
+
                 return (
                   <div key={idx} className="flex gap-4 w-full items-center">
+                    {/* {product.images.length > 0 && ( */}
                     <Image
                       src={product.images[0]}
                       alt={product.name}
@@ -67,6 +72,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                       height={400}
                       className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
                     />
+                    {/* // )} */}
 
                     <div className="flex flex-col gap-2 w-full">
                       <p className="text-lg font-bold">{product.name}</p>
@@ -98,6 +104,43 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                             ? product.price.toFixed(2)
                             : format_pricing(product.price)}
                         </p>
+                      </div>
+
+                      <div className="flex w-full justify-end">
+                        <div className="flex items-center justify-center gap-4">
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            color="primary"
+                            variant="ghost"
+                            onClick={() => {
+                              removeFromCart(product._id, store._id, additions);
+                            }}
+                          >
+                            <Minus />
+                          </Button>
+
+                          <p className="text-base font-bold">
+                            {product.quantity}
+                          </p>
+
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            color="primary"
+                            variant="ghost"
+                            onClick={() => {
+                              addToCart({
+                                store: store._id,
+                                product_id: product._id,
+                                quantity: 1,
+                                product_additions: additions,
+                              });
+                            }}
+                          >
+                            <Plus />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

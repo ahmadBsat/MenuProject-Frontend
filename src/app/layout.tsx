@@ -19,7 +19,7 @@ type Props = {
 };
 
 const neue = localFont({
-  src: "../../public/fonts/neue-montreal.woff2",
+  src: "../../public/fonts/Lato.ttf",
   display: "swap",
   variable: "--font-neue",
   adjustFontFallback: false,
@@ -38,17 +38,11 @@ export async function generateMetadata() {
 
   return {
     title: "FMC",
-    description:
-      "Agent is an all-in-one AI customer assistance tool that saves your thousands of dollars, it works as stand-alone or with your current support stack.",
-    applicationName: "AI Agent",
+    description: "Create your perfect restaurant menu",
+    applicationName: "FMC",
     referrer: "origin-when-cross-origin",
-    keywords: ["AI", "Customer support", "assistant"],
     authors: [{ name: "Abdellatif" }],
-    creator: "Abdellatif Edlby",
     metadataBase: metadataBase,
-    openGraph: {
-      images: "/preview.png",
-    },
     icons: {
       icon: [`/favicon.ico`],
       apple: ["/apple-touch-icon.png"],

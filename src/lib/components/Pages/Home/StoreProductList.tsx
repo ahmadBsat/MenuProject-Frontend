@@ -1,6 +1,7 @@
 import ProductList from "./Product/ProductList";
 import { usePreference } from "@/store/account";
 import { ProductPopulated } from "@/lib/types/store/product";
+import { StorePopulated } from "@/lib/types/store/store";
 
 export type GroupedCategory = {
   _id: string;
@@ -8,7 +9,7 @@ export type GroupedCategory = {
   products: ProductPopulated[];
 };
 
-const StoreProductList = ({ data }: { data: ProductPopulated[] }) => {
+const StoreProductList = ({ store }: { store: StorePopulated }) => {
   const { palette } = usePreference();
 
   const group_products = (products: ProductPopulated[]): GroupedCategory[] => {
@@ -30,7 +31,7 @@ const StoreProductList = ({ data }: { data: ProductPopulated[] }) => {
     return Object.values(category_map);
   };
 
-  const groups = group_products(data);
+  const groups = group_products(store.products);
 
   return (
     <div className="flex items-center px-4 sm:px-8 justify-center w-full h-full pb-8">
@@ -51,6 +52,7 @@ const StoreProductList = ({ data }: { data: ProductPopulated[] }) => {
                 </div>
 
                 <ProductList
+                  store={store}
                   data={category.products}
                   category={category.name}
                 />

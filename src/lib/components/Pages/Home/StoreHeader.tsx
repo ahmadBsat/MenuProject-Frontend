@@ -17,9 +17,7 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
         style={{
           background:
             store.palette.header_background || store.palette.background,
-          color: `${
-            store.palette.header_text_color || store.palette.color
-          } !important`,
+          color: store.palette.header_text_color || store.palette.color,
         }}
       >
         <div className="flex items-center justify-between max-w-screen-lg px-8 w-full">

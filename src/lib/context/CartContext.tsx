@@ -31,7 +31,11 @@ type CartContextType = {
     store: string;
   }) => void;
   resetCart: (data: { store: string }) => Promise<void>;
-  removeFromCart: (product_id: string, options?: any[]) => void;
+  removeFromCart: (
+    product_id: string,
+    store_id: string,
+    options?: any[]
+  ) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -109,10 +113,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (product_id: string, options?: string[]) => {
+  const removeFromCart = async (
+    product_id: string,
+    store_id: string,
+    options?: string[]
+  ) => {
     setSubLoading(true);
 
-    const temp: any = { product_id: product_id };
+    const temp: any = { product_id: product_id, store: store_id };
 
     if (options) {
       temp.options = options;
