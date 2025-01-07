@@ -61,7 +61,7 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                 style={{ background: palette.primary }}
                 className="rounded-2xl border-none w-full h-20 text-base text-white"
               >
-                <span className="font-semibold">{item.name}</span>
+                <span className="font-semibold text-wrap">{item.name}</span>
               </Button>
             );
           })}

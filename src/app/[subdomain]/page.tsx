@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import StoreCategory from "@/lib/components/Pages/Home/StoreCategory.tsx";
+import StoreCategory from "@/lib/components/Pages/Home/StoreCategory";
 import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
