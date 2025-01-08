@@ -30,7 +30,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   // userScalable: false,
-  themeColor: "#a41f13",
+  themeColor: "#ffffff",
 };
 
 export async function generateMetadata() {
@@ -50,7 +50,7 @@ export async function generateMetadata() {
     },
     manifest: "/site.webmanifest",
     background_color: "#fff",
-    theme_color: "#a41f13",
+    theme_color: "#ffffff",
   };
 }
 

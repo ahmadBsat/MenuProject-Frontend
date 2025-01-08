@@ -16,6 +16,7 @@ export const INITIAL_META = {
 
 export const STORE_INITIAL: StoreForm = {
   background_image: "",
+  watermark: true,
   logo: "",
   name: "",
   owner: "",

@@ -125,6 +125,20 @@ const StoreInformation = ({
           </div>
         </Switch>
 
+        <Switch
+          classNames={SWITCH_STYLE}
+          isDisabled={!editable}
+          isSelected={data.watermark}
+          onValueChange={(val) => handleChange("watermark", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">Watermark</p>
+            <p className="text-sm">
+              Enable to display watermark on the website
+            </p>
+          </div>
+        </Switch>
+
         <div className="grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
           <div className="flex flex-col gap-2">
             <p className="text-lg">Header Background Color</p>{" "}

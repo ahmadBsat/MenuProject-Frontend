@@ -62,9 +62,7 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
     // Build the message
     const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${data.name}\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region}\n\nThank you!`;
 
-    return `${WHATSAPP_URI}?phone=${
-      branch.phone_number
-    }&text=${encodeURIComponent(message)}`;
+    return `${WHATSAPP_URI}?phone=${branch.phone_number}&text=${encodeURIComponent(message)}`;
   };
 
   const handleChange = (field: string, value: string | number) => {

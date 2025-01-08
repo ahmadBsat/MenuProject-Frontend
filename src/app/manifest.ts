@@ -16,7 +16,7 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
       },
     ],
-    theme_color: "#a41f13",
+    theme_color: "#ffffff",
     background_color: "#ffffff",
     display: "standalone",
     description: "Agent is an all-in-one AI customer assistance tool.",

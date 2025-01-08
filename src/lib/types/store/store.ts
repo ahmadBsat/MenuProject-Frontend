@@ -16,6 +16,7 @@ export type Store = {
   renewal_date: string;
   is_active: boolean;
   renewal_cost: number;
+  watermark: boolean;
 };
 
 export type StoreForm = Omit<
@@ -59,6 +60,7 @@ export type StorePopulated = {
   products: ProductPopulated[];
   currencies: { name: string }[];
   categories: [];
+  watermark: boolean;
 };
 
 export type StorePalette = {

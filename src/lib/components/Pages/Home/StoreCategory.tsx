@@ -61,7 +61,7 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                 style={{ background: palette.primary }}
                 className="rounded-2xl border-none w-full h-20 text-base text-white"
               >
-                <span className="font-semibold text-wrap">{item.name}</span>
+                <span className="font-semibold text-wrap text-center">{item.name}</span>
               </Button>
             );
           })}
@@ -91,9 +91,11 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                     as={Link}
                     href={`#${item.name}`}
                     style={{ background: palette.primary }}
-                    className="rounded-2xl border-none w-full h-20 text-base text-white"
+                    className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white"
                   >
-                    <span className="font-semibold text-wrap">{item.name}</span>
+                    <span className="font-semibold text-wrap text-center">
+                      {item.name}
+                    </span>
                   </Button>
                 </SwiperSlide>
               );
