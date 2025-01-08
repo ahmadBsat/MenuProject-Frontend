@@ -19,6 +19,7 @@ const Page = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [store, setStore] = useState<StorePopulated>({
     _id: "",
+    watermark: true,
     background_image: "",
     branches: [],
     categories: [],
