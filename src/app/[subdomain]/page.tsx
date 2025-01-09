@@ -97,7 +97,7 @@ const Page = () => {
   if (error) {
     return (
       <div className="h-screen max-h-[calc(100vh-50px)] w-full">
-        <NotFound show_btn={false} />;
+        <NotFound show_btn={false} />
       </div>
     );
   }

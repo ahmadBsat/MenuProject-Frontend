@@ -58,7 +58,7 @@ const StoreInformation = ({
           <Input
             label="Name"
             type="text"
-            placeholder="Descriptive name for the action..."
+            placeholder="Descriptive name for the store..."
             isRequired
             required
             isDisabled={!editable}

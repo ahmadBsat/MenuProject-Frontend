@@ -173,6 +173,7 @@ const ProductRelation = ({
         label="Category"
         placeholder="Select product categories"
         selectionMode="multiple"
+        isRequired
         className="w-full"
         isLoading={loading}
         selectedKeys={new Set(product.category)}

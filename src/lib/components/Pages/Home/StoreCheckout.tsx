@@ -9,6 +9,7 @@ import {
   Input,
   Modal,
   ModalBody,
+  Textarea,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -23,6 +24,7 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
     address: "",
     name: "",
     phone: "",
+    instruction: "",
   });
 
   const { cart, resetCart } = useCart();
@@ -60,9 +62,11 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
       .join("\n\n");
 
     // Build the message
-    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${data.name}\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region}\n\nThank you!`;
+    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${data.name}\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} \n- Special Instruction: ${data.instruction}, \n\nThank you!`;
 
-    return `${WHATSAPP_URI}?phone=${branch.phone_number}&text=${encodeURIComponent(message)}`;
+    return `${WHATSAPP_URI}?phone=${
+      branch.phone_number
+    }&text=${encodeURIComponent(message)}`;
   };
 
   const handleChange = (field: string, value: string | number) => {
@@ -133,6 +137,13 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   variant="bordered"
                   value={data.address}
                   onValueChange={(v) => handleChange("address", v)}
+                />
+                <Textarea
+                  label="Special Instruction"
+                  placeholder="Enter your special instruction"
+                  variant="bordered"
+                  value={data.instruction}
+                  onValueChange={(v) => handleChange("instruction", v)}
                 />
               </div>
             </ModalBody>
