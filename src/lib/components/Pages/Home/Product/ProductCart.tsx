@@ -46,14 +46,22 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
   };
 
   const selectedItemsPrice = product.additions
-    .flatMap((addition) =>
-      addition.items
-        .filter((item) => flattened_values.includes(item._id))
-        .map((item) => item.additional_price)
+    .flatMap(
+      (addition) =>
+        // Check if the group exists in `selected`
+        selected[addition.group]?.flatMap(
+          (selectedItemId) =>
+            addition.items
+              .filter((item) => item._id === selectedItemId) // Match the item in the group
+              .map((item) => item.additional_price) // Map to price
+        ) || []
     )
-    .reduce((sum, price) => sum + price, 0);
+    .reduce((sum, price) => sum + price, 0); // Sum all prices
 
   const currentSubTotal = product.price + selectedItemsPrice;
+
+  console.log("Selected Items Price:", selectedItemsPrice);
+  console.log("Current Subtotal:", currentSubTotal);
 
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
