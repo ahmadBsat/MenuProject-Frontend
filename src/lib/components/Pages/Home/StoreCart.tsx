@@ -13,7 +13,7 @@ import {
   DrawerClose,
 } from "../../Common/drawer";
 import { useCart } from "@/lib/context/CartContext";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { ShoppingCartIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
@@ -22,7 +22,8 @@ import { StorePopulated } from "@/lib/types/store/store";
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
-  const { cart, setCartOpen, cartOpen, addToCart, removeFromCart } = useCart();
+  const { cart, setCartOpen, cartOpen, addToCart, removeFromCart, resetCart } =
+    useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const currencies = { USD: "$", LBP: "LBP" };
@@ -52,8 +53,17 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-2xl">
-            <DrawerHeader>
+            <DrawerHeader className="flex justify-between items-center">
               <DrawerTitle>Your Cart</DrawerTitle>
+              <Button
+                color="primary"
+                isIconOnly
+                onClick={async () => {
+                  await resetCart({ store: store._id });
+                }}
+              >
+                <TrashIcon className="h-4 w-4 text-white" />
+              </Button>
             </DrawerHeader>
 
             <div className="p-4 pb-8 flex flex-col gap-6">

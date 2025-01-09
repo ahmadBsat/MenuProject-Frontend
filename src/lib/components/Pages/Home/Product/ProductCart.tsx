@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Button, Checkbox, CheckboxGroup } from "@nextui-org/react";
+import { Button, Checkbox, CheckboxGroup, Divider } from "@nextui-org/react";
 import { ShoppingCartIcon } from "lucide-react";
 import {
   Drawer,
@@ -44,6 +44,16 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
       };
     });
   };
+
+  const selectedItemsPrice = product.additions
+    .flatMap((addition) =>
+      addition.items
+        .filter((item) => flattened_values.includes(item._id))
+        .map((item) => item.additional_price)
+    )
+    .reduce((sum, price) => sum + price, 0);
+
+  const currentSubTotal = product.price + selectedItemsPrice;
 
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
@@ -94,6 +104,13 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
             })}
           </div>
 
+          <div className="p-5 flex justify-between">
+            {" "}
+            <span className="font-bold">Subtotal</span>
+            <span> {currentSubTotal}$</span>
+          </div>
+          <Divider />
+
           <DrawerFooter className="flex flex-row justify-end items-center">
             <DrawerClose asChild>
               <Button color="danger">Cancel</Button>
@@ -109,6 +126,7 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
                   quantity: 1,
                   store: store,
                 });
+                setSelected({})
               }}
             >
               Confirm
