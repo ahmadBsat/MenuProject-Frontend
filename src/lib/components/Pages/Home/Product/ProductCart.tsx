@@ -60,9 +60,6 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
 
   const currentSubTotal = product.price + selectedItemsPrice;
 
-  console.log("Selected Items Price:", selectedItemsPrice);
-  console.log("Current Subtotal:", currentSubTotal);
-
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
