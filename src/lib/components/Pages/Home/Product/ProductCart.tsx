@@ -126,7 +126,7 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
                   quantity: 1,
                   store: store,
                 });
-                setSelected({})
+                setSelected({});
               }}
             >
               Confirm
