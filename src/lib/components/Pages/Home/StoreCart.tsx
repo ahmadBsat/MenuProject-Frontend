@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Badge, Button, useDisclosure } from "@nextui-org/react";
-import { ChevronRight, Minus, Plus } from "lucide-react";
-import {
-  Drawer,
-  DrawerTrigger,
-  DrawerContent,
-  DrawerTitle,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerClose,
-} from "../../Common/drawer";
 import { useCart } from "@/lib/context/CartContext";
-import { ShoppingCartIcon, TrashIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { Badge, Button, useDisclosure } from "@nextui-org/react";
+import { ChevronRight, Minus, Plus } from "lucide-react";
+import Image from "next/image";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../../Common/drawer";
 import StoreCheckout from "./StoreCheckout";
-import { StorePopulated } from "@/lib/types/store/store";
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
