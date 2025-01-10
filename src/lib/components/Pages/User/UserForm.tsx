@@ -47,7 +47,7 @@ const UsersForm = () => {
 
       const result = await API_USER.getUserById(user_id);
 
-      setUser({ ...result, password: result.authentication.password });
+      setUser({ ...result, password: "" });
     } catch (error) {
       console.log(error);
     } finally {

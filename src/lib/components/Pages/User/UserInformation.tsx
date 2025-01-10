@@ -22,7 +22,7 @@ const UserInformation = ({
   handleChange: (field: NestedKeyOf<UserForm>, value: any) => void;
 }) => {
   const params = useParams();
-  const user_id = params.id as string;
+  const user_id = params.id as string; // if updating
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -79,10 +79,10 @@ const UserInformation = ({
           label="Password"
           type="password"
           placeholder="Account Password"
-          isRequired
-          required
-          isDisabled={user_id ? true : false}
-          value={data.password}
+          // isRequired
+          // required
+          isDisabled={user_id && data.is_super_admin ? true : false}
+          // value={data.password}
           onValueChange={(e) => handleChange("password", e)}
         />
 

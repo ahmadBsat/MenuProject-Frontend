@@ -17,17 +17,19 @@ import { ProductPopulated } from "@/lib/types/store/product";
 import { useState } from "react";
 import { usePreference } from "@/store/account";
 import { useCart } from "@/lib/context/CartContext";
+import { format_pricing } from "@/utils/common";
 
 const ProductCart = ({ product }: { product: ProductPopulated }) => {
   const { palette, store } = usePreference();
   const { name, description, additions } = product;
   const { addToCart } = useCart();
+  const { currency } = usePreference();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Record<string, string[]>>({});
 
   const flattened_values = Object.values(selected).flat();
-
+  const currencies = { USD: "$", LBP: "LBP" };
   const handle_change = (
     group_id: string,
     is_multiple: boolean,
@@ -59,7 +61,7 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
     .reduce((sum, price) => sum + price, 0); // Sum all prices
 
   const currentSubTotal = product.price + selectedItemsPrice;
-
+  
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -112,7 +114,12 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
           <div className="p-5 flex justify-between">
             {" "}
             <span className="font-bold">Subtotal</span>
-            <span> {currentSubTotal}$</span>
+            <span>
+              <strong> {currencies[currency]}</strong>{" "}
+              {currency === "USD"
+                ? currentSubTotal.toFixed(2)
+                : format_pricing(currentSubTotal)}
+            </span>
           </div>
           <Divider />
 

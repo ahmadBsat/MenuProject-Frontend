@@ -52,21 +52,21 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
           </Badge>
         </DrawerTrigger>
         <DrawerContent>
-          <div className="mx-auto w-full max-w-2xl">
+          <div className="mx-auto w-full max-w-2xl overflow-auto">
             <DrawerHeader className="flex justify-between items-center">
               <DrawerTitle>Your Cart</DrawerTitle>
               <Button
                 color="primary"
-                isIconOnly
+                // isIconOnly
                 onClick={async () => {
                   await resetCart({ store: store._id });
                 }}
               >
-                <TrashIcon className="h-4 w-4 text-white" />
+                  Clear Cart
               </Button>
             </DrawerHeader>
 
-            <div className="p-4 pb-8 flex flex-col gap-6">
+            <div className="p-4 pb-8 flex flex-col gap-6 max-h-[60vh] overflow-auto">
               {cart.products.map((product, idx) => {
                 const additions = product.additions
                   .map((a) => a.items.map((i) => i._id))
