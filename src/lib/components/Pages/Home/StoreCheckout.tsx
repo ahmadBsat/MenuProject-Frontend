@@ -36,7 +36,7 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
     if (!branch.phone_number) return;
 
     // Check if user data is complete
-    const isUserDataComplete = Object.values(data).every((value) => value);
+    const isUserDataComplete = Object.entries(data).every(([key, value]) => key === 'instruction' || value);
     if (!isUserDataComplete) {
       return "Please fill in all the required fields before placing the order.";
     }
@@ -154,7 +154,7 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
               </Button>
               <Button
                 color="success"
-                isDisabled={!Object.values(data).every((value) => value)}
+                isDisabled={!Object.entries(data).every(([key, value]) => key === 'instruction' || value)}
                 as={Link}
                 href={whatsapp_uri}
                 onClick={async () => {
