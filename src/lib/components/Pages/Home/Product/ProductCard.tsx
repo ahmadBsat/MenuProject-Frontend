@@ -16,7 +16,7 @@ const ProductCard = ({
   category: string;
   store: StorePopulated;
 }) => {
-  const { currency } = usePreference();
+  const { currency, palette } = usePreference();
 
   const currencies = { USD: "$", LBP: "LBP" };
 
@@ -24,12 +24,26 @@ const ProductCard = ({
     <div className="flex flex-col gap-1 w-full py-4">
       <div className="flex items-center justify-between w-full">
         <div className="flex gap-3">
-          {product.images.length > 0 && (
+          {product.images.length > 0 ? (
             <div className="max-w-24 max-h-24 w-full h-full aspect-square">
               <Image
                 src={product.images[0]}
                 alt={product.name}
-                className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square"
+                className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1"
+                style={{
+                  borderColor: palette.border || palette.background,
+                }}
+              />
+            </div>
+          ) : (
+            <div className="max-w-24 max-h-24 w-full h-full aspect-square">
+              <Image
+                src={store.logo}
+                alt={product.name}
+                className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1"
+                style={{
+                  borderColor: palette.border || palette.background,
+                }}
               />
             </div>
           )}

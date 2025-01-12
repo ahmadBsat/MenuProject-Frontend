@@ -2,27 +2,26 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { handleServerError } from "@/lib/api/_axios";
+import { STORE_INITIAL } from "@/lib/constants/initials";
 import { getUrl, URLs } from "@/lib/constants/urls";
+import { API_STORE } from "@/lib/services/store/store_service";
+import { ErrorResponse, NestedKeyOf } from "@/lib/types/common";
+import { StoreForm } from "@/lib/types/store/store";
 import { Button, Spinner } from "@nextui-org/react";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { set } from "lodash";
 import { useParams, useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { handleServerError } from "@/lib/api/_axios";
-import { ErrorResponse, NestedKeyOf } from "@/lib/types/common";
-import NotFound from "../NotFound";
-import HeaderContainer from "../../Containers/HeaderContainer";
-import StoreInformation from "./StoreInformation";
-import { set } from "lodash";
 import { toast } from "sonner";
-import { STORE_INITIAL } from "@/lib/constants/initials";
-import { API_STORE } from "@/lib/services/store/store_service";
-import { StoreForm } from "@/lib/types/store/store";
+import HeaderContainer from "../../Containers/HeaderContainer";
+import NotFound from "../NotFound";
+import StoreInformation from "./StoreInformation";
 import StoreLogo from "./StoreLogo";
 
 const StoresForm = () => {
   const [store, setStore] = useState<StoreForm>(STORE_INITIAL);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [editable, setEditable] = useState(true);
   const [processing, setProcessing] = useState(false);
 
