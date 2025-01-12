@@ -59,12 +59,18 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
           currency === "USD"
             ? product.price.toFixed(2)
             : format_pricing(product.price)
-        } ${currencies[currency]})\n${additions}`;
+        } ${currencies[currency]})${additions ? `\n${additions}` : ""}${
+          product.instructions ? ` \n - Instructions: ${product.instructions}` : ""
+        }`;
       })
       .join("\n\n");
 
     // Build the message
-    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${data.name}\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} \n- Special Instruction: ${data.instruction}, \n\nThank you!`;
+    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${
+      data.name
+    }\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} ${
+      data.instruction ? ` \n- Special Instruction: ${data.instruction}` : ""
+    }, \n\nThank you!`;
 
     return `${WHATSAPP_URI}?phone=${
       branch.phone_number

@@ -36,6 +36,11 @@ type CartContextType = {
     store_id: string,
     options?: any[]
   ) => void;
+  updateCart: (data: {
+    index: number;
+    store: string;
+    instructions: string;
+  }) => Promise<void>;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -136,6 +141,23 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const updateCart = async (data: {
+    index: number;
+    store: string;
+    instructions: string;
+  }) => {
+    setSubLoading(true);
+
+    try {
+      const updatedCart = await API_CART.update_cart(data);
+      setCart(updatedCart);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubLoading(false);
+    }
+  };
+
   useEffect(() => {
     getUserCart();
   }, [getUserCart, store, currency]);
@@ -155,6 +177,7 @@ export const CartProvider = ({ children }) => {
         toggleCart,
         addToCart,
         removeFromCart,
+        updateCart,
       }}
     >
       {children}

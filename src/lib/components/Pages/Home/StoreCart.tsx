@@ -6,7 +6,7 @@ import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { Badge, Button, useDisclosure } from "@nextui-org/react";
+import { Badge, Button, Textarea, useDisclosure } from "@nextui-org/react";
 import { ChevronRight, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import {
@@ -19,11 +19,155 @@ import {
   DrawerTrigger,
 } from "../../Common/drawer";
 import StoreCheckout from "./StoreCheckout";
+import { useState } from "react";
+
+const CartItem = ({ product, additions, store, index }) => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [instructions, setInstructions] = useState(product.instructions || "");
+
+  const { currency } = usePreference();
+  const { addToCart, removeFromCart, updateCart } = useCart();
+
+  const currencies = { USD: "$", LBP: "LBP" };
+
+  const handleSubmit = async (index: number) => {
+    try {
+      setLoading(true);
+      await updateCart({ store, index, instructions });
+      setOpen(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex gap-4 w-full items-center">
+      {product.images.length > 0 && (
+        <Image
+          src={product.images[0]}
+          alt={product.name}
+          width={400}
+          height={400}
+          className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
+        />
+      )}
+
+      <div className="flex flex-col gap-2 w-full">
+        <p className="text-lg font-bold">{product.name}</p>
+        <div className="flex flex-col">
+          {product.additions.map((group, index) => {
+            return (
+              <div
+                key={`g${index}`}
+                className="flex flex-row gap-1 text-sm text-default-400"
+              >
+                <span className="text-black font-medium">{group.name}</span>
+
+                {group.items.map((item) => item.name).join(", ")}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <p>
+            <strong>QTY</strong> {product.quantity}
+          </p>
+
+          <p className="font-medium text-base">
+            <strong> {currencies[currency]}</strong>{" "}
+            {currency === "USD"
+              ? product.price.toFixed(2)
+              : format_pricing(product.price)}
+          </p>
+        </div>
+
+        {product.instructions && (
+          <p className="text-sm">
+            <b>Instructions:</b> {product.instructions}
+          </p>
+        )}
+
+        <div className="flex w-full justify-between">
+          <div>
+            <Button
+              size="sm"
+              color="primary"
+              className="text-xs text-primary bg-transparent px-2"
+              isDisabled={open}
+              onClick={() => setOpen(true)}
+            >
+              {product.instructions ? "Edit" : "Add"} instructions
+            </Button>
+          </div>
+
+          <div className="flex items-center justify-center gap-4">
+            <Button
+              size="sm"
+              isIconOnly
+              color="primary"
+              variant="ghost"
+              onClick={() => {
+                removeFromCart(product._id, store._id, additions);
+              }}
+            >
+              <Minus />
+            </Button>
+
+            <p className="text-base font-bold">{product.quantity}</p>
+
+            <Button
+              size="sm"
+              isIconOnly
+              color="primary"
+              variant="ghost"
+              onClick={() => {
+                addToCart({
+                  store: store._id,
+                  product_id: product._id,
+                  quantity: 1,
+                  product_additions: additions,
+                });
+              }}
+            >
+              <Plus />
+            </Button>
+          </div>
+        </div>
+
+        {open && (
+          <div className="flex w-full flex-col gap-2">
+            <Textarea
+              placeholder="Instructions"
+              aria-label="Instructions"
+              value={instructions}
+              onValueChange={(v) => setInstructions(v)}
+            />
+            <div className="flex justify-end">
+              <Button
+                color="success"
+                variant="ghost"
+                size="sm"
+                className="text-xs"
+                isLoading={loading}
+                onClick={() => handleSubmit(index)}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
-  const { cart, setCartOpen, cartOpen, addToCart, removeFromCart, resetCart } =
-    useCart();
+  const { cart, setCartOpen, cartOpen, resetCart } = useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const currencies = { USD: "$", LBP: "LBP" };
@@ -62,7 +206,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   await resetCart({ store: store._id });
                 }}
               >
-                  Clear Cart
+                Clear Cart
               </Button>
             </DrawerHeader>
 
@@ -73,87 +217,13 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   .flat();
 
                 return (
-                  <div key={idx} className="flex gap-4 w-full items-center">
-                    {product.images.length > 0 && (
-                      <Image
-                        src={product.images[0]}
-                        alt={product.name}
-                        width={400}
-                        height={400}
-                        className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
-                      />
-                    )}
-
-                    <div className="flex flex-col gap-2 w-full">
-                      <p className="text-lg font-bold">{product.name}</p>
-                      <div className="flex flex-col">
-                        {product.additions.map((group, index) => {
-                          return (
-                            <div
-                              key={`g${index}`}
-                              className="flex flex-row gap-1 text-sm text-default-400"
-                            >
-                              <span className="text-black font-medium">
-                                {group.name}
-                              </span>
-
-                              {group.items.map((item) => item.name).join(", ")}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <p>
-                          <strong>QTY</strong> {product.quantity}
-                        </p>
-
-                        <p className="font-medium text-base">
-                          <strong> {currencies[currency]}</strong>{" "}
-                          {currency === "USD"
-                            ? product.price.toFixed(2)
-                            : format_pricing(product.price)}
-                        </p>
-                      </div>
-
-                      <div className="flex w-full justify-end">
-                        <div className="flex items-center justify-center gap-4">
-                          <Button
-                            size="sm"
-                            isIconOnly
-                            color="primary"
-                            variant="ghost"
-                            onClick={() => {
-                              removeFromCart(product._id, store._id, additions);
-                            }}
-                          >
-                            <Minus />
-                          </Button>
-
-                          <p className="text-base font-bold">
-                            {product.quantity}
-                          </p>
-
-                          <Button
-                            size="sm"
-                            isIconOnly
-                            color="primary"
-                            variant="ghost"
-                            onClick={() => {
-                              addToCart({
-                                store: store._id,
-                                product_id: product._id,
-                                quantity: 1,
-                                product_additions: additions,
-                              });
-                            }}
-                          >
-                            <Plus />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <CartItem
+                    key={idx}
+                    additions={additions}
+                    store={store}
+                    product={product}
+                    index={idx}
+                  />
                 );
               })}
             </div>

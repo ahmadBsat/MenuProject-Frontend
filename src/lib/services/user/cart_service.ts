@@ -35,6 +35,15 @@ export namespace API_CART {
     }
   }
 
+  export async function update_cart(data: any) {
+    try {
+      const response = await _axios.patch(CART_ENDPOINTS.UPDATE, data);
+      return response.data as Cart;
+    } catch (error: unknown) {
+      throw handleErrors(error);
+    }
+  }
+
   export async function removeItem(data: any) {
     try {
       const response = await _axios.patch(CART_ENDPOINTS.REMOVE, data);
