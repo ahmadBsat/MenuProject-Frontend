@@ -17,6 +17,7 @@ export type Store = {
   is_active: boolean;
   renewal_cost: number;
   watermark: boolean;
+  logoDefault: boolean;
 };
 
 export type StoreForm = Omit<
@@ -61,6 +62,7 @@ export type StorePopulated = {
   currencies: { name: string }[];
   categories: [];
   watermark: boolean;
+  logoDefault: boolean;
 };
 
 export type StorePalette = {
@@ -71,4 +73,6 @@ export type StorePalette = {
   color: string;
   border: string;
   primary: string;
+  checkout_content: string;
+  checkout_background: string;
 };

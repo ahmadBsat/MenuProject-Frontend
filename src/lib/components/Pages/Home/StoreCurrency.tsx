@@ -11,9 +11,13 @@ import {
   Selection,
 } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
+  const params = useParams();
+  const domain = params.subdomain as string;
+
   const flags = { USD: "us", LBP: "lb" };
   const preferred = getCookie("preferredCurrency", "USD");
 
@@ -24,7 +28,7 @@ const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
   const handleCurrencyChange = (currency: string) => {
     if (currency) {
       const maxExpiryDate = new Date(2147483647 * 1000).toUTCString();
-      document.cookie = `preferredCurrency=${currency}; path=/; expires=${maxExpiryDate}`;
+      document.cookie = `preferredCurrency=${currency}; path=/${domain}; expires=${maxExpiryDate}`;
       setCurrency(currency);
       // window.location.reload();
     }
@@ -47,6 +51,7 @@ const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
         selectionMode="single"
         selectedKeys={selected}
         onSelectionChange={setSelected}
+        disallowEmptySelection
       >
         {[{ name: "USD" }, ...currencies].map((currency) => (
           <DropdownItem

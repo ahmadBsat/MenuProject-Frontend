@@ -2,6 +2,7 @@
 
 import { WHATSAPP_URI } from "@/lib/constants/variables";
 import { useCart } from "@/lib/context/CartContext";
+import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
 import {
@@ -15,10 +16,19 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import { set } from "lodash";
+import { XIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
+const StoreCheckout = ({
+  isOpen,
+  onOpenChange,
+  store,
+}: {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  store: StorePopulated;
+}) => {
   const [data, setData] = useState({
     region: "",
     address: "",
@@ -86,12 +96,30 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
       placement="auto"
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
+      style={{
+        backgroundColor: store.palette.checkout_background,
+      }}
       className="max-h-[400px] lg:max-h-[715px]"
+      closeButton={
+        <div
+          style={{
+            color: store.palette.checkout_content,
+          }}
+        >
+          <XIcon size={20} />
+        </div>
+      }
+      classNames={{
+        base: `bg-[${store.palette.checkout_background.replace("#", "\\#")}]`,
+      }}
     >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1 text-xl font-mono">
+            <ModalHeader
+              className="flex flex-col gap-1 text-xl font-mono"
+              style={{ color: store.palette.checkout_content }}
+            >
               Checkout
             </ModalHeader>
 
@@ -103,6 +131,10 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   placeholder="Enter your name"
                   variant="bordered"
                   value={data.name}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white",
+                  }}
                   onValueChange={(v) => handleChange("name", v)}
                 />
 
@@ -113,8 +145,19 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   type="number"
                   variant="bordered"
                   maxLength={8}
-                  startContent={<div className="text-sm">+961</div>}
+                  startContent={
+                    <div
+                      className="text-sm font-bold"
+                      style={{ color: store.palette.checkout_content }}
+                    >
+                      +961
+                    </div>
+                  }
                   value={data.phone}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white",
+                  }}
                   onValueChange={(v) => {
                     const maxLength = 8;
                     if (v.length <= maxLength) {
@@ -129,6 +172,10 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   placeholder="Area/Region"
                   variant="bordered"
                   value={data.region}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white",
+                  }}
                   onValueChange={(v) => handleChange("region", v)}
                 />
 
@@ -138,6 +185,10 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   placeholder="Enter your address"
                   variant="bordered"
                   value={data.address}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white",
+                  }}
                   onValueChange={(v) => handleChange("address", v)}
                 />
                 <Textarea
@@ -145,13 +196,17 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                   placeholder="Enter your special instruction"
                   variant="bordered"
                   value={data.instruction}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white",
+                  }}
                   onValueChange={(v) => handleChange("instruction", v)}
                 />
               </div>
             </ModalBody>
 
             <ModalFooter>
-              <Button color="danger" variant="solid" onPress={onClose}>
+              <Button color="primary" variant="solid" onPress={onClose}>
                 Close
               </Button>
               <Button
@@ -164,7 +219,7 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
                 as={Link}
                 href={whatsapp_uri}
                 onClick={async () => {
-                  await resetCart({ store });
+                  await resetCart({ store: store._id });
                 }}
               >
                 Order

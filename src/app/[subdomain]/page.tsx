@@ -20,6 +20,7 @@ const Page = () => {
   const [store, setStore] = useState<StorePopulated>({
     _id: "",
     watermark: true,
+    logoDefault: true,
     background_image: "",
     branches: [],
     categories: [],
@@ -34,6 +35,8 @@ const Page = () => {
       header_background: "",
       header_text_color: "",
       price_color: "",
+      checkout_content: "",
+      checkout_background: "",
     },
     products: [],
   });

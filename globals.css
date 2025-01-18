@@ -28,6 +28,12 @@ html {
   scroll-behavior: smooth;
 }
 
+html, body {
+  overflow: overlay !important;
+  padding-right: 0 !important; /* Prevent extra padding */
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

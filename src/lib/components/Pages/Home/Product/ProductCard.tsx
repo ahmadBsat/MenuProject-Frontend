@@ -35,7 +35,7 @@ const ProductCard = ({
                 }}
               />
             </div>
-          ) : (
+          ) : store.logoDefault ? (
             <div className="max-w-24 max-h-24 w-full h-full aspect-square">
               <Image
                 src={store.logo}
@@ -46,7 +46,7 @@ const ProductCard = ({
                 }}
               />
             </div>
-          )}
+          ) : null}
           <div className="font-medium">
             <p className="font-semibold text-lg">{product.name}</p>
             <p className="text-xs">{category}</p>

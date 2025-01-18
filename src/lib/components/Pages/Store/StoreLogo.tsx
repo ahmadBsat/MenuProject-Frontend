@@ -89,18 +89,11 @@ export default function StoreLogo({ data, path, handleChange }) {
         Uploading...
       </div>
     ) : (
-      <div className="mt-4 text-sm flex flex-col items-center justify-center text-center font-medium">
+      <div className="flex justify-center items-center">
         {data.logo && (
-          <div>
-            <Button
-              radius="full"
-              onClick={removeFile}
-              isIconOnly
-              color="danger"
-            >
-              <DeleteIcon />
-            </Button>
-          </div>
+          <Button radius="full" onClick={removeFile} isIconOnly color="danger">
+            <DeleteIcon />
+          </Button>
         )}
       </div>
     );

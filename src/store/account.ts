@@ -30,6 +30,8 @@ export const usePreference = create<PreferenceState>()(
         header_background: "",
         header_text_color: "",
         price_color: "",
+        checkout_content: "",
+        checkout_background: ""
       },
       store: "",
       branch: { _id: "", name: "", address: "", phone_number: "" },
