@@ -22,4 +22,5 @@ export type CartProduct = {
   __v: number;
   old_price: number;
   quantity: number;
+  instructions: string;
 };
