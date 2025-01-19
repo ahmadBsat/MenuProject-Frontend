@@ -53,6 +53,7 @@ const StoreCurrency = ({
         selectionMode="single"
         selectedKeys={selected}
         onSelectionChange={setSelected}
+        disallowEmptySelection
       >
         {[...default_currency, ...currencies].map((currency) => (
           <DropdownItem

@@ -28,10 +28,13 @@ export const STORE_INITIAL: StoreForm = {
     header_background: "#000",
     header_text_color: "#fff",
     price_color: "#fff",
+    checkout_content: "",
+    checkout_background: ""
   },
   is_active: true,
   domain: "",
   renewal_cost: 100,
+  logoDefault: false
 };
 
 export const USER_INITIAL: UserForm = {

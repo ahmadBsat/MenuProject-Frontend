@@ -61,8 +61,14 @@ const PanelSidebar = ({ children }) => {
           </div>
 
           {!collapse && (
-            <div className="bg-primary p-1 px-3 rounded-full text-sm text-white font-semibold">
-              {user?.user.email}
+            <div className="rounded-full text-sm text-primary font-semibold">
+              <div className="px-3 p-1">
+                {user?.user.firstname} {user?.user.lastname}
+              </div>
+
+              <div className="bg-primary rounded-sm px-3 p-1 text-sm text-white font-semibold">
+                {user?.user.email}
+              </div>
             </div>
           )}
           <nav className="flex flex-1 flex-col justify-between">
@@ -95,7 +101,7 @@ const PanelSidebar = ({ children }) => {
 
             {!collapse && (
               <div className="py-4 w-full">
-                <Button color="danger" onClick={logout} className="w-full">
+                <Button color="primary" onClick={logout} className="w-full">
                   Logout
                 </Button>
               </div>

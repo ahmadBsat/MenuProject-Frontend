@@ -110,7 +110,7 @@ const PanelSidebarMobile = ({
                   </div>
                 </nav>
 
-                <Button color="danger" onClick={logout} className="w-full">
+                <Button color="primary" onClick={logout} className="w-full">
                   Logout
                 </Button>
               </div>

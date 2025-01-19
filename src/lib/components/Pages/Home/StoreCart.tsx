@@ -240,7 +240,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
             <DrawerFooter className="flex flex-row justify-end items-center">
               <DrawerClose asChild>
-                <Button color="danger">Close</Button>
+                <Button color="primary">Close</Button>
               </DrawerClose>
               {cart.count !== 0 && (
                 <Button
@@ -261,7 +261,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
       <StoreCheckout
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        store={store._id}
+        store={store}
       />
     </>
   );

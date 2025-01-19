@@ -14,14 +14,21 @@ const StoreFooter = ({ store }: { store: StorePopulated }) => {
             href="https://www.facilitymanagementcorporation.com/contact-us-digital-marketing-solutions"
             target="_blank"
             radius="full"
-            className="px-4 py-4 h-14 bg-transparent text-lg w-fit min-w-fit border "
+            className="px-4 py-3 max-h-14 bg-transparent text-sm w-fit min-w-fit border "
             style={{ color: store.palette.color }}
           >
             Create your Digital Menu
           </Button>
         </div>
       )}
-      <div className="text-default-400 text-sm pt-2">Powered by FMC</div>
+
+      <Link
+        className="text-sm pt-2"
+        style={{ color: store.palette.color }}
+        href="https://www.facilitymanagementcorporation.com/contact-us-digital-marketing-solutions"
+      >
+        Powered by FMC
+      </Link>
     </div>
   );
 };

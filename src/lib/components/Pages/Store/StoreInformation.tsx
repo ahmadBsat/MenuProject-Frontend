@@ -51,7 +51,7 @@ const StoreInformation = ({
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 mt-5">
       <Card shadow="none" className={CARD_STYLE}>
         <div className="text-lg sm:text-xl px-1">Information</div>
 
@@ -136,6 +136,20 @@ const StoreInformation = ({
             <p className="text-medium">Watermark</p>
             <p className="text-sm">
               Enable to display watermark on the website
+            </p>
+          </div>
+        </Switch>
+
+        <Switch
+          classNames={SWITCH_STYLE}
+          isDisabled={!editable}
+          isSelected={data.logoDefault}
+          onValueChange={(val) => handleChange("logoDefault", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">Logo Default picture</p>
+            <p className="text-sm">
+              Enable to display the logo as the default picture for the product
             </p>
           </div>
         </Switch>
@@ -240,7 +254,7 @@ const StoreInformation = ({
 
           <Divider className="my-5" />
 
-          <div className="text-lg sm:text-xl ">Content</div>
+          <div className="text-lg sm:text-xl ">Button and Border</div>
 
           <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
             <div className="flex flex-col gap-2">
@@ -274,6 +288,46 @@ const StoreInformation = ({
                 className="w-[200px]"
                 value={data.palette.border}
                 onChange={(e) => handleChange("palette.border", e.target.value)}
+              />
+            </div>
+          </div>
+          
+          <Divider className="my-5" />
+
+          <div className="text-lg sm:text-xl ">Checkout</div>
+
+          <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Checkout Background</p>{" "}
+              <HexColorPicker
+                color={data.palette.checkout_background}
+                onChange={(c) => handleChange("palette.checkout_background", c)}
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Checkout Background"
+                className="w-[200px]"
+                value={data.palette.checkout_background}
+                onChange={(e) =>
+                  handleChange("palette.checkout_background", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Checkout Content COlor</p>{" "}
+              <HexColorPicker
+                color={data.palette.checkout_content}
+                onChange={(c) => handleChange("palette.checkout_content", c)}
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Checkout Content"
+                className="w-[200px]"
+                value={data.palette.checkout_content}
+                onChange={(e) => handleChange("palette.checkout_content", e.target.value)}
               />
             </div>
           </div>
