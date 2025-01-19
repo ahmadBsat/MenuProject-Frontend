@@ -78,10 +78,10 @@ const CartItem = ({ product, additions, store, index }) => {
           </p>
 
           <p className="font-medium text-base">
-            <strong> {currencies[currency]}</strong>{" "}
-            {currency === "USD"
+            <strong> {currencies[currency.name]}</strong>{" "}
+            {currency.name === "USD"
               ? product.price.toFixed(2)
-              : format_pricing(product.price)}
+              : format_pricing(product.price * currency.rate_change)}
           </p>
         </div>
 
@@ -231,10 +231,10 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
             <div className="p-4 pb-8 flex w-full items-center justify-between border-t border-dashed gap-6 text-lg font-semibold">
               <p>Subtotal</p>
               <p>
-                <strong> {currencies[currency]}</strong>{" "}
-                {currency === "USD"
+                <strong> {currencies[currency.name]}</strong>{" "}
+                {currency.name === "USD"
                   ? cart.total_price.toFixed(2)
-                  : format_pricing(cart.total_price)}
+                  : format_pricing(cart.total_price * currency.rate_change)}
               </p>
             </div>
 

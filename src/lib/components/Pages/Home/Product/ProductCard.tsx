@@ -56,10 +56,10 @@ const ProductCard = ({
                 color: store.palette.price_color || store.palette.color,
               }}
             >
-              {currencies[currency]}{" "}
-              {currency === "USD"
-                ? product.price.toFixed(2)
-                : format_pricing(product.price)}
+              {currencies[currency.name]}{" "}
+              {currency.name === "USD"
+                ? (product.price * currency.rate_change).toFixed(2)
+                : format_pricing(product.price * currency.rate_change)}
             </p>
           </div>
         </div>

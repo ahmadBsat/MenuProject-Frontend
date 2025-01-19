@@ -6,12 +6,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type PreferenceState = {
-  currency: string;
+  currency: { name: string; rate_change: number };
   branch: Partial<StoreBranch>;
   palette: StorePalette;
   setPalette: (val: StorePalette) => void;
   setBranch: (val: StoreBranch) => void;
-  setCurrency: (val: string) => void;
+  setCurrency: (val: { name: string; rate_change: number }) => void;
   store: string;
   setStore: (val: string) => void;
   has_hydrated: boolean;
@@ -21,7 +21,7 @@ type PreferenceState = {
 export const usePreference = create<PreferenceState>()(
   persist(
     (set) => ({
-      currency: "USD",
+      currency: { name: "USD", rate_change: 1 },
       palette: {
         background: "white",
         color: "black",

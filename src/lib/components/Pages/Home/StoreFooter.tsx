@@ -21,7 +21,7 @@ const StoreFooter = ({ store }: { store: StorePopulated }) => {
           </Button>
         </div>
       )}
-      <div className="text-gray-600 text-sm">Powered by FMC</div>
+      <div className="text-default-400 text-sm pt-2">Powered by FMC</div>
     </div>
   );
 };

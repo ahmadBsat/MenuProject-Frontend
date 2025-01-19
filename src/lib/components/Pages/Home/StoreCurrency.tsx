@@ -1,6 +1,6 @@
 "use client";
 
-import { getCookie } from "@/lib/api/_axios";
+// import { getCookie } from "@/lib/api/_axios";
 import { usePreference } from "@/store/account";
 import {
   Button,
@@ -13,18 +13,24 @@ import {
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
+const StoreCurrency = ({
+  currencies,
+}: {
+  currencies: { name: string; rate_change: number }[];
+}) => {
   const flags = { USD: "us", LBP: "lb" };
-  const preferred = getCookie("preferredCurrency", "USD");
+  const default_currency = [{ name: "USD", rate_change: 1 }];
 
-  const [selected, setSelected] = useState<Selection>(new Set([preferred]));
+  const { setCurrency, palette, currency } = usePreference();
+  const [selected, setSelected] = useState<Selection>(new Set([currency.name]));
 
-  const { setCurrency, palette } = usePreference();
-
-  const handleCurrencyChange = (currency: string) => {
+  const handleCurrencyChange = (currency: {
+    name: string;
+    rate_change: number;
+  }) => {
     if (currency) {
-      const maxExpiryDate = new Date(2147483647 * 1000).toUTCString();
-      document.cookie = `preferredCurrency=${currency}; path=/; expires=${maxExpiryDate}`;
+      // const maxExpiryDate = new Date(2147483647 * 1000).toUTCString();
+      // document.cookie = `preferredCurrency=${currency.name}; path=/; expires=${maxExpiryDate}`;
       setCurrency(currency);
       // window.location.reload();
     }
@@ -48,12 +54,12 @@ const StoreCurrency = ({ currencies }: { currencies: { name: string }[] }) => {
         selectedKeys={selected}
         onSelectionChange={setSelected}
       >
-        {[{ name: "USD" }, ...currencies].map((currency) => (
+        {[...default_currency, ...currencies].map((currency) => (
           <DropdownItem
             key={currency.name}
             value={currency.name}
             textValue={currency.name}
-            onClick={() => handleCurrencyChange(currency.name)}
+            onClick={() => handleCurrencyChange(currency)}
           >
             <div className="flex items-center gap-2">
               <div

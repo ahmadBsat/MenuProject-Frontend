@@ -60,8 +60,9 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
     )
     .reduce((sum, price) => sum + price, 0); // Sum all prices
 
-  const currentSubTotal = product.price + selectedItemsPrice;
-  
+  const currentSubTotal =
+    product.price * currency.rate_change + selectedItemsPrice;
+
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
@@ -115,8 +116,8 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
             {" "}
             <span className="font-bold">Subtotal</span>
             <span>
-              <strong> {currencies[currency]}</strong>{" "}
-              {currency === "USD"
+              <strong> {currencies[currency.name]}</strong>{" "}
+              {currency.name === "USD"
                 ? currentSubTotal.toFixed(2)
                 : format_pricing(currentSubTotal)}
             </span>

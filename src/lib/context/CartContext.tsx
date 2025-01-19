@@ -160,7 +160,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     getUserCart();
-  }, [getUserCart, store, currency]);
+  }, [getUserCart, store]);
 
   return (
     <CartContext.Provider

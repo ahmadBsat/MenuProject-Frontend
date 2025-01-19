@@ -56,11 +56,13 @@ const StoreCheckout = ({ isOpen, onOpenChange, store }) => {
           .join("\n");
 
         return `- ${product.name} (Qty: ${product.quantity}, Price: ${
-          currency === "USD"
+          currency.name === "USD"
             ? product.price.toFixed(2)
-            : format_pricing(product.price)
-        } ${currencies[currency]})${additions ? `\n${additions}` : ""}${
-          product.instructions ? ` \n - Instructions: ${product.instructions}` : ""
+            : format_pricing(product.price * currency.rate_change)
+        } ${currencies[currency.name]})${additions ? `\n${additions}` : ""}${
+          product.instructions
+            ? ` \n - Instructions: ${product.instructions}`
+            : ""
         }`;
       })
       .join("\n\n");

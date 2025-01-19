@@ -38,12 +38,13 @@ const Page = () => {
     products: [],
   });
   const {
-    setPalette,
     branch,
     currency,
-    setStore: setCurrentStore,
-    setBranch,
     has_hydrated,
+    setStore: setCurrentStore,
+    setPalette,
+    setBranch,
+    setCurrency,
   } = usePreference();
 
   const params = useParams();
@@ -71,6 +72,14 @@ const Page = () => {
           setBranch(current_branch);
         }
       }
+
+      const current_currency = res.currencies.find(
+        (c) => c.name === currency.name
+      );
+
+      if (current_currency) {
+        setCurrency(current_currency);
+      }
     } catch (error) {
       console.log(error);
       setError(true);
@@ -78,13 +87,13 @@ const Page = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [branch._id, domain, setPalette, currency]);
+  }, [branch._id, domain, setPalette]);
 
   useEffect(() => {
     if (has_hydrated) {
       getStore();
     }
-  }, [domain, getStore, branch._id, has_hydrated, currency]);
+  }, [domain, getStore, branch._id, has_hydrated]);
 
   if (loading && store?.products.length === 0) {
     return (
