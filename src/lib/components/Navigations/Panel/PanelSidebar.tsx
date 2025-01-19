@@ -57,7 +57,9 @@ const PanelSidebar = ({ children }) => {
               "flex gap-3 pt-6 items-center dark:text-white text-2xl font-semibold outline-none ring-0 select-none mb-4"
             )}
           >
-            <Link href={getUrl(URLs.admin.dashboard)}>FMC</Link>
+            <Link href={getUrl(URLs.admin.dashboard)} className="px-2">
+              FMC
+            </Link>
           </div>
 
           {!collapse && (

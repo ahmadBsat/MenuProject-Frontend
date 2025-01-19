@@ -105,7 +105,7 @@ const StoreCheckout = ({
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
       style={{
-        backgroundColor: store.palette.checkout_background,
+        backgroundColor: store.palette.checkout_background || "white",
       }}
       className="max-h-[400px] lg:max-h-[715px]"
       closeButton={
@@ -118,7 +118,7 @@ const StoreCheckout = ({
         </div>
       }
       classNames={{
-        base: `bg-[${store.palette.checkout_background.replace("#", "\\#")}]`,
+        base: `bg-[${store.palette?.checkout_background?.replace("#", "\\#")}]`,
       }}
     >
       <ModalContent>
@@ -140,8 +140,7 @@ const StoreCheckout = ({
                   variant="bordered"
                   value={data.name}
                   classNames={{
-                    inputWrapper:
-                      "bg-white",
+                    inputWrapper: "bg-white",
                   }}
                   onValueChange={(v) => handleChange("name", v)}
                 />
@@ -163,8 +162,7 @@ const StoreCheckout = ({
                   }
                   value={data.phone}
                   classNames={{
-                    inputWrapper:
-                      "bg-white",
+                    inputWrapper: "bg-white",
                   }}
                   onValueChange={(v) => {
                     const maxLength = 8;
@@ -181,8 +179,7 @@ const StoreCheckout = ({
                   variant="bordered"
                   value={data.region}
                   classNames={{
-                    inputWrapper:
-                      "bg-white",
+                    inputWrapper: "bg-white",
                   }}
                   onValueChange={(v) => handleChange("region", v)}
                 />
@@ -194,8 +191,7 @@ const StoreCheckout = ({
                   variant="bordered"
                   value={data.address}
                   classNames={{
-                    inputWrapper:
-                      "bg-white",
+                    inputWrapper: "bg-white",
                   }}
                   onValueChange={(v) => handleChange("address", v)}
                 />
@@ -205,8 +201,7 @@ const StoreCheckout = ({
                   variant="bordered"
                   value={data.instruction}
                   classNames={{
-                    inputWrapper:
-                      "bg-white",
+                    inputWrapper: "bg-white",
                   }}
                   onValueChange={(v) => handleChange("instruction", v)}
                 />

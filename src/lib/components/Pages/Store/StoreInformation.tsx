@@ -197,7 +197,7 @@ const StoreInformation = ({
 
           <Divider className="my-5" />
 
-          <div className="text-lg sm:text-xl ">Content</div>
+          <div className="text-lg sm:text-xl ">Main Content</div>
 
           <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
             <div className="flex flex-col gap-2">
@@ -316,7 +316,7 @@ const StoreInformation = ({
             </div>
 
             <div className="flex flex-col gap-2">
-              <p className="text-lg">Checkout Content COlor</p>{" "}
+              <p className="text-lg">Checkout Content Color</p>{" "}
               <HexColorPicker
                 color={data.palette.checkout_content}
                 onChange={(c) => handleChange("palette.checkout_content", c)}
