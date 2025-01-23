@@ -57,8 +57,8 @@ const PlansTable = () => {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
       search: parseAsString,
-      sortField: parseAsString,
-      sortOrder: parseAsString,
+      sortField: parseAsString.withDefault("createdAt"),
+      sortOrder: parseAsString.withDefault("ascending"),
     },
     {
       history: "push",
@@ -171,7 +171,7 @@ const PlansTable = () => {
         case "domain":
           return (
             <div className="flex flex-col gap-1 min-w-[230px]">
-              <p className="font-semibold">{`${store.domain}.fmcshops.com`}</p>
+              <p className="font-semibold">{`fmcshops.com/${store.domain}`}</p>
             </div>
           );
         case "is_active":

@@ -56,8 +56,8 @@ const ProductsTable = () => {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
       search: parseAsString,
-      sortField: parseAsString,
-      sortOrder: parseAsString,
+      sortField: parseAsString.withDefault("createdAt"),
+      sortOrder: parseAsString.withDefault("ascending"),
     },
     {
       history: "push",
