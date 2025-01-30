@@ -51,6 +51,10 @@ export type StorePopulatedOLD = {
   branches: StoreBranch[];
 };
 
+type Banner = {
+  images: string[];
+};
+
 export type StorePopulated = {
   _id: string;
   name: string;
@@ -61,11 +65,13 @@ export type StorePopulated = {
   products: ProductPopulated[];
   currencies: { name: string; rate_change: number }[];
   categories: [];
-  banners: {
-    [x: string]: any;images: []
-};
+  banners: Banner[];
   watermark: boolean;
   logoDefault: boolean;
+};
+
+export type StoreBanner = {
+  images: string[];
 };
 
 export type StorePalette = {
@@ -80,6 +86,3 @@ export type StorePalette = {
   checkout_background: string;
 };
 
-export type StoreBanner = { 
-  images: string[];
-}
