@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Banner, BannerForm, BannerTable } from "@/lib/types/store/banner";
+import { Banner, BannerTable } from "@/lib/types/store/banner";
 import { build_path } from "@/utils/common";
 import { _axios, handleErrors } from "../../api/_axios";
 import { BANNER_ENDPOINTS } from "../../constants/endpoints";

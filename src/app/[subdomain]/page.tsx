@@ -25,7 +25,7 @@ const Page = () => {
     branches: [],
     categories: [],
     currencies: [],
-    banners: {images:[]},
+    banners: [{ images: [] }],
     logo: "",
     name: "",
     palette: {
@@ -70,7 +70,7 @@ const Page = () => {
       setStore(res);
       setCurrentStore(res._id);
       setPalette(res.palette);
-      setBanners(res.banners)
+      setBanners(res.banners.length > 0 ? res.banners[0] : { images: [] });
       if (branch._id) {
         const current_branch = res.branches.find((x) => x._id === branch._id);
         if (current_branch) {

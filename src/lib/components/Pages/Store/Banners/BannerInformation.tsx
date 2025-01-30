@@ -3,7 +3,7 @@
 import { INITIAL_META } from "@/lib/constants/initials";
 import { API_BRANCH } from "@/lib/services/store/branch_service";
 import { StoreBranchTable } from "@/lib/types/store/store";
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import { useCallback, useEffect, useState } from "react";
 import BannerUpload from "./BannerUpload";
 

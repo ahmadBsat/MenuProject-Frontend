@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import Upload from "@/lib/components/Common/Upload";
-import { ProductForm } from "@/lib/types/store/product";
 import { BannerForm } from "@/lib/types/store/banner";
 
 type Props = {
