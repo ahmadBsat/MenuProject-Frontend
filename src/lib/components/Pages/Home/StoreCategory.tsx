@@ -34,6 +34,8 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
 
   const groups = group_products(store.products);
 
+  const banners = store.banners;
+  
   return (
     <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-12">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
@@ -49,6 +51,52 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
           </div>
         )}
 
+        <div className="max-w-screen-lg w-full ">
+          <Swiper
+            freeMode={true}
+            pagination={false}
+            autoplay={false}
+            allowTouchMove
+            breakpoints={{
+              320: {
+                slidesPerView: 1.5, // One slide per view on small mobile screens
+                spaceBetween: 10, 
+              },
+              480: {
+                slidesPerView: 2, // Two slides per view on slightly larger screens
+                spaceBetween: 15,
+              },
+              768: {
+                slidesPerView: 2.5, // Slightly more on tablets
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 3, // Default view on large screens
+                spaceBetween: 30,
+              },
+            }}
+          
+            slidesPerView={3}
+            spaceBetween={30}
+            modules={[FreeMode]}
+            className="mySwiper"
+          >
+            {banners.map((item, idx) => {
+              return (
+                <SwiperSlide key={idx} className="rounded-2xl">
+                  <Image
+                    src={item.images[0]}
+                    alt={store.name}
+                    className="w-full h-full rounded-2xl"
+                    width={350}
+                    height={350}
+                  />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+
         <p className="text-4xl font-bold px-1 mb-3">Menu</p>
 
         <div className="hidden sm:grid sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 items-center justify-between max-w-screen-lg w-full">
@@ -61,7 +109,9 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                 style={{ background: palette.primary }}
                 className="rounded-2xl border-none w-full h-20 text-base text-white"
               >
-                <span className="font-semibold text-wrap text-center">{item.name}</span>
+                <span className="font-semibold text-wrap text-center">
+                  {item.name}
+                </span>
               </Button>
             );
           })}

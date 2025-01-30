@@ -83,3 +83,11 @@ export const CART_ENDPOINTS = {
   RESET: "/api/v1/cart/reset",
   UPDATE: "/api/v1/cart/update",
 };
+
+export const BANNER_ENDPOINTS = { 
+  GET_ALL: "/api/v1/banners",
+  GET_ID: "/api/v1/banners/:id",
+  CREATE: "/api/v1/banners",
+  UPDATE: "/api/v1/banners/:id",
+  DELETE: "/api/v1/banners/:id",
+}

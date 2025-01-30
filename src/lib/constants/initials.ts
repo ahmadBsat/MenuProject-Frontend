@@ -1,3 +1,4 @@
+import { BannerForm } from "../types/store/banner";
 import { CategoryForm } from "../types/store/category";
 import { CurrencyForm } from "../types/store/currency";
 import { ProductForm, ProductItemForm } from "../types/store/product";
@@ -81,3 +82,9 @@ export const ITEM_INITIAL: ProductItemForm = {
   additional_price: 0,
   image: "",
 };
+
+export const BANNER_INITIAL: BannerForm = {
+  images: [],
+  branch: [],
+  is_active: true,
+}
