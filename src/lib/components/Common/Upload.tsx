@@ -132,7 +132,7 @@ export default function Upload({ images, type, onChange, size = 8 }: Props) {
           ),
         })}
       >
-        <input {...getInputProps()} />
+        {images.length < size && <input {...getInputProps()} />}
 
         {loading ? (
           <div className="text-center">
@@ -140,6 +140,10 @@ export default function Upload({ images, type, onChange, size = 8 }: Props) {
               <Spinner />
             </div>
             Uploading files please wait...
+          </div>
+        ) : images.length >= size ? (
+          <div className="text-center">
+            Maximum images uploaded. Remove some to add new ones.
           </div>
         ) : (
           <div className="text-center">

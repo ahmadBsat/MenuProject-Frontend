@@ -11,6 +11,7 @@ import {
   ArchiveBoxIcon,
   TagIcon,
   CurrencyDollarIcon,
+  PhotoIcon
 } from "@heroicons/react/24/outline";
 
 export const ADMIN_NAVIGATION = [
@@ -78,6 +79,12 @@ export const STORE_NAVIGATION = [
         name: "Currencies",
         link: URLs.store.currencies.index,
         icon: CurrencyDollarIcon,
+      },
+      {
+        key: "banners",
+        name: "banners",
+        link: URLs.store.banners.index,
+        icon: PhotoIcon,
       },
     ],
   },

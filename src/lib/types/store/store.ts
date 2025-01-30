@@ -61,6 +61,9 @@ export type StorePopulated = {
   products: ProductPopulated[];
   currencies: { name: string; rate_change: number }[];
   categories: [];
+  banners: {
+    [x: string]: any;images: []
+};
   watermark: boolean;
   logoDefault: boolean;
 };
@@ -76,3 +79,7 @@ export type StorePalette = {
   checkout_content: string;
   checkout_background: string;
 };
+
+export type StoreBanner = { 
+  images: string[];
+}

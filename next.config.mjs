@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "shopppers.s3.eu-central-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "fmcstore.fsn1.your-objectstorage.com",
+      },
     ],
   },
   async redirects() {

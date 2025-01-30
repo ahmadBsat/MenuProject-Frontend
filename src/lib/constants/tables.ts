@@ -105,3 +105,21 @@ export const INITIAL_SORT = {
   column: "",
   direction: "ascending",
 };
+
+
+export const BANNERS_COLUMNS = [
+  { name: "id", uid: "_id", sortable: true },
+  { name: "images", uid: "images", sortable: false },
+  { name: "status", uid: "is_active", sortable: true },
+  { name: "Created", uid: "createdAt", sortable: true },
+  { name: "Updated", uid: "updatedAt", sortable: true },
+  { name: "actions", uid: "actions" },
+];
+
+export const BANNERS_VISIBLE_COL = [
+  "images",
+  "is_active",
+  "createdAt",
+  "updatedAt",
+  "actions",
+];
