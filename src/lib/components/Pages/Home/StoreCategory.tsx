@@ -14,20 +14,11 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { palette } = usePreference();
 
-
   const breakpoints = {
     320: { slidesPerView: 1.5, spaceBetween: 10 },
     480: { slidesPerView: 2, spaceBetween: 15 },
     768: { slidesPerView: 2.5, spaceBetween: 20 },
     1024: { slidesPerView: 3, spaceBetween: 30 },
-  };
-
-  const getMaxSlidesPerView = (
-    breakpoints: Record<number, { slidesPerView: number }>
-  ) => {
-    return Math.max(
-      ...Object.values(breakpoints).map((bp) => bp.slidesPerView)
-    );
   };
 
   const groupProducts = (products: ProductPopulated[]): GroupedCategory[] => {
@@ -49,45 +40,29 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
     return Object.values(categoryMap);
   };
 
+  const processBanners = (
+    breakpoints: Record<number, { slidesPerView: number }>
+  ) => {
+    const max = Math.max(
+      ...Object.values(breakpoints).map((bp) => bp.slidesPerView)
+    );
+
+    const min = max * 2;
+    let banners = [...store.banners];
+
+    if (banners.length < min) {
+      banners = [...banners, ...store.banners];
+    }
+
+    return banners;
+  };
+
+  const banners = processBanners(breakpoints);
   const groups = groupProducts(store.products);
-
-  const maxSlidesPerView = getMaxSlidesPerView(breakpoints);
-  const minSlidesNeeded = maxSlidesPerView * 2;
-  let banners = [...store.banners];
-
-  while (banners.length < minSlidesNeeded) {
-    banners = [...banners, ...store.banners];
-  }
 
   return (
     <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-12">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
-        {/* Swiper for Banners */}
-        <div className="max-w-screen-lg w-full">
-          <Swiper
-            freeMode={true}
-            pagination={false}
-            autoplay={false}
-            allowTouchMove
-            loop={true}
-            breakpoints={breakpoints}
-            modules={[FreeMode]}
-            className="mySwiper"
-          >
-            {banners.map((item, idx) => (
-              <SwiperSlide key={idx} className="rounded-2xl">
-                <Image
-                  src={item.images[0]}
-                  alt={`banner-${idx}`}
-                  className="w-[350px] h-[200px] rounded-2xl object-cover"
-                  width={350}
-                  height={200}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
         {/* Store Logo */}
         {store.logo && (
           <div className="rounded-lg flex items-center w-full justify-center">
@@ -98,6 +73,34 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
               height={200}
               className="max-h-48 object-cover rounded-2xl"
             />
+          </div>
+        )}
+
+        {/* Swiper for Banners */}
+        {banners.length > 0 && (
+          <div className="max-w-screen-lg w-full">
+            <Swiper
+              freeMode={true}
+              pagination={false}
+              autoplay={false}
+              allowTouchMove
+              loop={true}
+              breakpoints={breakpoints}
+              modules={[FreeMode]}
+              className="mySwiper"
+            >
+              {banners.map((item, idx) => (
+                <SwiperSlide key={idx} className="rounded-2xl">
+                  <Image
+                    src={item.images[0]}
+                    alt={`banner-${idx}`}
+                    className="w-[350px] h-[200px] rounded-2xl object-cover select-none"
+                    width={350}
+                    height={200}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         )}
 
