@@ -8,25 +8,28 @@ import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
-import { FreeMode, Navigation, Pagination } from "swiper";
-
-// Define Swiper breakpoints dynamically
-const breakpoints = {
-  320: { slidesPerView: 1.5, spaceBetween: 10 },
-  480: { slidesPerView: 2, spaceBetween: 15 },
-  768: { slidesPerView: 2.5, spaceBetween: 20 },
-  1024: { slidesPerView: 3, spaceBetween: 30 },
-};
-
-// Function to get max slides per view dynamically
-const getMaxSlidesPerView = (breakpoints: Record<number, { slidesPerView: number }>) => {
-  return Math.max(...Object.values(breakpoints).map((bp) => bp.slidesPerView));
-};
+import { FreeMode } from "swiper";
 
 const StoreCategory = ({ store }: { store: StorePopulated }) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { palette } = usePreference();
 
-  // Function to group products by category
+
+  const breakpoints = {
+    320: { slidesPerView: 1.5, spaceBetween: 10 },
+    480: { slidesPerView: 2, spaceBetween: 15 },
+    768: { slidesPerView: 2.5, spaceBetween: 20 },
+    1024: { slidesPerView: 3, spaceBetween: 30 },
+  };
+
+  const getMaxSlidesPerView = (
+    breakpoints: Record<number, { slidesPerView: number }>
+  ) => {
+    return Math.max(
+      ...Object.values(breakpoints).map((bp) => bp.slidesPerView)
+    );
+  };
+
   const groupProducts = (products: ProductPopulated[]): GroupedCategory[] => {
     const categoryMap: Record<string, GroupedCategory> = {};
 
@@ -46,10 +49,8 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
     return Object.values(categoryMap);
   };
 
-  // Get grouped categories
   const groups = groupProducts(store.products);
 
-  // Ensure banners have enough slides for looping
   const maxSlidesPerView = getMaxSlidesPerView(breakpoints);
   const minSlidesNeeded = maxSlidesPerView * 2;
   let banners = [...store.banners];
@@ -112,7 +113,9 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
               style={{ background: palette.primary }}
               className="rounded-2xl border-none w-full h-20 text-base text-white"
             >
-              <span className="font-semibold text-wrap text-center">{item.name}</span>
+              <span className="font-semibold text-wrap text-center">
+                {item.name}
+              </span>
             </Button>
           ))}
         </div>
@@ -140,7 +143,9 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                   style={{ background: palette.primary }}
                   className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white"
                 >
-                  <span className="font-semibold text-wrap text-center">{item.name}</span>
+                  <span className="font-semibold text-wrap text-center">
+                    {item.name}
+                  </span>
                 </Button>
               </SwiperSlide>
             ))}
