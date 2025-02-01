@@ -94,9 +94,9 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                   <Image
                     src={item.images[0]}
                     alt={`banner-${idx}`}
-                    className="w-[350px] h-[200px] rounded-2xl object-cover select-none"
+                    className="w-[350px] h-[190px] rounded-2xl object-cover select-none"
                     width={350}
-                    height={200}
+                    height={190}
                   />
                 </SwiperSlide>
               ))}
