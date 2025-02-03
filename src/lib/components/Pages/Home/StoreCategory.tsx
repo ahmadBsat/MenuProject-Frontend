@@ -46,17 +46,17 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
     const max = Math.max(
       ...Object.values(breakpoints).map((bp) => bp.slidesPerView)
     );
-
+  
     const min = max * 2;
     let banners = [...store.banners];
-
-    if (banners.length < min) {
+  
+    if (banners.length > 2 && banners.length < min) {
       banners = [...banners, ...store.banners];
     }
-
+  
     return banners;
   };
-
+  
   const banners = processBanners(breakpoints);
   const groups = groupProducts(store.products);
 
