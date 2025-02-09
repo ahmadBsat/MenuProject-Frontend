@@ -21,6 +21,7 @@ export const STORE_INITIAL: StoreForm = {
   logo: "",
   name: "",
   owner: "",
+  custom_domain: "",
   palette: {
     background: "#fff",
     border: "#fff",

@@ -13,6 +13,7 @@ export type Store = {
   createdAt: string;
   updatedAt: string;
   domain: string;
+  custom_domain: string;
   renewal_date: string;
   is_active: boolean;
   renewal_cost: number;
@@ -85,4 +86,3 @@ export type StorePalette = {
   checkout_content: string;
   checkout_background: string;
 };
-

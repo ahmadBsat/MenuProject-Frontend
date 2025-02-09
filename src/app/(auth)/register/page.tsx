@@ -57,6 +57,7 @@ export default function Register() {
 
     setError("");
     setLoading(true);
+    return "jiba";
 
     try {
       const response = await API_AUTH.register(credentials);
@@ -257,10 +258,7 @@ export default function Register() {
                     color={success ? "success" : "primary"}
                     type="submit"
                     isLoading={loading}
-                    isDisabled={
-                      credentials.password !== credentials.confirm_password ||
-                      success
-                    }
+                    isDisabled={true}
                     className="w-full px-4 py-4 text-base font-semibold"
                   >
                     {success ? "Sucess" : "Sign Up"}

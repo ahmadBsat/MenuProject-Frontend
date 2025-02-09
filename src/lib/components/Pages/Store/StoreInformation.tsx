@@ -81,6 +81,15 @@ const StoreInformation = ({
             onValueChange={(e) => handleChange("domain", e)}
           />
 
+          <Input
+            label="Custom Domain"
+            type="text"
+            placeholder="Store custom domain address"
+            isDisabled={!editable}
+            value={data.custom_domain}
+            onValueChange={(e) => handleChange("custom_domain", e)}
+          />
+
           <Autocomplete
             label="Owner"
             isLoading={loading}
@@ -291,7 +300,7 @@ const StoreInformation = ({
               />
             </div>
           </div>
-          
+
           <Divider className="my-5" />
 
           <div className="text-lg sm:text-xl ">Checkout</div>
@@ -327,7 +336,9 @@ const StoreInformation = ({
                 placeholder="Checkout Content"
                 className="w-[200px]"
                 value={data.palette.checkout_content}
-                onChange={(e) => handleChange("palette.checkout_content", e.target.value)}
+                onChange={(e) =>
+                  handleChange("palette.checkout_content", e.target.value)
+                }
               />
             </div>
           </div>

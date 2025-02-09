@@ -42,12 +42,16 @@ export namespace API_STORE {
     }
   }
 
-  export async function getStoreByDomain(domain: string, query?: string) {
+  export async function getStoreByDomain(domain?: string, query?: string) {
     try {
-      let endpoint = build_path(STORE_ENDPOINTS.GET_DOMAIN, { domain });
+      let endpoint = build_path(STORE_ENDPOINTS.GET_DOMAIN);
 
       if (query) {
         endpoint += query;
+      }
+
+      if (domain) {
+        endpoint += query ? `&domain=${domain}` : `?domain=${domain}`;
       }
 
       const response = await _axios.get(endpoint);
