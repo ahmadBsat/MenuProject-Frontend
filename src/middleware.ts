@@ -5,18 +5,19 @@ export function middleware(request: NextRequest) {
   const origin = request.nextUrl.origin;
   const pathname = request.nextUrl.pathname;
 
-  // // Redirect if there is no locale
-  // if (
-  //   origin !== "https://fmcshops.com" &&
-  //   origin !== "http://localhost:3000" &&
-  //   !pathname.includes("admin") &&
-  //   !pathname.includes("store")
-  // ) {
-  //   const newUrl = `/${origin.split("//")[1]}`;
+  // Redirect if there is no locale
+  if (
+    origin !== "https://fmcshops.com" &&
+    origin !== "http://localhost:3000" &&
+    pathname === "/" &&
+    !pathname.includes("admin") &&
+    !pathname.includes("store")
+  ) {
+    const newUrl = `/custom-domain`;
 
-  //   // Perform the internal rewrite (without changing the URL in the address bar)
-  //   return NextResponse.rewrite(new URL(newUrl, request.url));
-  // }
+    // Perform the internal rewrite (without changing the URL in the address bar)
+    return NextResponse.rewrite(new URL(newUrl, request.url));
+  }
 
   const response = NextResponse.next({});
 
