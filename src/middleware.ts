@@ -4,11 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const origin = request.nextUrl.origin;
   const pathname = request.nextUrl.pathname;
+  const referrer = request.referrer.split("//")[1].split("/")[0];
 
   // Redirect if there is no locale
   if (
     origin !== "https://fmcshops.com" &&
     origin !== "http://localhost:3000" &&
+    referrer !== "fmcshops.com" &&
     pathname === "/" &&
     !pathname.includes("admin") &&
     !pathname.includes("store")
