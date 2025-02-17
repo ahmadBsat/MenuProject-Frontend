@@ -42,7 +42,7 @@ const StoreCurrency = ({
         <Button
           endContent={<ChevronDown size={16} />}
           style={{ color: palette.header_text_color || palette.color }}
-          className="bg-transparent text-base uppercase font-medium p-1"
+          className="bg-transparent text-sm sm:text-base uppercase font-medium p-1"
         >
           {selected}
         </Button>

@@ -20,7 +20,7 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
           color: store.palette.header_text_color || store.palette.color,
         }}
       >
-        <div className="flex items-center justify-between max-w-screen-lg px-8 w-full">
+        <div className="flex items-center justify-between max-w-screen-lg px-6 w-full">
           <div className="w-40">
             <StoreBranches data={store.branches} />
           </div>
