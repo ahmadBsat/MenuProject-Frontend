@@ -50,12 +50,14 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
   const selectedItemsPrice = product.additions
     .flatMap(
       (addition) =>
-        // Check if the group exists in `selected`
-        selected[addition.group]?.flatMap(
-          (selectedItemId) =>
-            addition.items
-              .filter((item) => item._id === selectedItemId) // Match the item in the group
-              .map((item) => item.additional_price) // Map to price
+        selected[addition.group]?.flatMap((selectedItemId) =>
+          addition.items
+            .filter((item) => item._id === selectedItemId)
+            .map((item) =>
+              currency.name === "USD"
+                ? item.additional_price
+                : item.additional_price * currency.rate_change
+            )
         ) || []
     )
     .reduce((sum, price) => sum + price, 0); // Sum all prices
