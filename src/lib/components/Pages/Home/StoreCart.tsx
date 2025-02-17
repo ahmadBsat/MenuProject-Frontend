@@ -187,10 +187,11 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
             <Button
               size="sm"
               radius="full"
+              className="max-sm:px-1"
               endContent={<ChevronRight size={16} />}
               onClick={() => setCartOpen(!cartOpen)}
             >
-              <ShoppingCartIcon className="size-5" />
+              <ShoppingCartIcon className="size-4 sm:size-5" />
             </Button>
           </Badge>
         </DrawerTrigger>

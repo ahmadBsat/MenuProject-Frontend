@@ -66,14 +66,16 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
           size="sm"
           radius="full"
           endContent={<ChevronRight size={16} />}
-          className="bg-transparent text-sm font-medium p-1 px-3 border"
+          className="bg-transparent text-xs sm:text-sm font-medium p-1 px-3 border"
           style={{
             color: palette.header_text_color || palette.color,
             borderColor: palette.header_text_color || palette.color,
           }}
           onClick={() => setOpen(!open)}
         >
-          {branch.name}
+          <span className="whitespace-nowrap overflow-hidden text-ellipsis block max-sm:max-w-[50px]">
+            {branch.name}
+          </span>
         </Button>
       </DrawerTrigger>
       <DrawerContent>
