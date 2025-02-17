@@ -158,13 +158,18 @@ const ProductsTable = () => {
                 src: product.images.length > 0 ? product.images[0] : "",
               }}
               name={product.name}
-              description={product.description}
+              description={
+                <span className="whitespace-nowrap overflow-hidden text-ellipsis block max-w-[250px]">
+                  {product.description}
+                </span>
+              }
               classNames={{
                 description: "text-sm line-clamp-1",
               }}
               className="justify-start text-ellipsis overflow-hidden whitespace-nowrap"
             >
               {product.name}
+              {product.description}
             </User>
           );
 

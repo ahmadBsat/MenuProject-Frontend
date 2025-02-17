@@ -27,6 +27,13 @@ const ProductInformation = ({ product, handleChange }) => {
         onValueChange={(e) => handleChange("description", e)}
       />
 
+      <Textarea
+        label="Extra Information"
+        placeholder="Enter extra information"
+        value={product.extra_information}
+        onValueChange={(e) => handleChange("extra_information", e)}
+      />
+
       <ProductPricing product={product} handleChange={handleChange} />
 
       <ProductRelation product={product} handleChange={handleChange} />

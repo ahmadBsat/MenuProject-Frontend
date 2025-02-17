@@ -78,11 +78,11 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl max-h-[60vh] overflow-auto">
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <p>{description}</p>
+              <p className="max-md:text-left">{description}</p>
             </DrawerDescription>
           </DrawerHeader>
 
