@@ -40,6 +40,8 @@ const Page = () => {
       checkout_background: "",
     },
     products: [],
+    vat_exclusive: false,
+    vat_percentage: 0, 
   });
   const {
     branch,

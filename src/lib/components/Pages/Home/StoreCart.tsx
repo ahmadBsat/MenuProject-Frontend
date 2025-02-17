@@ -171,7 +171,6 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const currencies = { USD: "$", LBP: "LBP" };
-
   return (
     <>
       <Drawer open={cartOpen} onOpenChange={setCartOpen}>
@@ -228,14 +227,67 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
               })}
             </div>
 
-            <div className="p-4 pb-8 flex w-full items-center justify-between border-t border-dashed gap-6 text-lg font-semibold">
-              <p>Subtotal</p>
-              <p>
-                <strong> {currencies[currency.name]}</strong>{" "}
-                {currency.name === "USD"
-                  ? cart.total_price.toFixed(2)
-                  : format_pricing(cart.total_price * currency.rate_change)}
-              </p>
+            <div className="p-4 pb-4 border-t border-dashed gap-6 font-semibold">
+              {store.vat_exclusive ? (
+                <>
+                  <div className="flex w-full items-center justify-between text-base">
+                    <p>Subtotal</p>
+                    <p>
+                      <strong>{currencies[currency.name]}</strong>{" "}
+                      {currency.name === "USD"
+                        ? cart.total_price.toFixed(2)
+                        : format_pricing(
+                            cart.total_price * currency.rate_change
+                          )}
+                    </p>
+                  </div>
+
+                  <div className="flex w-full items-center justify-between text-base">
+                    <p>VAT ({store.vat_percentage}%)</p>
+                    <p>
+                      <strong>{currencies[currency.name]}</strong>{" "}
+                      {currency.name === "USD"
+                        ? (
+                            (cart.total_price * store.vat_percentage) /
+                            100
+                          ).toFixed(2)
+                        : format_pricing(
+                            (cart.total_price *
+                              currency.rate_change *
+                              store.vat_percentage) /
+                              100
+                          )}
+                    </p>
+                  </div>
+
+                  <div className="flex w-full items-center justify-between text-lg">
+                    <p>Total (incl. VAT)</p>
+                    <p>
+                      <strong>{currencies[currency.name]}</strong>{" "}
+                      {currency.name === "USD"
+                        ? (
+                            cart.total_price *
+                            (1 + store.vat_percentage / 100)
+                          ).toFixed(2)
+                        : format_pricing(
+                            cart.total_price *
+                              currency.rate_change *
+                              (1 + store.vat_percentage / 100)
+                          )}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="flex w-full items-center justify-between text-lg">
+                  <p>Total</p>
+                  <p>
+                    <strong>{currencies[currency.name]}</strong>{" "}
+                    {currency.name === "USD"
+                      ? cart.total_price.toFixed(2)
+                      : format_pricing(cart.total_price * currency.rate_change)}
+                  </p>
+                </div>
+              )}
             </div>
 
             <DrawerFooter className="flex flex-row justify-end items-center">

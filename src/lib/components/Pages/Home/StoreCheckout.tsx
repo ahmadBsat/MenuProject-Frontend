@@ -77,12 +77,24 @@ const StoreCheckout = ({
       })
       .join("\n\n");
 
+    // Calculate total price (apply VAT if exclusive)
+    const totalPrice = store.vat_exclusive
+      ? cart.total_price * 1.11 // Add 11% VAT if exclusive
+      : cart.total_price;
+
+    const formattedTotalPrice =
+      currency.name === "USD"
+        ? totalPrice.toFixed(2)
+        : format_pricing(totalPrice * currency.rate_change);
+
     // Build the message
     const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${
       data.name
     }\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} ${
       data.instruction ? ` \n- Special Instruction: ${data.instruction}` : ""
-    }, \n\nThank you!`;
+    }\n\nTotal: ${formattedTotalPrice} ${currencies[currency.name]} ${
+      store.vat_exclusive ? "(incl. VAT)" : ""
+    }\n\nThank you!`;
 
     return `${WHATSAPP_URI}?phone=${
       branch.phone_number

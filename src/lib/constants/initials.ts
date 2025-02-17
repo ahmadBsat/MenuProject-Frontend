@@ -37,6 +37,7 @@ export const STORE_INITIAL: StoreForm = {
   domain: "",
   renewal_cost: 100,
   logoDefault: false,
+  vat_exclusive: false,
 };
 
 export const USER_INITIAL: UserForm = {
