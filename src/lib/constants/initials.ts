@@ -32,6 +32,8 @@ export const STORE_INITIAL: StoreForm = {
     price_color: "#fff",
     checkout_content: "",
     checkout_background: "",
+    category_color: "",
+    category_background: "",
   },
   is_active: true,
   domain: "",
