@@ -45,7 +45,11 @@ const StoreProductList = ({ store }: { store: StorePopulated }) => {
                 className="flex flex-col gap-2 w-full"
               >
                 <div
-                  style={{ color: palette.color, background: palette.primary }}
+                  style={{
+                    color: palette.category_color || palette.color,
+                    background:
+                      palette.category_background || palette.primary,
+                  }}
                   className="w-full p-3 mb-4 rounded-2xl flex items-center justify-center text-center text-lg font-semibold"
                 >
                   {category.name}

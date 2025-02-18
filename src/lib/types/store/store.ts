@@ -85,4 +85,6 @@ export type StorePalette = {
   primary: string;
   checkout_content: string;
   checkout_background: string;
+  category_color: string;
+  category_background: string;
 };
