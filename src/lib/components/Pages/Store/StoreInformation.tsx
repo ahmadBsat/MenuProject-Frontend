@@ -163,6 +163,18 @@ const StoreInformation = ({
           </div>
         </Switch>
 
+        <Switch
+          classNames={SWITCH_STYLE}
+          isDisabled={!editable}
+          isSelected={data?.settings?.display_pricing}
+          onValueChange={(val) => handleChange("settings.display_pricing", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">Display Pricing</p>
+            <p className="text-sm">Enable to display the products pricing</p>
+          </div>
+        </Switch>
+
         <div>
           <div className="text-lg sm:text-xl ">Header</div>
 

@@ -35,6 +35,7 @@ export const STORE_INITIAL: StoreForm = {
     category_color: "",
     category_background: "",
   },
+  settings: { display_pricing: true },
   is_active: true,
   domain: "",
   renewal_cost: 100,

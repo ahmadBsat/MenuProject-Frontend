@@ -18,6 +18,7 @@ export type Store = {
   is_active: boolean;
   renewal_cost: number;
   watermark: boolean;
+  settings: { display_pricing: boolean };
   logoDefault: boolean;
 };
 
@@ -69,6 +70,7 @@ export type StorePopulated = {
   banners: Banner[];
   watermark: boolean;
   logoDefault: boolean;
+  settings?: { display_pricing: boolean };
 };
 
 export type StoreBanner = {
