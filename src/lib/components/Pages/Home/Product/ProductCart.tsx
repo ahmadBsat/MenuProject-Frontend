@@ -18,8 +18,15 @@ import { useState } from "react";
 import { usePreference } from "@/store/account";
 import { useCart } from "@/lib/context/CartContext";
 import { format_pricing } from "@/utils/common";
+import { StorePopulated } from "@/lib/types/store/store";
 
-const ProductCart = ({ product }: { product: ProductPopulated }) => {
+const ProductCart = ({
+  product,
+  store_info,
+}: {
+  product: ProductPopulated;
+  store_info: StorePopulated;
+}) => {
   const { palette, store } = usePreference();
   const { name, description, additions } = product;
   const { addToCart } = useCart();
@@ -79,12 +86,13 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
           />
         </Button>
       </DrawerTrigger>
+
       <DrawerContent>
         <div className="mx-auto w-full max-w-2xl">
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <p>{description}</p>
+              <div>{description}</div>
             </DrawerDescription>
           </DrawerHeader>
 
@@ -115,14 +123,18 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
           </div>
 
           <div className="p-5 flex justify-between">
-            {" "}
             <span className="font-bold">Subtotal</span>
-            <span>
-              <strong> {currencies[currency.name]}</strong>{" "}
-              {currency.name === "USD"
-                ? currentSubTotal.toFixed(2)
-                : format_pricing(currentSubTotal)}
-            </span>
+
+            {store_info.settings?.display_pricing ? (
+              <span>
+                <strong> {currencies[currency.name]}</strong>{" "}
+                {currency.name === "USD"
+                  ? currentSubTotal.toFixed(2)
+                  : format_pricing(currentSubTotal)}
+              </span>
+            ) : (
+              <span>N/A</span>
+            )}
           </div>
           <Divider />
 

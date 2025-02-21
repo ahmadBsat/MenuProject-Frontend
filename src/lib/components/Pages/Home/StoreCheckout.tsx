@@ -42,19 +42,20 @@ const StoreCheckout = ({
 
   const currencies = { USD: "$", LBP: "LBP" };
 
-  const getWhatsappMessage = () => {
+  const get_whatsapp_message = () => {
     if (!branch.phone_number) return;
 
-    // Check if user data is complete
-    const isUserDataComplete = Object.entries(data).every(
+    // check if user data is complete
+    const is_user_data_complete = Object.entries(data).every(
       ([key, value]) => key === "instruction" || value
     );
-    if (!isUserDataComplete) {
+
+    if (!is_user_data_complete) {
       return "Please fill in all the required fields before placing the order.";
     }
 
-    // Build the product list message with additions
-    const productList = cart.products
+    // build the product list message with additions
+    const product_list = cart.products
       .map((product) => {
         const additions = product.additions
           .map(
@@ -65,24 +66,39 @@ const StoreCheckout = ({
           )
           .join("\n");
 
-        return `- ${product.name} (Qty: ${product.quantity}, Price: ${
-          currency.name === "USD"
-            ? product.price.toFixed(2)
-            : format_pricing(product.price * currency.rate_change)
-        } ${currencies[currency.name]})${additions ? `\n${additions}` : ""}${
-          product.instructions
-            ? ` \n - Instructions: ${product.instructions}`
-            : ""
-        }`;
+        const formatted_price = store.settings?.display_pricing
+          ? `${
+              currency.name === "USD"
+                ? product.price.toFixed(2)
+                : format_pricing(product.price * currency.rate_change)
+            } ${currencies[currency.name]}`
+          : "Ask for a quote";
+
+        const instructions = product.instructions
+          ? ` \n - Instructions: ${product.instructions}`
+          : "";
+
+        return `- ${product.name} (Qty: ${
+          product.quantity
+        }${`, Price: ${formatted_price}`})${
+          additions ? `\n${additions}` : ""
+        }${instructions}`;
       })
       .join("\n\n");
 
-    // Build the message
-    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${
-      data.name
-    }\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} ${
-      data.instruction ? ` \n- Special Instruction: ${data.instruction}` : ""
-    }, \n\nThank you!`;
+    // build the message
+    const message = [
+      "Hello, I would like to order the following:",
+      product_list,
+      "Delivery Details:",
+      `- Name: ${data.name}`,
+      `- Phone: ${data.phone}`,
+      `- Address: ${data.address}, ${data.region}`,
+      data.instruction ? `- Special Instruction: ${data.instruction}` : "",
+      "Thank you!",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
 
     return `${WHATSAPP_URI}?phone=${
       branch.phone_number
@@ -95,7 +111,7 @@ const StoreCheckout = ({
     setData(temp);
   };
 
-  const whatsapp_uri = getWhatsappMessage();
+  const whatsapp_uri = get_whatsapp_message();
 
   return (
     <Modal

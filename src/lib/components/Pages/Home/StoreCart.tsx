@@ -77,12 +77,14 @@ const CartItem = ({ product, additions, store, index }) => {
             <strong>QTY</strong> {product.quantity}
           </p>
 
-          <p className="font-medium text-base">
-            <strong> {currencies[currency.name]}</strong>{" "}
-            {currency.name === "USD"
-              ? product.price.toFixed(2)
-              : format_pricing(product.price * currency.rate_change)}
-          </p>
+          {store?.settings?.display_pricing && (
+            <p className="font-medium text-base">
+              <strong> {currencies[currency.name]}</strong>{" "}
+              {currency.name === "USD"
+                ? product.price.toFixed(2)
+                : format_pricing(product.price * currency.rate_change)}
+            </p>
+          )}
         </div>
 
         {product.instructions && (
@@ -231,12 +233,16 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
             <div className="p-4 pb-8 flex w-full items-center justify-between border-t border-dashed gap-6 text-lg font-semibold">
               <p>Subtotal</p>
-              <p>
-                <strong> {currencies[currency.name]}</strong>{" "}
-                {currency.name === "USD"
-                  ? cart.total_price.toFixed(2)
-                  : format_pricing(cart.total_price * currency.rate_change)}
-              </p>
+              {store.settings?.display_pricing ? (
+                <p>
+                  <strong> {currencies[currency.name]}</strong>{" "}
+                  {currency.name === "USD"
+                    ? cart.total_price.toFixed(2)
+                    : format_pricing(cart.total_price * currency.rate_change)}
+                </p>
+              ) : (
+                <p>N/A</p>
+              )}
             </div>
 
             <DrawerFooter className="flex flex-row justify-end items-center">

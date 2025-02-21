@@ -69,7 +69,7 @@ const ProductCard = ({
           </div>
         </div>
 
-        <ProductCart product={product} />
+        <ProductCart product={product} store_info={store} />
       </div>
 
       <p className="text-sm font-medium mt-2">{product.description}</p>
