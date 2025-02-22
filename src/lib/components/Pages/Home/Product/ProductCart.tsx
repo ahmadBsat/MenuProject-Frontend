@@ -122,20 +122,18 @@ const ProductCart = ({
             })}
           </div>
 
-          <div className="p-5 flex justify-between">
-            <span className="font-bold">Subtotal</span>
+          {store_info.settings?.display_pricing && (
+            <div className="p-5 flex justify-between">
+              <span className="font-bold">Subtotal</span>
 
-            {store_info.settings?.display_pricing ? (
               <span>
                 <strong> {currencies[currency.name]}</strong>{" "}
                 {currency.name === "USD"
                   ? currentSubTotal.toFixed(2)
                   : format_pricing(currentSubTotal)}
               </span>
-            ) : (
-              <span>N/A</span>
-            )}
-          </div>
+            </div>
+          )}
           <Divider />
 
           <DrawerFooter className="flex flex-row justify-end items-center">

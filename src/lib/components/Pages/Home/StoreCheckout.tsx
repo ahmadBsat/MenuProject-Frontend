@@ -72,23 +72,24 @@ const StoreCheckout = ({
                 ? product.price.toFixed(2)
                 : format_pricing(product.price * currency.rate_change)
             } ${currencies[currency.name]}`
-          : "Ask for a quote";
+          : "";
 
         const instructions = product.instructions
           ? ` \n - Instructions: ${product.instructions}`
           : "";
 
-        return `- ${product.name} (Qty: ${
-          product.quantity
-        }${`, Price: ${formatted_price}`})${
-          additions ? `\n${additions}` : ""
-        }${instructions}`;
+        return `- ${product.name} (Qty: ${product.quantity}${
+          store.settings?.display_pricing ? `, Price: ${formatted_price}` : ""
+        })${additions ? `\n${additions}` : ""}${instructions}`;
       })
       .join("\n\n");
 
     // build the message
     const message = [
-      "Hello, I would like to order the following:",
+      store.settings?.display_pricing
+        ? "Hello, I would like to order the following:"
+        : "Hello, I would like to order the following items. Please provide me with a quote.",
+
       product_list,
       "Delivery Details:",
       `- Name: ${data.name}`,

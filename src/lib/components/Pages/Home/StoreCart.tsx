@@ -230,20 +230,17 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                 );
               })}
             </div>
-
-            <div className="p-4 pb-8 flex w-full items-center justify-between border-t border-dashed gap-6 text-lg font-semibold">
-              <p>Subtotal</p>
-              {store.settings?.display_pricing ? (
+            {store.settings?.display_pricing && (
+              <div className="p-4 pb-8 flex w-full items-center justify-between border-t border-dashed gap-6 text-lg font-semibold">
+                <p>Subtotal</p>
                 <p>
                   <strong> {currencies[currency.name]}</strong>{" "}
                   {currency.name === "USD"
                     ? cart.total_price.toFixed(2)
                     : format_pricing(cart.total_price * currency.rate_change)}
                 </p>
-              ) : (
-                <p>N/A</p>
-              )}
-            </div>
+              </div>
+            )}
 
             <DrawerFooter className="flex flex-row justify-end items-center">
               <DrawerClose asChild>
