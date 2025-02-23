@@ -60,7 +60,7 @@ const ProductCard = ({
                   />
                 </div>
               ) : null}
-              <div className="font-medium">
+              <div className="font-medium text-left">
                 <p className="font-semibold text-lg">{product.name}</p>
                 <p className="text-xs">{category}</p>
 
@@ -123,12 +123,14 @@ const ProductCard = ({
                     </div>
                   </div>
                 </DrawerTitle>
-                <DrawerDescription className="flex flex-col gap-1 h-full text-left font-normal">
-                  <label className="mt-5 font-bold pb-2">
-                    Extra Information
-                  </label>
-                  <div>{product.extra_information}</div>
-                </DrawerDescription>
+                {product.extra_information && (
+                  <DrawerDescription className="flex flex-col gap-1 h-full text-left font-normal">
+                    <label className="mt-5 font-bold pb-2">
+                      Extra Information
+                    </label>
+                    <div>{product.extra_information}</div>
+                  </DrawerDescription>
+                )}
               </DrawerHeader>
             </div>
           </DrawerContent>
