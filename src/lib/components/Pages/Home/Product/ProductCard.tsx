@@ -33,7 +33,8 @@ const ProductCard = ({
   const currencies = { USD: "$", LBP: "LBP" };
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    // onOpenChange is a currently a condition that is always true just incase there was a setting needed, it will be easier to modify
+    <Drawer open={open} onOpenChange={true ? setOpen : () => {}}>
       <div className="flex flex-col gap-1 w-full py-4">
         <div className="flex items-center justify-between w-full">
           <DrawerTrigger asChild>
@@ -64,11 +65,11 @@ const ProductCard = ({
               <div className="font-medium">
                 <p className="font-semibold text-lg">{product.name}</p>
                 <p className="text-xs">{category}</p>
-    
-            {store.settings?.display_pricing === false ? (
-              <p></p>
-            ) : (
-              <p
+
+                {store.settings?.display_pricing === false ? (
+                  <p></p>
+                ) : (
+                  <p
                     className="mt-4 text-base font-semibold"
                     style={{
                       color: store.palette.price_color || store.palette.color,
@@ -80,7 +81,7 @@ const ProductCard = ({
                       : format_pricing(product.price * currency.rate_change)}
                   </p>
                 )}
-          </div>
+              </div>
             </div>
           </DrawerTrigger>
           <DrawerContent>
@@ -92,7 +93,7 @@ const ProductCard = ({
                       <Image
                         src={product.images[0]}
                         alt={product.name}
-                        className="w-[250px] h-[250px]"
+                        className="max-w-36 max-h-36 min-w-36 min-h-36 w-full h-full aspect-square border-1"
                         style={{
                           borderColor: palette.border || palette.background,
                         }}
@@ -100,22 +101,31 @@ const ProductCard = ({
                     )}
                     <div className="text-left">
                       <div className="text-2xl">{product.name}</div>
+
                       <div>
-                        <p className="mt-4 text-sm">
-                          {currencies[currency.name]}{" "}
-                          {currency.name === "USD"
-                            ? (product.price * currency.rate_change).toFixed(2)
-                            : format_pricing(
-                                product.price * currency.rate_change
-                              )}
-                        </p>
+                        {store.settings?.display_pricing === false ? (
+                          <p></p>
+                        ) : (
+                          <p className="mt-4 text-sm">
+                            {currencies[currency.name]}{" "}
+                            {currency.name === "USD"
+                              ? (product.price * currency.rate_change).toFixed(
+                                  2
+                                )
+                              : format_pricing(
+                                  product.price * currency.rate_change
+                                )}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="font-normal text-zinc-500 mt-5">
+                        {product.description}
                       </div>
                     </div>
                   </div>
                 </DrawerTitle>
                 <DrawerDescription className="flex flex-col gap-1 h-full text-left font-normal">
-                  <label className="mt-5 font-bold pb-2">Description</label>
-                  <div>{product.description}</div>
                   <label className="mt-5 font-bold pb-2">
                     Extra Information
                   </label>

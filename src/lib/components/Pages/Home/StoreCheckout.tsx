@@ -94,14 +94,6 @@ const StoreCheckout = ({
         ? totalPrice.toFixed(2)
         : format_pricing(totalPrice * currency.rate_change);
 
-    // Build the message
-    const message = `Hello, I would like to order the following:\n\n${productList}\n\nDelivery Details:\n- Name: ${
-      data.name
-    }\n- Phone: ${data.phone}\n- Address: ${data.address}, ${data.region} ${
-      data.instruction ? ` \n- Special Instruction: ${data.instruction}` : ""
-    }\n\nTotal: ${formattedTotalPrice} ${currencies[currency.name]} ${
-      store.vat_exclusive ? "(incl. VAT)" : ""
-    }\n\nThank you!`;
     // build the message
     const message = [
       store.settings?.display_pricing
@@ -114,6 +106,13 @@ const StoreCheckout = ({
       `- Phone: ${data.phone}`,
       `- Address: ${data.address}, ${data.region}`,
       data.instruction ? `- Special Instruction: ${data.instruction}` : "",
+
+      store.settings?.display_pricing
+        ? `Total: ${formattedTotalPrice} ${currencies[currency.name]} ${
+            store.vat_exclusive ? "(incl. VAT)" : "(excl. VAT)"
+          }`
+        : "",
+
       "Thank you!",
     ]
       .filter(Boolean)

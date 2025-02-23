@@ -23,6 +23,8 @@ const ProductInformation = ({ product, handleChange }) => {
       <Textarea
         label="Description"
         placeholder="Enter your description"
+        maxLength={200}
+        description="Max 200 characters"
         value={product.description}
         onValueChange={(e) => handleChange("description", e)}
       />
