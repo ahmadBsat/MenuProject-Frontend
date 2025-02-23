@@ -40,6 +40,11 @@ const Page = () => {
       category_background: "",
       category_color: "",
     },
+    settings: {
+      display_pricing: true,
+    },
+    vat_exclusive: false,
+    vat_percentage: 0,
     products: [],
   });
   const {

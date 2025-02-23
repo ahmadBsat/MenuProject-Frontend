@@ -13,8 +13,6 @@ import {
   DrawerDescription,
   DrawerTitle,
   DrawerHeader,
-  DrawerFooter,
-  DrawerClose,
 } from "../../../Common/drawer";
 import { useState } from "react";
 
@@ -33,11 +31,11 @@ const ProductCard = ({
   const currencies = { USD: "$", LBP: "LBP" };
 
   return (
-    // onOpenChange is a currently a condition that is always true just incase there was a setting needed, it will be easier to modify
-    <Drawer open={open} onOpenChange={true ? setOpen : () => {}}>
+    // onOpenChange is a currently a condition that is always true just incase there was a setting needed, it will be easier to modify onOpenChange={true ? setOpen : () => {}}
+    <Drawer open={open} onOpenChange={setOpen}>
       <div className="flex flex-col gap-1 w-full py-4">
         <div className="flex items-center justify-between w-full">
-          <DrawerTrigger asChild>
+          <DrawerTrigger>
             <div className="flex gap-3">
               {product.images.length > 0 ? (
                 <div className="max-w-24 max-h-24 w-full h-full aspect-square">
