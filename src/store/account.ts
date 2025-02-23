@@ -38,6 +38,8 @@ export const usePreference = create<PreferenceState>()(
         price_color: "",
         checkout_content: "",
         checkout_background: "",
+        category_background: "",
+        category_color: "",
       },
       banners: { images: [] },
       store: "",

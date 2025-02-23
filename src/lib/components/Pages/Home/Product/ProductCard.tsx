@@ -64,18 +64,23 @@ const ProductCard = ({
               <div className="font-medium">
                 <p className="font-semibold text-lg">{product.name}</p>
                 <p className="text-xs">{category}</p>
-                <p
-                  className="mt-4 text-base font-semibold"
-                  style={{
-                    color: store.palette.price_color || store.palette.color,
-                  }}
-                >
-                  {currencies[currency.name]}{" "}
-                  {currency.name === "USD"
-                    ? (product.price * currency.rate_change).toFixed(2)
-                    : format_pricing(product.price * currency.rate_change)}
-                </p>
-              </div>
+    
+            {store.settings?.display_pricing === false ? (
+              <p></p>
+            ) : (
+              <p
+                    className="mt-4 text-base font-semibold"
+                    style={{
+                      color: store.palette.price_color || store.palette.color,
+                    }}
+                  >
+                    {currencies[currency.name]}{" "}
+                    {currency.name === "USD"
+                      ? (product.price * currency.rate_change).toFixed(2)
+                      : format_pricing(product.price * currency.rate_change)}
+                  </p>
+                )}
+          </div>
             </div>
           </DrawerTrigger>
           <DrawerContent>
@@ -119,7 +124,7 @@ const ProductCard = ({
               </DrawerHeader>
             </div>
           </DrawerContent>
-          <ProductCart product={product} />
+          <ProductCart product={product} store_info={store} />
         </div>
 
         <p className="text-sm font-medium mt-2 line-clamp-1">

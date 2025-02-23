@@ -18,6 +18,7 @@ export type Store = {
   is_active: boolean;
   renewal_cost: number;
   watermark: boolean;
+  settings: { display_pricing: boolean };
   logoDefault: boolean;
   vat_exclusive: boolean;
   vat_percentage: number;
@@ -73,6 +74,7 @@ export type StorePopulated = {
   logoDefault: boolean;
   vat_exclusive: boolean;
   vat_percentage: number;
+  settings?: { display_pricing: boolean };
 };
 
 export type StoreBanner = {
@@ -89,4 +91,6 @@ export type StorePalette = {
   primary: string;
   checkout_content: string;
   checkout_background: string;
+  category_color: string;
+  category_background: string;
 };

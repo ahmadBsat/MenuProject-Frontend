@@ -18,8 +18,15 @@ import { useState } from "react";
 import { usePreference } from "@/store/account";
 import { useCart } from "@/lib/context/CartContext";
 import { format_pricing } from "@/utils/common";
+import { StorePopulated } from "@/lib/types/store/store";
 
-const ProductCart = ({ product }: { product: ProductPopulated }) => {
+const ProductCart = ({
+  product,
+  store_info,
+}: {
+  product: ProductPopulated;
+  store_info: StorePopulated;
+}) => {
   const { palette, store } = usePreference();
   const { name, description, additions } = product;
   const { addToCart } = useCart();
@@ -50,12 +57,14 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
   const selectedItemsPrice = product.additions
     .flatMap(
       (addition) =>
-        // Check if the group exists in `selected`
-        selected[addition.group]?.flatMap(
-          (selectedItemId) =>
-            addition.items
-              .filter((item) => item._id === selectedItemId) // Match the item in the group
-              .map((item) => item.additional_price) // Map to price
+        selected[addition.group]?.flatMap((selectedItemId) =>
+          addition.items
+            .filter((item) => item._id === selectedItemId)
+            .map((item) =>
+              currency.name === "USD"
+                ? item.additional_price
+                : item.additional_price * currency.rate_change
+            )
         ) || []
     )
     .reduce((sum, price) => sum + price, 0); // Sum all prices
@@ -77,12 +86,13 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
           />
         </Button>
       </DrawerTrigger>
+
       <DrawerContent>
         <div className="mx-auto w-full max-w-2xl max-h-[60vh] overflow-auto">
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <p className="max-md:text-left">{description}</p>
+              <div className="max-md:text-left">{description}</div>
             </DrawerDescription>
           </DrawerHeader>
 
@@ -112,16 +122,18 @@ const ProductCart = ({ product }: { product: ProductPopulated }) => {
             })}
           </div>
 
-          <div className="p-5 flex justify-between">
-            {" "}
-            <span className="font-bold">Subtotal</span>
-            <span>
-              <strong> {currencies[currency.name]}</strong>{" "}
-              {currency.name === "USD"
-                ? currentSubTotal.toFixed(2)
-                : format_pricing(currentSubTotal)}
-            </span>
-          </div>
+          {store_info.settings?.display_pricing && (
+            <div className="p-5 flex justify-between">
+              <span className="font-bold">Subtotal</span>
+
+              <span>
+                <strong> {currencies[currency.name]}</strong>{" "}
+                {currency.name === "USD"
+                  ? currentSubTotal.toFixed(2)
+                  : format_pricing(currentSubTotal)}
+              </span>
+            </div>
+          )}
           <Divider />
 
           <DrawerFooter className="flex flex-row justify-end items-center">

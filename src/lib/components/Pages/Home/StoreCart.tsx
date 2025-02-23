@@ -77,12 +77,14 @@ const CartItem = ({ product, additions, store, index }) => {
             <strong>QTY</strong> {product.quantity}
           </p>
 
-          <p className="font-medium text-base">
-            <strong> {currencies[currency.name]}</strong>{" "}
-            {currency.name === "USD"
-              ? product.price.toFixed(2)
-              : format_pricing(product.price * currency.rate_change)}
-          </p>
+          {store?.settings?.display_pricing && (
+            <p className="font-medium text-base">
+              <strong> {currencies[currency.name]}</strong>{" "}
+              {currency.name === "USD"
+                ? product.price.toFixed(2)
+                : format_pricing(product.price * currency.rate_change)}
+            </p>
+          )}
         </div>
 
         {product.instructions && (
@@ -227,14 +229,14 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                 );
               })}
             </div>
-
-            <div className="p-4 pb-4 border-t border-dashed gap-6 font-semibold">
+            {store.settings?.display_pricing && (
+              <div className="p-4 pb-4 border-t border-dashed gap-6 font-semibold">
               {store.vat_exclusive ? (
                 <>
                   <div className="flex w-full items-center justify-between text-base">
-                    <p>Subtotal</p>
-                    <p>
-                      <strong>{currencies[currency.name]}</strong>{" "}
+                      <p>Subtotal</p>
+                      <p>
+                        <strong>{currencies[currency.name]}</strong>{" "}
                       {currency.name === "USD"
                         ? cart.total_price.toFixed(2)
                         : format_pricing(
@@ -283,13 +285,14 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   <p>Total</p>
                   <p>
                     <strong>{currencies[currency.name]}</strong>{" "}
-                    {currency.name === "USD"
-                      ? cart.total_price.toFixed(2)
-                      : format_pricing(cart.total_price * currency.rate_change)}
-                  </p>
-                </div>
+                      {currency.name === "USD"
+                        ? cart.total_price.toFixed(2)
+                        : format_pricing(cart.total_price * currency.rate_change)}
+                    </p>
+                  </div>
               )}
             </div>
+            )}
 
             <DrawerFooter className="flex flex-row justify-end items-center">
               <DrawerClose asChild>

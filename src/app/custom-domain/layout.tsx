@@ -1,4 +1,5 @@
 import { CartProvider } from "@/lib/context/CartContext";
+import { StoreProvider } from "@/lib/context/StoreContext";
 import { Suspense } from "react";
 
 export default function HomeLayout({
@@ -10,7 +11,9 @@ export default function HomeLayout({
     <Suspense>
       <section>
         <div className="w-full h-full">
-          <CartProvider>{children}</CartProvider>
+          <StoreProvider>
+            <CartProvider>{children}</CartProvider>
+          </StoreProvider>
         </div>
       </section>
     </Suspense>

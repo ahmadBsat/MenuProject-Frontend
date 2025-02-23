@@ -191,6 +191,18 @@ const StoreInformation = ({
           </div>
         </Switch>
 
+        <Switch
+          classNames={SWITCH_STYLE}
+          isDisabled={!editable}
+          isSelected={data?.settings?.display_pricing}
+          onValueChange={(val) => handleChange("settings.display_pricing", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">Display Pricing</p>
+            <p className="text-sm">Enable to display the products pricing</p>
+          </div>
+        </Switch>
+
         <div>
           <div className="text-lg sm:text-xl ">Header</div>
 
@@ -285,6 +297,48 @@ const StoreInformation = ({
                 className="w-[200px]"
                 value={data.palette.color}
                 onChange={(e) => handleChange("palette.color", e.target.value)}
+              />
+            </div>
+          </div>
+
+          <Divider className="my-5" />
+
+          <div className="text-lg sm:text-xl ">Category</div>
+
+          <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Category Color</p>{" "}
+              <HexColorPicker
+                color={data.palette.category_color}
+                onChange={(c) => handleChange("palette.category_color", c)}
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Category Color"
+                className="w-[200px]"
+                value={data.palette.category_color}
+                onChange={(e) =>
+                  handleChange("palette.category_color", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Category Background</p>{" "}
+              <HexColorPicker
+                color={data.palette.category_background}
+                onChange={(c) => handleChange("palette.category_background", c)}
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Category Background"
+                className="w-[200px]"
+                value={data.palette.category_background}
+                onChange={(e) =>
+                  handleChange("palette.category_background", e.target.value)
+                }
               />
             </div>
           </div>
