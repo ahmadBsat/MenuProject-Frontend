@@ -42,6 +42,8 @@ const Page = () => {
       category_color: "",
     },
     products: [],
+    vat_exclusive: false,
+    vat_percentage: 0, 
   });
   const {
     branch,

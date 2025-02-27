@@ -88,11 +88,11 @@ const ProductCart = ({
       </DrawerTrigger>
 
       <DrawerContent>
-        <div className="mx-auto w-full max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl max-h-[60vh] overflow-auto">
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <div>{description}</div>
+              <div className="max-md:text-left">{description}</div>
             </DrawerDescription>
           </DrawerHeader>
 
@@ -122,20 +122,18 @@ const ProductCart = ({
             })}
           </div>
 
-          <div className="p-5 flex justify-between">
-            <span className="font-bold">Subtotal</span>
+          {store_info.settings?.display_pricing && (
+            <div className="p-5 flex justify-between">
+              <span className="font-bold">Subtotal</span>
 
-            {store_info.settings?.display_pricing ? (
               <span>
                 <strong> {currencies[currency.name]}</strong>{" "}
                 {currency.name === "USD"
                   ? currentSubTotal.toFixed(2)
                   : format_pricing(currentSubTotal)}
               </span>
-            ) : (
-              <span>N/A</span>
-            )}
-          </div>
+            </div>
+          )}
           <Divider />
 
           <DrawerFooter className="flex flex-row justify-end items-center">

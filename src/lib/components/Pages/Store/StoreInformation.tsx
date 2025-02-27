@@ -124,6 +124,34 @@ const StoreInformation = ({
         <Switch
           classNames={SWITCH_STYLE}
           isDisabled={!editable}
+          isSelected={data.vat_exclusive}
+          onValueChange={(val) => handleChange("vat_exclusive", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">VAT Exclusive</p>
+            <p className="text-sm">
+              Enable to add VAT to the total of the cart.
+            </p>
+          </div>
+        </Switch>
+
+        {data.vat_exclusive && (
+          <Input
+            label="VAT Percentage"
+            type="text"
+            placeholder="VAT Amount Percentage"
+            isRequired
+            required
+            isDisabled={!editable}
+            value={data.vat_percentage?.toString()}
+            startContent={<span className="text-sm text-default-400">%</span>}
+            onValueChange={(e) => handleChange("vat_percentage", Number(e))}
+          />
+        )}
+
+        <Switch
+          classNames={SWITCH_STYLE}
+          isDisabled={!editable}
           isSelected={data.is_active}
           onValueChange={(val) => handleChange("is_active", val)}
         >

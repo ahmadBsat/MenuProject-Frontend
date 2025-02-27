@@ -23,8 +23,17 @@ const ProductInformation = ({ product, handleChange }) => {
       <Textarea
         label="Description"
         placeholder="Enter your description"
+        maxLength={200}
+        description="Max 200 characters"
         value={product.description}
         onValueChange={(e) => handleChange("description", e)}
+      />
+
+      <Textarea
+        label="Extra Information"
+        placeholder="Enter extra information"
+        value={product.extra_information}
+        onValueChange={(e) => handleChange("extra_information", e)}
       />
 
       <ProductPricing product={product} handleChange={handleChange} />

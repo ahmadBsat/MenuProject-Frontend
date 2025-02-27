@@ -72,29 +72,47 @@ const StoreCheckout = ({
                 ? product.price.toFixed(2)
                 : format_pricing(product.price * currency.rate_change)
             } ${currencies[currency.name]}`
-          : "Ask for a quote";
+          : "";
 
         const instructions = product.instructions
           ? ` \n - Instructions: ${product.instructions}`
           : "";
 
-        return `- ${product.name} (Qty: ${
-          product.quantity
-        }${`, Price: ${formatted_price}`})${
-          additions ? `\n${additions}` : ""
-        }${instructions}`;
+        return `- ${product.name} (Qty: ${product.quantity}${
+          store.settings?.display_pricing ? `, Price: ${formatted_price}` : ""
+        })${additions ? `\n${additions}` : ""}${instructions}`;
       })
       .join("\n\n");
 
+    // Calculate total price (apply VAT if exclusive)
+    const totalPrice = store.vat_exclusive
+      ? cart.total_price * 1.11 // Add 11% VAT if exclusive
+      : cart.total_price;
+
+    const formattedTotalPrice =
+      currency.name === "USD"
+        ? totalPrice.toFixed(2)
+        : format_pricing(totalPrice * currency.rate_change);
+
     // build the message
     const message = [
-      "Hello, I would like to order the following:",
+      store.settings?.display_pricing
+        ? "Hello, I would like to order the following:"
+        : "Hello, I would like to order the following items. Please provide me with a quote.",
+
       product_list,
       "Delivery Details:",
       `- Name: ${data.name}`,
       `- Phone: ${data.phone}`,
       `- Address: ${data.address}, ${data.region}`,
       data.instruction ? `- Special Instruction: ${data.instruction}` : "",
+
+      store.settings?.display_pricing
+        ? `Total: ${formattedTotalPrice} ${currencies[currency.name]} ${
+            store.vat_exclusive ? "(incl. VAT)" : "(excl. VAT)"
+          }`
+        : "",
+
       "Thank you!",
     ]
       .filter(Boolean)

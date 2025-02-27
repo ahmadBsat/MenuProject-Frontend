@@ -11,6 +11,11 @@
 }
 
 
+/* Added to stop the background from glitching every time the drawer is open  */
+html, body {
+  width: 100%;
+}
+
 @supports (font-variation-settings: normal) {
   html {
     font-family: "Inter var", sans-serif;

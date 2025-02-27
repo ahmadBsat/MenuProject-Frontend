@@ -40,6 +40,8 @@ export const STORE_INITIAL: StoreForm = {
   domain: "",
   renewal_cost: 100,
   logoDefault: false,
+  vat_exclusive: false,
+  vat_percentage: 0,
 };
 
 export const USER_INITIAL: UserForm = {
@@ -59,6 +61,7 @@ export const PRODUCT_INITIAL: ProductForm = {
   branch: [],
   category: [],
   description: "",
+  extra_information: "",
   images: [],
   is_active: true,
   name: "",

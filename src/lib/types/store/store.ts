@@ -20,6 +20,8 @@ export type Store = {
   watermark: boolean;
   settings: { display_pricing: boolean };
   logoDefault: boolean;
+  vat_exclusive: boolean;
+  vat_percentage: number;
 };
 
 export type StoreForm = Omit<
@@ -70,6 +72,8 @@ export type StorePopulated = {
   banners: Banner[];
   watermark: boolean;
   logoDefault: boolean;
+  vat_exclusive: boolean;
+  vat_percentage: number;
   settings?: { display_pricing: boolean };
 };
 
