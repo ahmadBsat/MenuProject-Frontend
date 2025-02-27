@@ -22,7 +22,7 @@ _axios.interceptors.request.use(
 
     if (preference) {
       const preference_parsed = JSON.parse(preference);
-      config.headers["X-Session-ID"] = preference_parsed.session_id || null;
+      config.headers["X-Session-ID"] = preference_parsed?.state?.session_id || null;
     }
 
     if (preferredCurrency) {
