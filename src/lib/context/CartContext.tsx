@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
   const [cartOpen, setCartOpen] = useState(false);
   const [subLoading, setSubLoading] = useState(false);
   const [processing, setProcessing] = useState(true);
-  const { store, currency } = usePreference();
+  const { store, setSessionId } = usePreference();
 
   const getUserCart = useCallback(async () => {
     if (!store) return;
@@ -68,6 +68,10 @@ export const CartProvider = ({ children }) => {
     try {
       const cart = await API_CART.getCart(store);
       setCart(cart);
+
+      if (cart.session_id) {
+        setSessionId(cart.session_id);
+      }
     } catch (error) {
       console.log(error);
     } finally {

@@ -10,6 +10,7 @@ export type Cart = {
   count: number;
   createdAt: string;
   updatedAt: string;
+  session_id?: string;
 };
 
 export type CartProduct = {

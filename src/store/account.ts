@@ -10,10 +10,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type PreferenceState = {
+  session_id: string | null;
   currency: { name: string; rate_change: number };
   branch: Partial<StoreBranch>;
   palette: StorePalette;
   banners: StoreBanner;
+  setSessionId: (val: string | null) => void;
   setBanners: (val: StoreBanner) => void;
   setPalette: (val: StorePalette) => void;
   setBranch: (val: StoreBranch) => void;
@@ -43,12 +45,14 @@ export const usePreference = create<PreferenceState>()(
       },
       banners: { images: [] },
       store: "",
+      session_id: null,
       branch: { _id: "", name: "", address: "", phone_number: "" },
       setStore: (val) => set({ store: val }),
       setBranch: (val) => set({ branch: val }),
       setCurrency: (val) => set({ currency: val }),
       setPalette: (val) => set({ palette: val }),
       setBanners: (val) => set({ banners: val }),
+      setSessionId: (val) => set({ session_id: val }),
       has_hydrated: false,
       set_has_hydrated: (val) => set({ has_hydrated: val }),
     }),
@@ -57,6 +61,7 @@ export const usePreference = create<PreferenceState>()(
       partialize: (state) => ({
         currency: state.currency,
         branch: state.branch,
+        session_id: state.session_id,
       }),
       onRehydrateStorage: () => (state) => {
         state?.set_has_hydrated(true);
