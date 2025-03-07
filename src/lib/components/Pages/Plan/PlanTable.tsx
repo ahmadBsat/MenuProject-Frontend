@@ -22,7 +22,7 @@ import { getUrl, URLs } from "@/lib/constants/urls";
 import { INPUT_STYLE } from "@/lib/constants/style";
 import { INITIAL_META } from "@/lib/constants/initials";
 import { PLANS_VISIBLE_COL, PLANS_COLUMNS } from "@/lib/constants/tables";
-import { build_path, formatDates } from "@/utils/common";
+import { build_path, formatDates, formatDatesWithYear } from "@/utils/common";
 import {
   createSerializer,
   parseAsInteger,
@@ -79,7 +79,7 @@ const PlansTable = () => {
     if (!selectedStore) return null;
 
     const renewal = new Date(selectedStore?.renewal_date);
-    renewal.setMonth(renewal.getMonth() + 1);
+    renewal.setFullYear(renewal.getFullYear() + 1);
 
     return renewal;
   };
@@ -182,7 +182,7 @@ const PlansTable = () => {
           );
 
         case "renewal_date":
-          return formatDates(store.renewal_date);
+          return formatDatesWithYear(store.renewal_date);
 
         case "renewal_cost":
           return (
@@ -200,7 +200,10 @@ const PlansTable = () => {
           let chip_color = "success"; // Default green
           let status_message = "Active";
 
-          if (days_diff <= 3) {
+          if (days_diff < 0) {
+            chip_color = "danger"; // Red for overdue
+            status_message = "Expired";
+          } else if (days_diff <= 3) {
             chip_color = "danger"; // Red for due in 3 days or less
             status_message = "Due Soon";
           } else if (days_diff <= 7) {
@@ -331,7 +334,7 @@ const PlansTable = () => {
             Next renewal for{" "}
             <span className="font-bold">{selectedStore?.name}</span> will be at{" "}
             <span className="font-bold">
-              {renewal ? formatDates(renewal.toISOString()) : ""}
+              {renewal ? formatDatesWithYear(renewal.toISOString()) : ""}
             </span>
           </p>
         </div>

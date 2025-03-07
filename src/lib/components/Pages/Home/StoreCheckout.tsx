@@ -14,6 +14,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  RadioGroup,
+  Radio,
 } from "@nextui-org/react";
 import { set } from "lodash";
 import { XIcon } from "lucide-react";
@@ -34,6 +36,7 @@ const StoreCheckout = ({
     address: "",
     name: "",
     phone: "",
+    orderMethod: "delivery",
     instruction: "",
   });
 
@@ -46,13 +49,17 @@ const StoreCheckout = ({
     if (!branch.phone_number) return;
 
     // check if user data is complete
-    const is_user_data_complete = Object.entries(data).every(
-      ([key, value]) => key === "instruction" || value
+    const is_user_data_complete = !Object.entries(data).every(
+      ([key, value]) =>
+        key === "instruction" ||
+        value ||
+        (data.orderMethod === "pickup" &&
+          (key === "region" || key === "address" || key === "instruction"))
     );
 
-    if (!is_user_data_complete) {
-      return "Please fill in all the required fields before placing the order.";
-    }
+    // if (!is_user_data_complete) {
+    //   return "Please fill in all the required fields before placing the order.";
+    // }
 
     // build the product list message with additions
     const product_list = cart.products
@@ -94,6 +101,23 @@ const StoreCheckout = ({
         ? totalPrice.toFixed(2)
         : format_pricing(totalPrice * currency.rate_change);
 
+    // Determine order method message
+    const is_delivery = data.orderMethod === "delivery";
+
+    const delivery_details = is_delivery
+      ? [
+          "Delivery Details:",
+          `- Name: ${data.name}`,
+          `- Phone: ${data.phone}`,
+          `- Address: ${data.address}, ${data.region}`,
+          data.instruction ? `- Special Instruction: ${data.instruction}` : "",
+        ]
+      : [
+          "I will pick up my order myself.",
+          `- Name: ${data.name}`,
+          `- Phone: ${data.phone}`,
+        ];
+
     // build the message
     const message = [
       store.settings?.display_pricing
@@ -101,11 +125,7 @@ const StoreCheckout = ({
         : "Hello, I would like to order the following items. Please provide me with a quote.",
 
       product_list,
-      "Delivery Details:",
-      `- Name: ${data.name}`,
-      `- Phone: ${data.phone}`,
-      `- Address: ${data.address}, ${data.region}`,
-      data.instruction ? `- Special Instruction: ${data.instruction}` : "",
+      ...delivery_details,
 
       store.settings?.display_pricing
         ? `Total: ${formattedTotalPrice} ${currencies[currency.name]} ${
@@ -206,29 +226,53 @@ const StoreCheckout = ({
                   }}
                 />
 
-                <Input
-                  isRequired
-                  label="Area/Region"
-                  placeholder="Area/Region"
-                  variant="bordered"
-                  value={data.region}
+                <RadioGroup
+                  label="Order method"
+                  size="md"
+                  orientation="horizontal"
+                  className="bg-white p-2 rounded-xl w-full"
                   classNames={{
-                    inputWrapper: "bg-white",
+                    label: "text-xs text-gray-600",
                   }}
-                  onValueChange={(v) => handleChange("region", v)}
-                />
+                  value={data.orderMethod}
+                  onChange={(e) => handleChange("orderMethod", e.target.value)}
+                >
+                  <Radio value="delivery">
+                    <span className="text-xs">Delivery</span>
+                  </Radio>
+                  <Radio value="pickup">
+                    <span className="text-xs">Self Pickup</span>
+                  </Radio>
+                </RadioGroup>
 
-                <Input
-                  isRequired
-                  label="Address"
-                  placeholder="Enter your address"
-                  variant="bordered"
-                  value={data.address}
-                  classNames={{
-                    inputWrapper: "bg-white",
-                  }}
-                  onValueChange={(v) => handleChange("address", v)}
-                />
+                {data.orderMethod === "delivery" && (
+                  <>
+                    <Input
+                      isRequired
+                      label="Area/Region"
+                      placeholder="Area/Region"
+                      variant="bordered"
+                      value={data.region}
+                      classNames={{
+                        inputWrapper: "bg-white",
+                      }}
+                      onValueChange={(v) => handleChange("region", v)}
+                    />
+
+                    <Input
+                      isRequired
+                      label="Address"
+                      placeholder="Enter your address"
+                      variant="bordered"
+                      value={data.address}
+                      classNames={{
+                        inputWrapper: "bg-white",
+                      }}
+                      onValueChange={(v) => handleChange("address", v)}
+                    />
+                  </>
+                )}
+
                 <Textarea
                   label="Special Instruction"
                   placeholder="Enter your special instruction"
@@ -250,7 +294,11 @@ const StoreCheckout = ({
                 color="success"
                 isDisabled={
                   !Object.entries(data).every(
-                    ([key, value]) => key === "instruction" || value
+                    ([key, value]) =>
+                      key === "instruction" ||
+                      value ||
+                      (data.orderMethod === "pickup" &&
+                        (key === "region" || key === "address"))
                   )
                 }
                 as={Link}

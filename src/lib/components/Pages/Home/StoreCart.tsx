@@ -282,7 +282,11 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   </>
                 ) : (
                   <div className="flex w-full items-center justify-between text-lg">
-                    <p>Total</p>
+                    <p>
+                      Total
+                      <p className="text-sm font-light text-gray-400">(VAT included)</p>
+                    </p>
+
                     <p>
                       <strong>{currencies[currency.name]}</strong>{" "}
                       {currency.name === "USD"
