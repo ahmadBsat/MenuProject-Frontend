@@ -75,14 +75,9 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         {groups.map((item, idx) => (
           <Button
             key={idx}
-            // as={Link}
-            // href={`#${item.name}`}
             style={{ background: palette.primary }}
             className="rounded-2xl border-none w-full h-20 text-base text-white"
-            onClick={() => {
-              // e.preventDefault();
-              handleScroll(item.name);
-            }}
+            onClick={() => handleScroll(item.name)}
           >
             <span className="font-semibold text-wrap text-center">
               {item.name}
@@ -98,30 +93,25 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           pagination={false}
           autoplay={false}
           allowTouchMove
-          breakpoints={{
-            310: { slidesPerView: 3.5, spaceBetween: 5 },
-          }}
           slidesPerView={3}
           spaceBetween={5}
           modules={[FreeMode]}
           className="mySwiper"
+          breakpoints={{
+            310: { slidesPerView: 3.5, spaceBetween: 5 },
+          }}
         >
           {groups.map((item, idx) => (
             <SwiperSlide key={idx}>
-              <Button
-                // as={Link}
-                // href={`#${item.name}`}
+              <div
                 style={{ background: palette.primary }}
-                className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white"
-                onClick={() => {
-                  // e.preventDefault();
-                  handleScroll(item.name);
-                }}
+                className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white font-medium transition-all px-1"
+                onClick={() => handleScroll(item.name)}
               >
                 <span className="font-semibold text-wrap text-center">
                   {item.name}
                 </span>
-              </Button>
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
