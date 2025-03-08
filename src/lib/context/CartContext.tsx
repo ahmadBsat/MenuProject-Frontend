@@ -77,7 +77,7 @@ export const CartProvider = ({ children }) => {
     } finally {
       setProcessing(false);
     }
-  }, [store]);
+  }, [store, setSessionId]);
 
   const toggleCart = () => {
     setCartOpen(!cartOpen);

@@ -1,9 +1,4 @@
-import Link from "next/link";
-import { Button } from "@nextui-org/react";
-import { usePreference } from "@/store/account";
 import { StorePopulated } from "@/lib/types/store/store";
-import { ProductPopulated } from "@/lib/types/store/product";
-import { GroupedCategory } from "./StoreProductList";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";

@@ -49,13 +49,13 @@ const StoreCheckout = ({
     if (!branch.phone_number) return;
 
     // check if user data is complete
-    const is_user_data_complete = !Object.entries(data).every(
-      ([key, value]) =>
-        key === "instruction" ||
-        value ||
-        (data.orderMethod === "pickup" &&
-          (key === "region" || key === "address" || key === "instruction"))
-    );
+    // const is_user_data_complete = !Object.entries(data).every(
+    //   ([key, value]) =>
+    //     key === "instruction" ||
+    //     value ||
+    //     (data.orderMethod === "pickup" &&
+    //       (key === "region" || key === "address" || key === "instruction"))
+    // );
 
     // if (!is_user_data_complete) {
     //   return "Please fill in all the required fields before placing the order.";
