@@ -11,7 +11,7 @@ const StoreCurrency = dynamic(() => import("./StoreCurrency"), {
 
 const StoreHeader = ({ store }: { store: StorePopulated }) => {
   return (
-    <div className="min-h-14 z-50">
+    <div className="min-h-14 max-h-32 z-50">
       <div
         className="flex fixed top-0 left-0 items-center justify-center w-full min-h-14 max-h-32"
         style={{

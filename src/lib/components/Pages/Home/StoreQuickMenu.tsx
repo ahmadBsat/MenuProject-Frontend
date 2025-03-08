@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import { FreeMode } from "swiper";
-import Link from "next/link";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export const group_products = (
   products: ProductPopulated[]
@@ -37,10 +37,36 @@ export const group_products = (
 const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { palette } = usePreference();
+  const { width } = useWindowSize();
+  const is_mobile = width && width <= 640;
 
   const groups = group_products(store.products).sort(
     (a, b) => a.order - b.order
   );
+
+  const offset = !!is_mobile ? 200 : 320;
+
+  const handleScroll = (targetName: string) => {
+    const targetElement = document.querySelector(
+      `[data-scroll-target="${targetName}"]`
+    );
+    const container = document.querySelector(".h-screen"); // Select your scrollable container
+
+    console.log(targetElement);
+
+    if (targetElement && container) {
+      const containerTop = container.getBoundingClientRect().top;
+      const targetTop = targetElement.getBoundingClientRect().top;
+      const scrollAmount = targetTop - containerTop - offset;
+
+      console.log(targetTop, containerTop, scrollAmount);
+
+      container.scrollTo({
+        top: container.scrollTop + scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <>
@@ -49,10 +75,14 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         {groups.map((item, idx) => (
           <Button
             key={idx}
-            as={Link}
-            href={`#${item.name}`}
+            // as={Link}
+            // href={`#${item.name}`}
             style={{ background: palette.primary }}
             className="rounded-2xl border-none w-full h-20 text-base text-white"
+            onClick={() => {
+              // e.preventDefault();
+              handleScroll(item.name);
+            }}
           >
             <span className="font-semibold text-wrap text-center">
               {item.name}
@@ -79,10 +109,14 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           {groups.map((item, idx) => (
             <SwiperSlide key={idx}>
               <Button
-                as={Link}
-                href={`#${item.name}`}
+                // as={Link}
+                // href={`#${item.name}`}
                 style={{ background: palette.primary }}
                 className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white"
+                onClick={() => {
+                  // e.preventDefault();
+                  handleScroll(item.name);
+                }}
               >
                 <span className="font-semibold text-wrap text-center">
                   {item.name}

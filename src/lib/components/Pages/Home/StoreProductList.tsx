@@ -27,6 +27,7 @@ const StoreProductList = ({ store }: { store: StorePopulated }) => {
               <div
                 id={category.name}
                 key={idx}
+                data-scroll-target={category.name}
                 className="flex flex-col gap-2 w-full"
               >
                 <div

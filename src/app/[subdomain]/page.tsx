@@ -122,31 +122,29 @@ const Page = () => {
   }
 
   return (
-    <>
-      <div
-        style={{
-          background: store.palette.background,
-          color: store.palette.color,
-        }}
-        className="w-full min-h-screen h-screen flex flex-col overflow-y-auto"
-      >
-        <StoreHeader store={store} />
+    <div
+      style={{
+        background: store.palette.background,
+        color: store.palette.color,
+      }}
+      className="w-full min-h-screen h-screen flex flex-col overflow-y-auto"
+    >
+      <StoreHeader store={store} />
 
-        <StoreCategory store={store} />
+      <StoreCategory store={store} />
 
-        <div className="sticky top-0 z-10 bg-inherit pb-8 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
-          <StoreQuickMenu store={store} />
-        </div>
-
-        <div className="flex-grow z-0">
-          <StoreProductList store={store} />
-        </div>
-
-        <div className="mt-auto">
-          <StoreFooter store={store} />
-        </div>
+      <div className="sticky top-0 z-10 bg-inherit pb-8 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
+        <StoreQuickMenu store={store} />
       </div>
-    </>
+
+      <div className="flex-grow z-0">
+        <StoreProductList store={store} />
+      </div>
+
+      <div className="mt-auto">
+        <StoreFooter store={store} />
+      </div>
+    </div>
   );
 };
 
