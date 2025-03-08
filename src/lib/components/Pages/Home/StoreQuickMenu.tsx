@@ -38,13 +38,13 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { palette } = usePreference();
   const { width } = useWindowSize();
-  const is_mobile = width && width <= 640;
+  const is_mobile = width && width <= 640 ? true : false;
 
   const groups = group_products(store.products).sort(
     (a, b) => a.order - b.order
   );
 
-  const offset = !!is_mobile ? 200 : 320;
+  const offset = is_mobile ? 200 : 320;
 
   const handleScroll = (targetName: string) => {
     const targetElement = document.querySelector(
