@@ -1,37 +1,22 @@
 import ProductList from "./Product/ProductList";
 import { usePreference } from "@/store/account";
-import { ProductPopulated } from "@/lib/types/store/product";
+import { group_products } from "./StoreQuickMenu";
 import { StorePopulated } from "@/lib/types/store/store";
+import { ProductPopulated } from "@/lib/types/store/product";
 
 export type GroupedCategory = {
   _id: string;
   name: string;
+  order: number;
   products: ProductPopulated[];
 };
 
 const StoreProductList = ({ store }: { store: StorePopulated }) => {
   const { palette } = usePreference();
 
-  const group_products = (products: ProductPopulated[]): GroupedCategory[] => {
-    const category_map: { [key: string]: GroupedCategory } = {};
-
-    products.forEach((product) => {
-      product.category.forEach((category) => {
-        if (!category_map[category._id]) {
-          category_map[category._id] = {
-            _id: category._id,
-            name: category.name,
-            products: [],
-          };
-        }
-        category_map[category._id].products.push(product);
-      });
-    });
-
-    return Object.values(category_map);
-  };
-
-  const groups = group_products(store.products);
+  const groups = group_products(store.products).sort(
+    (a, b) => a.order - b.order
+  );
 
   return (
     <div className="flex items-center px-4 sm:px-8 justify-center w-full h-full pb-8">
@@ -47,8 +32,7 @@ const StoreProductList = ({ store }: { store: StorePopulated }) => {
                 <div
                   style={{
                     color: palette.category_color || palette.color,
-                    background:
-                      palette.category_background || palette.primary,
+                    background: palette.category_background || palette.primary,
                   }}
                   className="w-full p-3 mb-4 rounded-2xl flex items-center justify-center text-center text-lg font-semibold"
                 >

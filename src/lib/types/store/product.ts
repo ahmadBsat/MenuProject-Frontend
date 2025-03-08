@@ -26,7 +26,7 @@ export type ProductAddition = {
 
 export type ProductPopulated = Omit<Product, "additions" | "category"> & {
   additions: ProductAdditionGroup[];
-  category: { _id: string; name: string }[];
+  category: { _id: string; name: string; order?: number }[];
 };
 
 export type ProductItem = {

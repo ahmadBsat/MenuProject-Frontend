@@ -96,16 +96,17 @@ const StoreInformation = ({
             placeholder="Select a user as owner"
             required
             isRequired
-            items={users}
             isDisabled={!editable}
             selectedKey={data.owner}
             onSelectionChange={(e) => handleChange("owner", e?.toString())}
           >
-            {(item) => (
-              <AutocompleteItem key={item._id}>
-                {`${item.firstname} ${item.lastname}`}
-              </AutocompleteItem>
-            )}
+            {users.map((item) => {
+              return (
+                <AutocompleteItem key={item._id}>
+                  {`${item.firstname} ${item.lastname}`}
+                </AutocompleteItem>
+              );
+            })}
           </Autocomplete>
         </div>
 

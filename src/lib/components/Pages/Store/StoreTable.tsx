@@ -285,7 +285,7 @@ const StoresTable = () => {
         <GeneralizedTable
           name="Store Table"
           emptyContent={`No stores added yet!`}
-          selectionMode="multiple"
+          selectionMode="none"
           loading={loading}
           page={stores.meta.page}
           total={stores.meta.total_pages}
@@ -301,6 +301,7 @@ const StoresTable = () => {
           setSortDescriptor={onSortChange}
           setSelectedKeys={handleSelectionChange}
           renderCell={renderCell}
+          showSelectionCheckboxes={false}
         />
       </div>
 

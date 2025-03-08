@@ -9,13 +9,9 @@ export default function HomeLayout({
 }>) {
   return (
     <Suspense>
-      <section>
-        <div className="w-full h-full">
-          <StoreProvider>
-            <CartProvider>{children}</CartProvider>
-          </StoreProvider>
-        </div>
-      </section>
+      <StoreProvider>
+        <CartProvider>{children}</CartProvider>
+      </StoreProvider>
     </Suspense>
   );
 }

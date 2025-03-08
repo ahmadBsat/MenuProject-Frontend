@@ -2,7 +2,6 @@
 
 import { ProductPopulated } from "@/lib/types/store/product";
 import { usePreference } from "@/store/account";
-import { Image } from "@nextui-org/react";
 import ProductCart from "./ProductCart";
 import { format_pricing } from "@/utils/common";
 import { StorePopulated } from "@/lib/types/store/store";
@@ -15,6 +14,7 @@ import {
   DrawerHeader,
 } from "../../../Common/drawer";
 import { useState } from "react";
+import Image from "next/image";
 
 const ProductCard = ({
   product,
@@ -40,9 +40,11 @@ const ProductCard = ({
               {product.images.length > 0 ? (
                 <div className="max-w-24 max-h-24 w-full h-full aspect-square">
                   <Image
+                    width={96}
+                    height={96}
                     src={product.images[0]}
                     alt={product.name}
-                    className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1"
+                    className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1 rounded-xl"
                     style={{
                       borderColor: palette.border || palette.background,
                     }}
@@ -51,9 +53,11 @@ const ProductCard = ({
               ) : store.logoDefault ? (
                 <div className="max-w-24 max-h-24 w-full h-full aspect-square">
                   <Image
+                    width={96}
+                    height={96}
                     src={store.logo}
                     alt={product.name}
-                    className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1"
+                    className="max-w-24 max-h-24 min-w-24 min-h-24 w-full h-full aspect-square border-1 rounded-xl"
                     style={{
                       borderColor: palette.border || palette.background,
                     }}
@@ -89,9 +93,11 @@ const ProductCard = ({
                   <div className="lg:flex gap-2 text-sm">
                     {product.images.length > 0 && (
                       <Image
+                        width={144}
+                        height={144}
                         src={product.images[0]}
                         alt={product.name}
-                        className="max-w-36 max-h-36 min-w-36 min-h-36 w-full h-full aspect-square border-1"
+                        className="max-w-36 max-h-36 min-w-36 min-h-36 w-full h-full aspect-square border-1 rounded-xl"
                         style={{
                           borderColor: palette.border || palette.background,
                         }}

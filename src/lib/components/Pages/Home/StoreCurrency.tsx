@@ -11,7 +11,7 @@ import {
   Selection,
 } from "@nextui-org/react";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StoreCurrency = ({
   currencies,
@@ -35,6 +35,10 @@ const StoreCurrency = ({
       // window.location.reload();
     }
   };
+
+  useEffect(() => {
+    setSelected(new Set([currency.name]));
+  }, [currency]);
 
   return (
     <Dropdown placement="bottom">
