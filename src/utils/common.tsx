@@ -98,3 +98,10 @@ export const redirect = (url: string, callback: string) => {
 export const format_pricing = (price: number) => {
   return price.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const formatDatesWithYear = (date: string) => {
+  const parsedDate = parseISO(date);
+  const formattedDate = format(parsedDate, "MMMM d, yyyy h:mm a");
+
+  return formattedDate;
+};
