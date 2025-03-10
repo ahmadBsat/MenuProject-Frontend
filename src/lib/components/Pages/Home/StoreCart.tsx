@@ -22,7 +22,6 @@ import StoreCheckout from "./StoreCheckout";
 import { useEffect, useState } from "react";
 
 const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
-  const [loading, setLoading] = useState(false);
   const [instructions, setInstructions] = useState(product.instructions || "");
 
   const { currency } = usePreference();
@@ -44,12 +43,9 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
   // Submit function
   const handleSubmit = async (index: number, updatedInstructions: string) => {
     try {
-      setLoading(true);
       await updateCart({ store, index, instructions: updatedInstructions });
     } catch (error) {
       console.error("Error updating cart:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
