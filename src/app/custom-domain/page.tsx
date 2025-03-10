@@ -39,6 +39,8 @@ const Page = () => {
       checkout_background: "",
       category_background: "",
       category_color: "",
+      clear_button_color: "",
+      clear_button_background: "",
     },
     settings: {
       display_pricing: true,

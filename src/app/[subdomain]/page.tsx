@@ -40,6 +40,8 @@ const Page = () => {
       checkout_background: "",
       category_background: "",
       category_color: "",
+      clear_button_color: "",
+      clear_button_background: "",
     },
     products: [],
     vat_exclusive: false,
