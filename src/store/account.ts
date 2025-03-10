@@ -42,6 +42,8 @@ export const usePreference = create<PreferenceState>()(
         checkout_background: "",
         category_background: "",
         category_color: "",
+        clear_button_color: "",
+        clear_button_background: "",
       },
       banners: { images: [] },
       store: "",
