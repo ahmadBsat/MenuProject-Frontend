@@ -119,6 +119,7 @@ const StoreCheckout = ({
           `- Phone: ${data.phone}`,
         ];
 
+    const locationLinkInfo = locationLink ? `- Location: ${locationLink}` : "";
     // build the message
     const message = [
       store.settings?.display_pricing
@@ -127,7 +128,7 @@ const StoreCheckout = ({
 
       product_list,
       ...delivery_details,
-
+      locationLinkInfo,
       store.settings?.display_pricing
         ? `Total: ${formattedTotalPrice} ${currencies[currency.name]} ${
             store.vat_exclusive ? "(incl. VAT)" : "(excl. VAT)"
@@ -340,7 +341,7 @@ const StoreCheckout = ({
                           size="sm"
                           variant="solid"
                           className="max-md:w-full"
-                          >
+                        >
                           Check Location on Map
                         </Button>
                       )}
