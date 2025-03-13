@@ -5,6 +5,10 @@ export function middleware(request: NextRequest) {
   const origin = request.nextUrl.origin;
   const pathname = request.nextUrl.pathname;
 
+  console.log(JSON.stringify(request));
+  console.log(pathname);
+  console.log(origin);
+
   // Redirect if there is no locale
   if (
     origin !== "https://fmcshops.com" &&
