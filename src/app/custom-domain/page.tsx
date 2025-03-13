@@ -5,6 +5,7 @@ import StoreCategory from "@/lib/components/Pages/Home/StoreCategory";
 import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
+import StoreQuickMenu from "@/lib/components/Pages/Home/StoreQuickMenu";
 import NotFound from "@/lib/components/Pages/NotFound";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StorePopulated } from "@/lib/types/store/store";
@@ -42,12 +43,12 @@ const Page = () => {
       clear_button_color: "",
       clear_button_background: "",
     },
+    products: [],
     settings: {
       display_pricing: true,
     },
     vat_exclusive: false,
     vat_percentage: 0,
-    products: [],
   });
   const {
     branch,
@@ -127,13 +128,21 @@ const Page = () => {
         background: store.palette.background,
         color: store.palette.color,
       }}
-      className="w-full min-h-screen grid grid-cols-1"
+      className="w-full min-h-screen h-screen flex flex-col overflow-y-auto"
     >
       <StoreHeader store={store} />
-      <StoreCategory store={store} />
-      <StoreProductList store={store} />
 
-      <div className="flex items-end justify-end h-full">
+      <StoreCategory store={store} />
+
+      <div className="sticky top-0 z-10 bg-inherit pb-8 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
+        <StoreQuickMenu store={store} />
+      </div>
+
+      <div className="flex-grow z-0">
+        <StoreProductList store={store} />
+      </div>
+
+      <div className="mt-auto">
         <StoreFooter store={store} />
       </div>
     </div>
