@@ -34,6 +34,8 @@ export const STORE_INITIAL: StoreForm = {
     checkout_background: "",
     category_color: "",
     category_background: "",
+    clear_button_color: "",
+    clear_button_background: "",
   },
   settings: { display_pricing: true },
   is_active: true,

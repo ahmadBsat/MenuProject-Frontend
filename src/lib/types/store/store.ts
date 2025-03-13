@@ -93,4 +93,6 @@ export type StorePalette = {
   checkout_background: string;
   category_color: string;
   category_background: string;
+  clear_button_color: string;
+  clear_button_background: string;
 };

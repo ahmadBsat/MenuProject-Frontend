@@ -42,6 +42,7 @@ const StoreCheckout = ({
 
   const { cart, resetCart } = useCart();
   const { branch, currency } = usePreference();
+  const [locationLink, setLocationLink] = useState("");
 
   const currencies = { USD: "$", LBP: "LBP" };
 
@@ -118,6 +119,7 @@ const StoreCheckout = ({
           `- Phone: ${data.phone}`,
         ];
 
+    const locationLinkInfo = locationLink ? `- Location: ${locationLink}` : "";
     // build the message
     const message = [
       store.settings?.display_pricing
@@ -126,7 +128,7 @@ const StoreCheckout = ({
 
       product_list,
       ...delivery_details,
-
+      locationLinkInfo,
       store.settings?.display_pricing
         ? `Total: ${formattedTotalPrice} ${currencies[currency.name]} ${
             store.vat_exclusive ? "(incl. VAT)" : "(excl. VAT)"
@@ -150,6 +152,50 @@ const StoreCheckout = ({
   };
 
   const whatsapp_uri = get_whatsapp_message();
+
+  const [loadingLocation, setLoadingLocation] = useState(false);
+
+  const getCurrentLocation = async () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    setLoadingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        // Generate a Google Maps link
+        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+        // Reverse geocode to get address
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+        const locationData = await response.json();
+
+        const fetchedAddress =
+          locationData.display_name || "Location not found";
+        const fetchedRegion = locationData.address?.city || "Unknown Region";
+
+        setData((prevData) => ({
+          ...prevData,
+          region: fetchedRegion,
+          address: fetchedAddress,
+        }));
+
+        setLocationLink(mapUrl); // Save the map link
+
+        setLoadingLocation(false);
+      },
+      (error) => {
+        alert("Unable to retrieve your location: " + error.message);
+        setLoadingLocation(false);
+      }
+    );
+  };
 
   return (
     <Modal
@@ -270,6 +316,36 @@ const StoreCheckout = ({
                       }}
                       onValueChange={(v) => handleChange("address", v)}
                     />
+
+                    <div className="flex gap-5">
+                      <Button
+                        color="primary"
+                        variant="solid"
+                        size="sm"
+                        onClick={getCurrentLocation}
+                        isLoading={loadingLocation}
+                        disabled={!navigator.geolocation}
+                        isDisabled={!navigator.geolocation}
+                        className="max-md:w-full"
+                      >
+                        Get Current Location
+                      </Button>
+
+                      {locationLink && (
+                        <Button
+                          as={Link}
+                          href={locationLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          color="success"
+                          size="sm"
+                          variant="solid"
+                          className="max-md:w-full"
+                        >
+                          Check Location on Map
+                        </Button>
+                      )}
+                    </div>
                   </>
                 )}
 
