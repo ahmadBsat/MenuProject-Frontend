@@ -2,12 +2,22 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const origin = request.nextUrl.origin;
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto");
+  const referer = request.headers.get("referer");
   const pathname = request.nextUrl.pathname;
 
-  console.log(JSON.stringify(request));
-  console.log(pathname);
-  console.log(origin);
+  const origin =
+    forwardedHost && forwardedProto
+      ? `${forwardedProto}://${forwardedHost}`
+      : request.nextUrl.origin;
+
+  // Logging (optional)
+  console.log("Origin:", origin);
+  console.log("Referer:", referer);
+  console.log("Pathname:", pathname);
+  console.log("Forwarded Host:", forwardedHost);
+  console.log("Forwarded Proto:", forwardedProto);
 
   // Redirect if there is no locale
   if (
@@ -30,13 +40,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     {
       source:
         "/((?!api|_next/static|_next/image|images|favicon.ico|manifest.webmanifest|site.webmanifest|android-chrome-192x192.png|android-chrome-512x512.png|apple-touch-icon.png|favicon-16x16.png|favicon-32x32.png|preview.png|cover.jpg).*)",
