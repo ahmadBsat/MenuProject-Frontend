@@ -26,6 +26,7 @@ const Page = () => {
     categories: [],
     currencies: [],
     banners: [{ images: [] }],
+    store_label: "",
     logo: "",
     name: "",
     palette: {

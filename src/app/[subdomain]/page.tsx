@@ -23,6 +23,7 @@ const Page = () => {
     watermark: true,
     logoDefault: true,
     background_image: "",
+    store_label: "",
     branches: [],
     categories: [],
     currencies: [],

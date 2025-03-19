@@ -76,7 +76,9 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
           </div>
         )}
 
-        <p className="text-4xl font-bold px-1 -mb-16 sm:-mb-24 z-30">Menu</p>
+        <p className="text-4xl font-bold px-1 -mb-16 sm:-mb-24 z-30">
+          {store.store_label ? store.store_label : "Menu"}
+        </p>
       </div>
     </div>
   );

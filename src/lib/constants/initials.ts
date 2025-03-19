@@ -22,6 +22,7 @@ export const STORE_INITIAL: StoreForm = {
   name: "",
   owner: "",
   custom_domain: "",
+  store_label: "Menu",
   palette: {
     background: "#fff",
     border: "#fff",
