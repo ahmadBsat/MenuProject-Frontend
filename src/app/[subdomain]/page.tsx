@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
+import StoreAccessLinks from "@/lib/components/Pages/Home/StoreAccessLinks";
 import StoreCategory from "@/lib/components/Pages/Home/StoreCategory";
 import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
@@ -141,12 +142,14 @@ const Page = () => {
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store} />
+        <StoreProductList store={store}/>
       </div>
 
       <div className="mt-auto">
         <StoreFooter store={store} />
       </div>
+
+      <StoreAccessLinks store={store} />
     </div>
   );
 };

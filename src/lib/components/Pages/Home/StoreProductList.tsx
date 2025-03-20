@@ -23,6 +23,16 @@ const StoreProductList = ({ store }: { store: StorePopulated }) => {
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
         <div className="flex flex-col gap-3 w-full">
           {groups.map((category, idx) => {
+            // // Filter the products in the current category based on the search value
+            // const filteredProducts = category.products.filter((product) =>
+            //   product.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive search
+            // );
+
+            // // Only render category if there are filtered products
+            // if (filteredProducts.length === 0) {
+            //   return null; // Skip rendering this category if no products match the filter
+            // }
+
             return (
               <div
                 id={category.name}
@@ -42,7 +52,8 @@ const StoreProductList = ({ store }: { store: StorePopulated }) => {
 
                 <ProductList
                   store={store}
-                  data={category.products}
+                  // data={filteredProducts} // Pass only the filtered products to ProductList
+                  data={category.products} // Pass all products in the category to ProductList
                   category={category.name}
                 />
               </div>
