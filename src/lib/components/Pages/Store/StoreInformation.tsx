@@ -122,6 +122,17 @@ const StoreInformation = ({
           onValueChange={(e) => handleChange("renewal_cost", Number(e))}
         />
 
+        <Input
+          label="Store Label"
+          type="text"
+          placeholder="Store Label Value..."
+          isRequired
+          required
+          isDisabled={!editable}
+          value={data.store_label}
+          onValueChange={(e) => handleChange("store_label", e)}
+        />
+
         <Switch
           classNames={SWITCH_STYLE}
           isDisabled={!editable}
@@ -405,7 +416,9 @@ const StoreInformation = ({
               <p className="text-lg">Clear Cart Background Color</p>{" "}
               <HexColorPicker
                 color={data.palette.clear_button_background}
-                onChange={(c) => handleChange("palette.clear_button_background", c)}
+                onChange={(c) =>
+                  handleChange("palette.clear_button_background", c)
+                }
               />{" "}
               <Input
                 label=""
@@ -414,7 +427,10 @@ const StoreInformation = ({
                 className="w-[200px]"
                 value={data.palette.clear_button_background}
                 onChange={(e) =>
-                  handleChange("palette.clear_button_background", e.target.value)
+                  handleChange(
+                    "palette.clear_button_background",
+                    e.target.value
+                  )
                 }
               />
             </div>

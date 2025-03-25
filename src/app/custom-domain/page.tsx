@@ -26,6 +26,7 @@ const Page = () => {
     categories: [],
     currencies: [],
     banners: [{ images: [] }],
+    store_label: "",
     logo: "",
     name: "",
     palette: {
@@ -139,7 +140,7 @@ const Page = () => {
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store} />
+        <StoreProductList store={store}  />
       </div>
 
       <div className="mt-auto">
