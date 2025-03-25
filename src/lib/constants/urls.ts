@@ -1,5 +1,9 @@
 export const URLs = {
+  home: "/",
   checkout: "/checkout",
+  about: "/about",
+  branch: "/branch",
+  search: "/search",
   account: {
     profile: "/settings/account",
     setting: "/settings/account",
@@ -63,7 +67,7 @@ export const URLs = {
       index: "/store/banners",
       create: "/store/banners/create",
       get_id: "/store/banners/:id",
-    }
+    },
   },
 };
 
