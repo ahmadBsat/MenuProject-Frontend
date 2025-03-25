@@ -4,28 +4,15 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const forwardedHost = request.headers.get("x-forwarded-host");
   const forwardedProto = request.headers.get("x-forwarded-proto");
-  const referer = request.headers.get("referer");
-  const pathname = request.nextUrl.pathname;
-
   const origin =
     forwardedHost && forwardedProto
       ? `${forwardedProto}://${forwardedHost}`
       : request.nextUrl.origin;
 
-  // Logging (optional)
-  console.log("Origin:", origin);
-  console.log("Referer:", referer);
-  console.log("Pathname:", pathname);
-  console.log("Forwarded Host:", forwardedHost);
-  console.log("Forwarded Proto:", forwardedProto);
-
-  // Redirect if there is no locale
   if (
     origin !== "https://fmcshops.com" &&
-    origin !== "http://localhost:3000" &&
-    pathname === "/" &&
-    !pathname.includes("admin") &&
-    !pathname.includes("store")
+    origin !== "https://fmctest.xyz" &&
+    origin !== "http://localhost:3000"
   ) {
     const newUrl = `/custom-domain`;
 
