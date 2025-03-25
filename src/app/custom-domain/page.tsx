@@ -82,6 +82,8 @@ const Page = () => {
         const current_branch = res.branches.find((x) => x._id === branch._id);
         if (current_branch) {
           setBranch(current_branch);
+        } else {
+          setBranch(res.branches[0]);
         }
       }
 
@@ -91,6 +93,8 @@ const Page = () => {
 
       if (current_currency) {
         setCurrency(current_currency);
+      } else {
+        setCurrency({ name: "USD", rate_change: 1 });
       }
     } catch (error) {
       console.log(error);
@@ -140,7 +144,7 @@ const Page = () => {
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store}  />
+        <StoreProductList store={store} />
       </div>
 
       <div className="mt-auto">
