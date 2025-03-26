@@ -247,7 +247,7 @@ const StoreCheckout = ({
     <Modal
       size="3xl"
       isOpen={isOpen}
-      placement="auto"
+      placement="top"
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
       style={{
@@ -275,7 +275,7 @@ const StoreCheckout = ({
           Checkout
         </ModalHeader>
 
-        <ModalBody className="grid grid-cols-1 gap-5">
+        <ModalBody className="grid grid-cols-1 gap-5 overflow-y-auto max-h-[calc(100vh-200px)]">
           {/* Step 1 - User Information */}
           {currentStep === 1 && (
             <div className="flex flex-col gap-3">
@@ -335,28 +335,33 @@ const StoreCheckout = ({
                 </Radio>
               </RadioGroup>
 
-              <Input
-                isRequired
-                label="Area/Region"
-                placeholder="Area/Region"
-                variant="bordered"
-                value={data.region}
-                classNames={{
-                  inputWrapper: "bg-white",
-                }}
-                onValueChange={(v) => handleChange("region", v)}
-              />
-              <Input
-                isRequired
-                label="Address"
-                placeholder="Enter your address"
-                variant="bordered"
-                value={data.address}
-                classNames={{
-                  inputWrapper: "bg-white",
-                }}
-                onValueChange={(v) => handleChange("address", v)}
-              />
+              {data.orderMethod === "delivery" && (
+                <>
+                  <Input
+                    isRequired
+                    label="Area/Region"
+                    placeholder="Area/Region"
+                    variant="bordered"
+                    value={data.region}
+                    classNames={{
+                      inputWrapper: "bg-white",
+                    }}
+                    onValueChange={(v) => handleChange("region", v)}
+                  />
+                  <Input
+                    isRequired
+                    label="Address"
+                    placeholder="Enter your address"
+                    variant="bordered"
+                    value={data.address}
+                    classNames={{
+                      inputWrapper: "bg-white",
+                    }}
+                    onValueChange={(v) => handleChange("address", v)}
+                  />
+                </>
+              )}
+
               <Textarea
                 label="Special Instruction"
                 placeholder="Enter your special instruction"
