@@ -196,28 +196,39 @@ const StoreCheckout = ({
   const isButtonDisabled = () => {
     if (currentStep === 1) {
       return !(data.name && data.phone && data.orderMethod); // Step 1 validation
-    } else if (currentStep === 2) {
-      return !userLocation.latitude || !userLocation.longitude; // Step 2 validation (location)
+    } else if (currentStep === 3) {
+      return !userLocation.latitude || !userLocation.longitude; // Step 3 validation (location)
     }
-    return false; // Step 3 always enabled
+    return false; // Step 4 always enabled
   };
 
   const handleNextButtonClick = () => {
-    if (currentStep === 3) {
-      // Complete the order and reset the cart on Step 3
+    if (currentStep === 4) {
+      // Complete the order and reset the cart on Step 4
       resetCart({ store: store._id });
+      return;
+    }
+
+    // Move to the next step or skip to Step 3 if pickup or no location
+    if (currentStep === 1 && data.orderMethod === "pickup") {
+      setCurrentStep(4);
+      return;
+    }
+
+    if (currentStep === 1 && data.orderMethod !== "pickup") {
+      setCurrentStep(2);
+      return;
+    }
+
+    if (
+      currentStep === 3 &&
+      (!userLocation.latitude || !userLocation.longitude)
+    ) {
+      setCurrentStep(4); // Skip to Step 3 if no location
+      return;
     } else {
-      // Move to the next step or skip to Step 3 if pickup or no location
-      if (currentStep === 1 && data.orderMethod === "pickup") {
-        setCurrentStep(3);
-      } else if (
-        currentStep === 2 &&
-        (!userLocation.latitude || !userLocation.longitude)
-      ) {
-        setCurrentStep(3); // Skip to Step 3 if no location
-      } else {
-        setCurrentStep(currentStep + 1);
-      }
+      setCurrentStep(currentStep + 1);
+      return;
     }
   };
 
@@ -226,8 +237,8 @@ const StoreCheckout = ({
     if (currentStep > 1) {
       // If on step 2, or if on step 3 and order method is pickup, go to step 1
       if (
-        currentStep === 2 ||
-        (currentStep === 3 && data.orderMethod === "pickup")
+        currentStep === 3 ||
+        (currentStep === 2 && data.orderMethod === "pickup")
       ) {
         setCurrentStep(1);
       } else {
@@ -238,7 +249,7 @@ const StoreCheckout = ({
   };
 
   useEffect(() => {
-    if (currentStep === 2) {
+    if (currentStep === 3) {
       getCurrentLocation();
     }
   }, [currentStep]);
@@ -335,33 +346,6 @@ const StoreCheckout = ({
                 </Radio>
               </RadioGroup>
 
-              {data.orderMethod === "delivery" && (
-                <>
-                  <Input
-                    isRequired
-                    label="Area/Region"
-                    placeholder="Area/Region"
-                    variant="bordered"
-                    value={data.region}
-                    classNames={{
-                      inputWrapper: "bg-white",
-                    }}
-                    onValueChange={(v) => handleChange("region", v)}
-                  />
-                  <Input
-                    isRequired
-                    label="Address"
-                    placeholder="Enter your address"
-                    variant="bordered"
-                    value={data.address}
-                    classNames={{
-                      inputWrapper: "bg-white",
-                    }}
-                    onValueChange={(v) => handleChange("address", v)}
-                  />
-                </>
-              )}
-
               <Textarea
                 label="Special Instruction"
                 placeholder="Enter your special instruction"
@@ -374,8 +358,36 @@ const StoreCheckout = ({
               />
             </div>
           )}
+
+          {currentStep === 2 && (
+            <>
+              <Input
+                isRequired
+                label="Area/Region"
+                placeholder="Area/Region"
+                variant="bordered"
+                value={data.region}
+                classNames={{
+                  inputWrapper: "bg-white",
+                }}
+                onValueChange={(v) => handleChange("region", v)}
+              />
+              <Input
+                isRequired
+                label="Address"
+                placeholder="Enter your address"
+                variant="bordered"
+                value={data.address}
+                classNames={{
+                  inputWrapper: "bg-white",
+                }}
+                onValueChange={(v) => handleChange("address", v)}
+              />
+            </>
+          )}
+
           {/* Step 2 - Location Information */}
-          {currentStep === 2 &&
+          {currentStep === 3 &&
             !loadingLocation &&
             userLocation.latitude &&
             userLocation.longitude && (
@@ -394,7 +406,7 @@ const StoreCheckout = ({
               </div>
             )}
 
-          {currentStep === 2 &&
+          {currentStep === 3 &&
             !userLocation.latitude &&
             !userLocation.longitude &&
             loadingLocation && (
@@ -419,7 +431,7 @@ const StoreCheckout = ({
               </div>
             )}
 
-          {currentStep === 2 &&
+          {currentStep === 3 &&
             !loadingLocation &&
             !userLocation.latitude &&
             !userLocation.longitude && (
@@ -450,7 +462,7 @@ const StoreCheckout = ({
             )}
 
           {/* Step 3 - Checkout Summary */}
-          {currentStep === 3 && (
+          {currentStep === 4 && (
             <div className="order-summary p-6 bg-gray-100 rounded-lg shadow-lg overflow-y-auto max-h-[100%]">
               <h3 className="text-2xl font-semibold mb-4">Order Summary</h3>
 
@@ -573,11 +585,11 @@ const StoreCheckout = ({
           <Button
             color="success"
             isDisabled={isButtonDisabled()}
-            as={currentStep === 3 ? Link : "button"}
-            href={currentStep === 3 ? whatsapp_uri : ""}
-            onClick={handleNextButtonClick}
+            as={currentStep === 4 ? Link : "button"}
+            href={currentStep === 4 ? whatsapp_uri : ""}
+            onPress={handleNextButtonClick}
           >
-            {currentStep === 3 ? "Complete Order" : "Next"}
+            {currentStep === 4 ? "Complete Order" : "Next"}
           </Button>
         </ModalFooter>
       </ModalContent>
