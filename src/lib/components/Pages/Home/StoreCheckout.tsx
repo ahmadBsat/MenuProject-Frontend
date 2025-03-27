@@ -247,13 +247,13 @@ const StoreCheckout = ({
     <Modal
       size="3xl"
       isOpen={isOpen}
-      placement="top"
+      placement="auto"
       scrollBehavior="inside"
       onOpenChange={onOpenChange}
       style={{
         backgroundColor: store.palette.checkout_background || "white",
       }}
-      className="max-h-[500px] lg:max-h-[715px]"
+      className="max-h-[715px]"
       closeButton={
         <div
           style={{
