@@ -253,7 +253,7 @@ const StoreCheckout = ({
       style={{
         backgroundColor: store.palette.checkout_background || "white",
       }}
-      className="max-h-[715px]"
+      className="max-h-[510px] lg:max-h-[715px]"
       closeButton={
         <div
           style={{
