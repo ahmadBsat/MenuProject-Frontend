@@ -20,6 +20,9 @@ import {
 } from "../../Common/drawer";
 import StoreCheckout from "./StoreCheckout";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { getUrl, URLs } from "@/lib/constants/urls";
 
 const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
   const [instructions, setInstructions] = useState(product.instructions || "");
@@ -166,6 +169,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { cart, setCartOpen, cartOpen, resetCart } = useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const pathname = usePathname();
 
   const currencies = { USD: "$", LBP: "LBP" };
   return (
@@ -312,13 +316,11 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
               </DrawerClose>
               {cart.count !== 0 && (
                 <Button
-                  onClick={() => {
-                    onOpen();
-                    setCartOpen(false);
-                  }}
+                  as={Link}
+                  href={pathname + getUrl(URLs.checkout)}
                   color="success"
                 >
-                  Confirm
+                  Checkout
                 </Button>
               )}
             </DrawerFooter>

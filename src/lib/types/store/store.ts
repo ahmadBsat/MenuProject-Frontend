@@ -66,6 +66,8 @@ export type StorePopulated = {
   logo: string;
   store_label: string;
   palette: StorePalette;
+  domain: string;
+  custom_domain: string;
   background_image: string;
   branches: StoreBranch[];
   products: ProductPopulated[];

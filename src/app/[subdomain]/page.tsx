@@ -28,6 +28,8 @@ const Page = () => {
     store_label: "",
     branches: [],
     categories: [],
+    domain: "",
+    custom_domain: "",
     currencies: [],
     banners: [{ images: [] }],
     logo: "",
