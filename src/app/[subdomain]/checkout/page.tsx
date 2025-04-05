@@ -1,37 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
+import { WHATSAPP_URI } from "@/lib/constants/variables";
+import { useCart } from "@/lib/context/CartContext";
+import { useStore } from "@/lib/context/StoreContext";
+import { usePreference } from "@/store/account";
+import { format_pricing } from "@/utils/common";
 import {
   Button,
   Input,
   Modal,
   ModalBody,
-  ModalContent,
   ModalFooter,
   ModalHeader,
-  Textarea,
-  RadioGroup,
   Radio,
+  RadioGroup,
+  Textarea,
 } from "@nextui-org/react";
-import { XIcon } from "lucide-react";
 import { set } from "lodash";
 import Link from "next/link";
-import { WHATSAPP_URI } from "@/lib/constants/variables";
-import { useCart } from "@/lib/context/CartContext";
-import { StorePopulated } from "@/lib/types/store/store";
-import { usePreference } from "@/store/account";
-import { format_pricing } from "@/utils/common";
-import { useStore } from "@/lib/context/StoreContext";
-import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
-import { getUrl, URLs } from "@/lib/constants/urls";
+import { useEffect, useState } from "react";
 
 const Page = () => {
   const { store } = useStore();
-
-  if (!store) {
-    return <div>Loading...</div>;
-  }
-
+  const { cart } = useCart();
+  const { branch, currency } = usePreference();
+  // All state hooks are called unconditionally
   const [data, setData] = useState({
     region: "",
     address: "",
@@ -40,26 +34,31 @@ const Page = () => {
     orderMethod: "delivery",
     instruction: "",
   });
-  const [currentStep, setCurrentStep] = useState(1);
-  const { cart, resetCart } = useCart();
-  const { branch, currency } = usePreference();
   const [locationLink, setLocationLink] = useState("");
-  const [loadingLocation, setLoadingLocation] = useState(false);
-  const [userLocation, setUserLocation] = useState<{
-    latitude: number | null;
-    longitude: number | null;
-    address: string;
-    region: string;
-  }>({
-    latitude: null,
-    longitude: null,
-    address: "",
-    region: "",
-  });
   const [locationPermissionAsked, setLocationPermissionAsked] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
+
+    useEffect(() => {
+      if (!locationPermissionAsked) {
+        checkLocationPermission();
+      }
+    }, [locationPermissionAsked]); // dependency is locationPermissionAsked
+  // const [userLocation, setUserLocation] = useState<{
+  //   latitude: number | null;
+  //   longitude: number | null;
+  //   address: string;
+  //   region: string;
+  // }>({
+  //   latitude: null,
+  //   longitude: null,
+  //   address: "",
+  //   region: "",
+  // });
+  if (!store) {
+    return <div>Loading...</div>;
+  }
 
   const currencies = { USD: "$", LBP: "LBP" };
 
@@ -143,6 +142,8 @@ const Page = () => {
     }&text=${encodeURIComponent(message)}`;
   };
 
+  const whatsapp_uri = get_whatsapp_message();
+
   const handleChange = (field: string, value: string | number) => {
     const temp = { ...data };
     set(temp, field, value);
@@ -155,36 +156,33 @@ const Page = () => {
       return;
     }
 
-    setLoadingLocation(true);
-    const defaultMapUrl =
-      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"; // Lebanon
-    setLocationLink(defaultMapUrl);
+    setLocationLink(
+      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"
+    ); // Default Lebanon map
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        );
-        const locationData = await response.json();
-        const fetchedAddress =
-          locationData.display_name || "Location not found";
-        const fetchedRegion = locationData.address?.city || "Unknown Region";
+        // const response = await fetch(
+        //   `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        // );
+        // const locationData = await response.json();
+        // const fetchedAddress =
+        //   locationData.display_name || "Location not found";
+        // const fetchedRegion = locationData.address?.city || "Unknown Region";
 
-        setUserLocation({
-          latitude,
-          longitude,
-          address: fetchedAddress,
-          region: fetchedRegion,
-        });
+        // setUserLocation({
+        //   latitude,
+        //   longitude,
+        //   address: fetchedAddress,
+        //   region: fetchedRegion,
+        // });
 
         setLocationLink(mapUrl);
-        setLoadingLocation(false);
       },
       (error) => {
         alert("Unable to retrieve your location: " + error.message);
-        setLoadingLocation(false);
       }
     );
   };
@@ -216,14 +214,10 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    if (!locationPermissionAsked) {
-      checkLocationPermission();
-    }
-  }, [locationPermissionAsked]);
+  // useEffect will run when locationPermissionAsked changes
+
 
   const origin = window.location.origin;
-
   const backLink =
     store.custom_domain.length > 0
       ? store.custom_domain
@@ -330,6 +324,10 @@ const Page = () => {
               />
             </>
           )}
+
+          <Button color="success" as={Link} href={whatsapp_uri}>
+            Complete Order
+          </Button>
 
           <Textarea
             label="Special Instruction"

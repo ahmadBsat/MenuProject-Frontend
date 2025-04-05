@@ -26,6 +26,8 @@ const Page = () => {
     categories: [],
     currencies: [],
     banners: [{ images: [] }],
+    domain: "",
+    custom_domain: "",
     store_label: "",
     logo: "",
     name: "",

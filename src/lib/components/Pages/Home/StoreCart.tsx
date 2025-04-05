@@ -167,7 +167,7 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
   const { cart, setCartOpen, cartOpen, resetCart } = useCart();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpenChange } = useDisclosure();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const pathname = usePathname();
 
