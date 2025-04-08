@@ -92,7 +92,7 @@ const ProductCart = ({
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <div className="max-md:text-left">{description}</div>
+              <span className="max-md:text-left">{description}</span>
             </DrawerDescription>
           </DrawerHeader>
 
