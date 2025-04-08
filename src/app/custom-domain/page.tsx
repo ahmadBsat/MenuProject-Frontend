@@ -26,6 +26,7 @@ const Page = () => {
     categories: [],
     currencies: [],
     banners: [{ images: [] }],
+    store_label: "",
     logo: "",
     name: "",
     palette: {
@@ -40,6 +41,8 @@ const Page = () => {
       checkout_background: "",
       category_background: "",
       category_color: "",
+      clear_button_color: "",
+      clear_button_background: "",
     },
     products: [],
     settings: {
@@ -79,6 +82,8 @@ const Page = () => {
         const current_branch = res.branches.find((x) => x._id === branch._id);
         if (current_branch) {
           setBranch(current_branch);
+        } else {
+          setBranch(res.branches[0]);
         }
       }
 
@@ -88,6 +93,8 @@ const Page = () => {
 
       if (current_currency) {
         setCurrency(current_currency);
+      } else {
+        setCurrency({ name: "USD", rate_change: 1 });
       }
     } catch (error) {
       console.log(error);

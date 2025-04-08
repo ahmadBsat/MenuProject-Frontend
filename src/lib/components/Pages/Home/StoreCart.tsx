@@ -19,11 +19,9 @@ import {
   DrawerTrigger,
 } from "../../Common/drawer";
 import StoreCheckout from "./StoreCheckout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const CartItem = ({ product, additions, store, index }) => {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
   const [instructions, setInstructions] = useState(product.instructions || "");
 
   const { currency } = usePreference();
@@ -31,15 +29,23 @@ const CartItem = ({ product, additions, store, index }) => {
 
   const currencies = { USD: "$", LBP: "LBP" };
 
-  const handleSubmit = async (index: number) => {
+  // Auto-save effect (debounced)
+  useEffect(() => {
+    if (instructions === product.instructions) return; // Prevent unnecessary API calls
+
+    const delaySave = setTimeout(() => {
+      handleSubmit(index, instructions);
+    }, 1000); // Adjust delay as needed (1s)
+
+    return () => clearTimeout(delaySave); // Cleanup function on re-typing
+  }, [instructions]); // Runs only when `instructions` change
+
+  // Submit function
+  const handleSubmit = async (index: number, updatedInstructions: string) => {
     try {
-      setLoading(true);
-      await updateCart({ store, index, instructions });
-      setOpen(false);
+      await updateCart({ store, index, instructions: updatedInstructions });
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.error("Error updating cart:", error);
     }
   };
 
@@ -100,7 +106,7 @@ const CartItem = ({ product, additions, store, index }) => {
               color="primary"
               className="text-xs text-primary bg-transparent px-2"
               isDisabled={open}
-              onClick={() => setOpen(true)}
+              onClick={() => setOpenIndex(open ? null : index)}
             >
               {product.instructions ? "Edit" : "Add"} instructions
             </Button>
@@ -146,20 +152,8 @@ const CartItem = ({ product, additions, store, index }) => {
               placeholder="Instructions"
               aria-label="Instructions"
               value={instructions}
-              onValueChange={(v) => setInstructions(v)}
+              onValueChange={setInstructions} // Updates state on change
             />
-            <div className="flex justify-end">
-              <Button
-                color="success"
-                variant="ghost"
-                size="sm"
-                className="text-xs"
-                isLoading={loading}
-                onClick={() => handleSubmit(index)}
-              >
-                Save
-              </Button>
-            </div>
           </div>
         )}
       </div>
@@ -171,6 +165,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
   const { cart, setCartOpen, cartOpen, resetCart } = useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const currencies = { USD: "$", LBP: "LBP" };
   return (
@@ -202,7 +197,14 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
             <DrawerHeader className="flex justify-between items-center">
               <DrawerTitle>Your Cart</DrawerTitle>
               <Button
-                color="primary"
+                // color="primary"
+                style={{
+                  backgroundColor:
+                    store.palette.clear_button_background ||
+                    store.palette.primary,
+                  color:
+                    store.palette.clear_button_color || store.palette.color,
+                }}
                 // isIconOnly
                 onClick={async () => {
                   await resetCart({ store: store._id });
@@ -225,6 +227,8 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                     store={store}
                     product={product}
                     index={idx}
+                    open={openIndex === idx}
+                    setOpenIndex={setOpenIndex}
                   />
                 );
               })}
@@ -284,7 +288,9 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   <div className="flex w-full items-center justify-between text-lg">
                     <p>
                       Total
-                      <p className="text-sm font-light text-gray-400">(VAT included)</p>
+                      <p className="text-sm font-light text-gray-400">
+                        (VAT included)
+                      </p>
                     </p>
 
                     <p>

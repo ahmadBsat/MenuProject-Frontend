@@ -122,6 +122,17 @@ const StoreInformation = ({
           onValueChange={(e) => handleChange("renewal_cost", Number(e))}
         />
 
+        <Input
+          label="Store Label"
+          type="text"
+          placeholder="Store Label Value..."
+          isRequired
+          required
+          isDisabled={!editable}
+          value={data.store_label}
+          onValueChange={(e) => handleChange("store_label", e)}
+        />
+
         <Switch
           classNames={SWITCH_STYLE}
           isDisabled={!editable}
@@ -308,7 +319,7 @@ const StoreInformation = ({
 
           <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
             <div className="flex flex-col gap-2">
-              <p className="text-lg">Category Color</p>{" "}
+              <p className="text-lg">Category Font Color</p>{" "}
               <HexColorPicker
                 color={data.palette.category_color}
                 onChange={(c) => handleChange("palette.category_color", c)}
@@ -316,7 +327,7 @@ const StoreInformation = ({
               <Input
                 label=""
                 type="text"
-                placeholder="Category Color"
+                placeholder="Category Font Color"
                 className="w-[200px]"
                 value={data.palette.category_color}
                 onChange={(e) =>
@@ -350,7 +361,7 @@ const StoreInformation = ({
 
           <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
             <div className="flex flex-col gap-2">
-              <p className="text-lg">Buttons Color</p>{" "}
+              <p className="text-lg">Buttons Font Color</p>{" "}
               <HexColorPicker
                 color={data.palette.primary}
                 onChange={(c) => handleChange("palette.primary", c)}
@@ -358,7 +369,7 @@ const StoreInformation = ({
               <Input
                 label=""
                 type="text"
-                placeholder="Buttons Color"
+                placeholder="Buttons Font Color"
                 className="w-[200px]"
                 value={data.palette.primary}
                 onChange={(e) =>
@@ -380,6 +391,47 @@ const StoreInformation = ({
                 className="w-[200px]"
                 value={data.palette.border}
                 onChange={(e) => handleChange("palette.border", e.target.value)}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Clear Cart Font Color</p>{" "}
+              <HexColorPicker
+                color={data.palette.clear_button_color}
+                onChange={(c) => handleChange("palette.clear_button_color", c)}
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Clear Cart Font Color"
+                className="w-[200px]"
+                value={data.palette.clear_button_color}
+                onChange={(e) =>
+                  handleChange("palette.clear_button_color", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-lg">Clear Cart Background Color</p>{" "}
+              <HexColorPicker
+                color={data.palette.clear_button_background}
+                onChange={(c) =>
+                  handleChange("palette.clear_button_background", c)
+                }
+              />{" "}
+              <Input
+                label=""
+                type="text"
+                placeholder="Clear Cart Background Color"
+                className="w-[200px]"
+                value={data.palette.clear_button_background}
+                onChange={(e) =>
+                  handleChange(
+                    "palette.clear_button_background",
+                    e.target.value
+                  )
+                }
               />
             </div>
           </div>

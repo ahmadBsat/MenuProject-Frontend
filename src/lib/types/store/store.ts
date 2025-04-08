@@ -9,6 +9,7 @@ export type Store = {
   logo: string;
   owner: string;
   background_image: string;
+  store_label: string;
   palette: StorePalette;
   createdAt: string;
   updatedAt: string;
@@ -63,6 +64,7 @@ export type StorePopulated = {
   _id: string;
   name: string;
   logo: string;
+  store_label: string;
   palette: StorePalette;
   background_image: string;
   branches: StoreBranch[];
@@ -93,4 +95,6 @@ export type StorePalette = {
   checkout_background: string;
   category_color: string;
   category_background: string;
+  clear_button_color: string;
+  clear_button_background: string;
 };

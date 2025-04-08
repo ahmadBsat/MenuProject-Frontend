@@ -7,6 +7,7 @@ import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import StoreQuickMenu from "@/lib/components/Pages/Home/StoreQuickMenu";
 import NotFound from "@/lib/components/Pages/NotFound";
+import { useStore } from "@/lib/context/StoreContext";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
@@ -23,6 +24,7 @@ const Page = () => {
     watermark: true,
     logoDefault: true,
     background_image: "",
+    store_label: "",
     branches: [],
     categories: [],
     currencies: [],
@@ -41,6 +43,8 @@ const Page = () => {
       checkout_background: "",
       category_background: "",
       category_color: "",
+      clear_button_color: "",
+      clear_button_background: "",
     },
     products: [],
     vat_exclusive: false,
@@ -56,6 +60,7 @@ const Page = () => {
     setBanners,
     setCurrency,
   } = usePreference();
+  const { setStore: setStoreContext } = useStore();
 
   const params = useParams();
   const domain = params.subdomain as string;
@@ -73,6 +78,7 @@ const Page = () => {
 
       const res = await API_STORE.getStoreByDomain(domain, query);
       setStore(res);
+      setStoreContext(res);
       setCurrentStore(res._id);
       setPalette(res.palette);
       setBanners(res.banners.length > 0 ? res.banners[0] : { images: [] });
@@ -80,6 +86,8 @@ const Page = () => {
         const current_branch = res.branches.find((x) => x._id === branch._id);
         if (current_branch) {
           setBranch(current_branch);
+        } else {
+          setBranch(res.branches[0]);
         }
       }
 
@@ -89,6 +97,8 @@ const Page = () => {
 
       if (current_currency) {
         setCurrency(current_currency);
+      } else {
+        setCurrency({ name: "USD", rate_change: 1 });
       }
     } catch (error) {
       console.log(error);

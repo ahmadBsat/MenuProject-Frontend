@@ -92,7 +92,7 @@ const ProductCart = ({
           <DrawerHeader>
             <DrawerTitle>{name}</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-1">
-              <div className="max-md:text-left">{description}</div>
+              <span className="max-md:text-left">{description}</span>
             </DrawerDescription>
           </DrawerHeader>
 
@@ -138,7 +138,7 @@ const ProductCart = ({
 
           <DrawerFooter className="flex flex-row justify-end items-center">
             <DrawerClose asChild>
-              <Button color="danger">Cancel</Button>
+              <Button color="primary">Cancel</Button>
             </DrawerClose>
             <Button
               color="success"
