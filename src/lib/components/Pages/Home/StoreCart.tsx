@@ -292,9 +292,9 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   <div className="flex w-full items-center justify-between text-lg">
                     <p>
                       Total
-                      <p className="text-sm font-light text-gray-400">
+                      <span className="text-sm font-light text-gray-400">
                         (VAT included)
-                      </p>
+                      </span>
                     </p>
 
                     <p>
@@ -318,6 +318,9 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                 <Button
                   as={Link}
                   href={pathname + getUrl(URLs.checkout)}
+                  onPress={() => {
+                    setCartOpen(false);
+                  }}
                   color="success"
                 >
                   Checkout
@@ -328,11 +331,11 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
         </DrawerContent>
       </Drawer>
 
-      <StoreCheckout
+      {/* <StoreCheckout
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         store={store}
-      />
+      /> */}
     </>
   );
 };

@@ -11,6 +11,7 @@ import {
   Input,
   Modal,
   ModalBody,
+  ModalContent,
   ModalFooter,
   ModalHeader,
   Radio,
@@ -18,12 +19,15 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { set } from "lodash";
+import { PinIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 const Page = () => {
+  const router = useRouter();
   const { store } = useStore();
-  const { cart } = useCart();
+  const { cart ,resetCart} = useCart();
   const { branch, currency } = usePreference();
   // All state hooks are called unconditionally
   const [data, setData] = useState({
@@ -40,24 +44,28 @@ const Page = () => {
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
 
-    useEffect(() => {
-      if (!locationPermissionAsked) {
-        checkLocationPermission();
-      }
-    }, [locationPermissionAsked]); // dependency is locationPermissionAsked
-  // const [userLocation, setUserLocation] = useState<{
-  //   latitude: number | null;
-  //   longitude: number | null;
-  //   address: string;
-  //   region: string;
-  // }>({
-  //   latitude: null,
-  //   longitude: null,
-  //   address: "",
-  //   region: "",
-  // });
+  const [userLocation, setUserLocation] = useState<{
+    latitude: number | null;
+    longitude: number | null;
+    address: string;
+    region: string;
+  }>({
+    latitude: null,
+    longitude: null,
+    address: "",
+    region: "",
+  });
+
+  useEffect(() => {
+    if (!store) {
+      const currentPath = window.location.pathname;
+      const newPath = currentPath.replace("/checkout", "");
+      router.push(newPath);
+    }
+  }, [store, router]);
+
   if (!store) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   const currencies = { USD: "$", LBP: "LBP" };
@@ -156,29 +164,45 @@ const Page = () => {
       return;
     }
 
-    setLocationLink(
-      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"
-    ); // Default Lebanon map
+    // Show Lebanon map initially, even before the location is fetched
+    const defaultMapUrl =
+      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"; // Lebanon
 
+    setLocationLink(defaultMapUrl); // Set Lebanon as default map
+
+    // Try fetching user's location
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
+
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-        // const response = await fetch(
-        //   `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        // );
-        // const locationData = await response.json();
-        // const fetchedAddress =
-        //   locationData.display_name || "Location not found";
-        // const fetchedRegion = locationData.address?.city || "Unknown Region";
 
-        // setUserLocation({
-        //   latitude,
-        //   longitude,
-        //   address: fetchedAddress,
-        //   region: fetchedRegion,
-        // });
+        // Fetch location data for display
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+        const locationData = await response.json();
 
+        const fetchedAddress =
+          locationData.display_name || "Location not found";
+        const fetchedRegion = locationData.address?.city || "Unknown Region";
+
+        setUserLocation({
+          latitude,
+          longitude,
+          address: fetchedAddress,
+          region: fetchedRegion,
+        });
+
+        setData((prev) => ({
+          ...prev,
+          address: fetchedAddress,
+          region: fetchedRegion,
+        }));
+
+        setLocationLink(mapUrl);
+
+        // Set map to show user's location
         setLocationLink(mapUrl);
       },
       (error) => {
@@ -204,6 +228,12 @@ const Page = () => {
     }
   };
 
+  useEffect(() => {
+    if (!locationPermissionAsked) {
+      checkLocationPermission();
+    }
+  }, [locationPermissionAsked]);
+
   const handleLocationPermissionResponse = async (granted) => {
     setShowLocationModal(false);
     if (granted) {
@@ -216,7 +246,6 @@ const Page = () => {
 
   // useEffect will run when locationPermissionAsked changes
 
-
   const origin = window.location.origin;
   const backLink =
     store.custom_domain.length > 0
@@ -227,7 +256,6 @@ const Page = () => {
     <div
       style={{
         background: store.palette.background,
-        color: store.palette.color,
       }}
       className="w-full min-h-screen h-screen flex flex-col overflow-y-auto "
     >
@@ -238,7 +266,14 @@ const Page = () => {
           <Button as={Link} href={backLink} color="success">
             Back
           </Button>
-          <div className="text-xl font-mono">Checkout</div>
+          <div
+            className="text-xl font-mono"
+            style={{
+              color: store.palette.checkout_content,
+            }}
+          >
+            Checkout
+          </div>
         </div>
 
         <div className="flex flex-col gap-3">
@@ -250,6 +285,7 @@ const Page = () => {
             value={data.name}
             classNames={{
               inputWrapper: "bg-white",
+              input: "text-black",
             }}
             onValueChange={(v) => handleChange("name", v)}
           />
@@ -325,10 +361,6 @@ const Page = () => {
             </>
           )}
 
-          <Button color="success" as={Link} href={whatsapp_uri}>
-            Complete Order
-          </Button>
-
           <Textarea
             label="Special Instruction"
             placeholder="Enter your special instruction"
@@ -340,6 +372,17 @@ const Page = () => {
             onValueChange={(v) => handleChange("instruction", v)}
           />
 
+          <Button
+            color="success"
+            as={Link}
+            href={whatsapp_uri}
+            onPress={() => {
+              resetCart({ store: store._id });
+            }}
+          >
+            Complete Order
+          </Button>
+
           {/* Show message if location permission is denied */}
           {!locationPermissionGranted && (
             <div className="text-red-500">
@@ -347,35 +390,61 @@ const Page = () => {
             </div>
           )}
 
-          {locationPermissionGranted && (
-            <a className="text-green-500" href={locationLink} target="_blank">
-              {locationLink}
-            </a>
+          {locationPermissionGranted && locationLink && (
+            <div className="w-full h-64 mt-2 rounded-xl overflow-hidden">
+              <iframe
+                src={
+                  locationLink.replace(
+                    "https://www.google.com/maps?q=",
+                    "https://maps.google.com/maps?q="
+                  ) + "&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                }
+                width="100%"
+                height="100%"
+                loading="lazy"
+                style={{ border: 0 }}
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           )}
-
-          {/* Show location modal */}
-          <Modal
-            isOpen={showLocationModal}
-            onClose={() => setShowLocationModal(false)}
-          >
-            <ModalHeader>Location Permission</ModalHeader>
-            <ModalBody>
-              <div>We need access to your location for delivery.</div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                color="danger"
-                onPress={() => handleLocationPermissionResponse(false)}
-              >
-                No
-              </Button>
-              <Button onPress={() => handleLocationPermissionResponse(true)}>
-                Yes
-              </Button>
-            </ModalFooter>
-          </Modal>
         </div>
       </div>
+
+      {/* Show location modal */}
+      <Modal
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex gap-1 items-center">
+                <PinIcon size={24} /> Location Permission
+              </ModalHeader>
+              <ModalBody>
+                <div>
+                  Would you please allow to use your Location for delivery.
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  onPress={() => handleLocationPermissionResponse(false)}
+                >
+                  No
+                </Button>
+                <Button
+                  color="success"
+                  onPress={() => handleLocationPermissionResponse(true)}
+                >
+                  Yes
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
