@@ -5,13 +5,26 @@ import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import { useStore } from "@/lib/context/StoreContext";
 import SearchInput from "./components/SearchInput";
-import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getUrl, URLs } from "@/lib/constants/urls";
+import SearchProductList from "./components/SearchProductsList";
 
 const Page = () => {
   const { store } = useStore();
+  const [value, setValue] = useState<string>("");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!store) {
+      const currentPath = window.location.pathname;
+      const newPath = currentPath.replace(getUrl(URLs.search), "");
+      router.push(newPath);
+    }
+  }, [store, router]);
 
   if (!store) {
-    return <div>Loading...</div>;
+    return null;
   }
 
   return (
@@ -24,11 +37,11 @@ const Page = () => {
     >
       <StoreHeader store={store} />
       <div className="container mx-auto p-4 flex items-center justify-center">
-        <SearchInput store={store} />
+        <SearchInput store={store} setValue={setValue} value={value} />
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store} />
+        <SearchProductList store={store} value={value} />
       </div>
 
       <div className="mt-auto">

@@ -22,14 +22,14 @@ import { set } from "lodash";
 import { PinIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
+import { getUrl, URLs } from "@/lib/constants/urls";
 
 const Page = () => {
   const router = useRouter();
   const { store } = useStore();
-  const { cart ,resetCart} = useCart();
+  const { cart, resetCart } = useCart();
   const { branch, currency } = usePreference();
-  // All state hooks are called unconditionally
   const [data, setData] = useState({
     region: "",
     address: "",
@@ -44,31 +44,91 @@ const Page = () => {
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
 
-  const [userLocation, setUserLocation] = useState<{
-    latitude: number | null;
-    longitude: number | null;
-    address: string;
-    region: string;
-  }>({
-    latitude: null,
-    longitude: null,
-    address: "",
-    region: "",
-  });
-
   useEffect(() => {
     if (!store) {
       const currentPath = window.location.pathname;
-      const newPath = currentPath.replace("/checkout", "");
+      const newPath = currentPath.replace(getUrl(URLs.checkout), "");
       router.push(newPath);
     }
   }, [store, router]);
 
-  if (!store) {
-    return null;
-  }
+  const shouldRender = !!store;
 
   const currencies = { USD: "$", LBP: "LBP" };
+
+
+  const handleChange = (field: string, value: string | number) => {
+    const temp = { ...data };
+    set(temp, field, value);
+    setData(temp);
+  };
+
+  const getCurrentLocation = async () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    const defaultMapUrl =
+      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"; // Lebanon
+
+    setLocationLink(defaultMapUrl);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+        );
+        const locationData = await response.json();
+
+        const fetchedAddress =
+          locationData.display_name || "Location not found";
+        const fetchedRegion = locationData.address?.city || "Unknown Region";
+
+        setData((prev) => ({
+          ...prev,
+          address: fetchedAddress,
+          region: fetchedRegion,
+        }));
+
+        setLocationLink(mapUrl);
+      },
+      (error) => {
+        alert("Unable to retrieve your location: " + error.message);
+      }
+    );
+  };
+
+  const checkLocationPermission = async () => {
+    try {
+      const permission = await navigator.permissions.query({
+        name: "geolocation",
+      });
+      if (permission.state === "granted") {
+        setLocationPermissionGranted(true);
+        getCurrentLocation();
+      } else if (permission.state === "prompt") {
+        setLocationPermissionAsked(true);
+        setShowLocationModal(true);
+      }
+    } catch (error) {
+      console.error("Error checking location permission:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!locationPermissionAsked) {
+      checkLocationPermission();
+    }
+  }, [locationPermissionAsked]);
+
+  if (!shouldRender) {
+    return null;
+  }
 
   const get_whatsapp_message = () => {
     if (!branch.phone_number) return;
@@ -149,90 +209,8 @@ const Page = () => {
       branch.phone_number
     }&text=${encodeURIComponent(message)}`;
   };
-
+  
   const whatsapp_uri = get_whatsapp_message();
-
-  const handleChange = (field: string, value: string | number) => {
-    const temp = { ...data };
-    set(temp, field, value);
-    setData(temp);
-  };
-
-  const getCurrentLocation = async () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
-      return;
-    }
-
-    // Show Lebanon map initially, even before the location is fetched
-    const defaultMapUrl =
-      "https://www.google.com/maps?q=33.8547,35.8623&hl=es;z=14&output=embed"; // Lebanon
-
-    setLocationLink(defaultMapUrl); // Set Lebanon as default map
-
-    // Try fetching user's location
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-
-        // Fetch location data for display
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        );
-        const locationData = await response.json();
-
-        const fetchedAddress =
-          locationData.display_name || "Location not found";
-        const fetchedRegion = locationData.address?.city || "Unknown Region";
-
-        setUserLocation({
-          latitude,
-          longitude,
-          address: fetchedAddress,
-          region: fetchedRegion,
-        });
-
-        setData((prev) => ({
-          ...prev,
-          address: fetchedAddress,
-          region: fetchedRegion,
-        }));
-
-        setLocationLink(mapUrl);
-
-        // Set map to show user's location
-        setLocationLink(mapUrl);
-      },
-      (error) => {
-        alert("Unable to retrieve your location: " + error.message);
-      }
-    );
-  };
-
-  const checkLocationPermission = async () => {
-    try {
-      const permission = await navigator.permissions.query({
-        name: "geolocation",
-      });
-      if (permission.state === "granted") {
-        setLocationPermissionGranted(true);
-        getCurrentLocation();
-      } else if (permission.state === "prompt") {
-        setLocationPermissionAsked(true);
-        setShowLocationModal(true);
-      }
-    } catch (error) {
-      console.error("Error checking location permission:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!locationPermissionAsked) {
-      checkLocationPermission();
-    }
-  }, [locationPermissionAsked]);
 
   const handleLocationPermissionResponse = async (granted) => {
     setShowLocationModal(false);
@@ -244,14 +222,20 @@ const Page = () => {
     }
   };
 
-  // useEffect will run when locationPermissionAsked changes
-
   const origin = window.location.origin;
-  const backLink =
+  const storeLink =
     store.custom_domain.length > 0
       ? store.custom_domain
       : origin + "/" + store.domain;
 
+  const handleCompleteOrder = () => {
+    resetCart({ store: store._id });
+    if (whatsapp_uri) {
+      router.push(whatsapp_uri);
+    } else {
+      console.error("WhatsApp URI is undefined. Cannot redirect.");
+    }
+  };
   return (
     <div
       style={{
@@ -263,7 +247,7 @@ const Page = () => {
 
       <div className="container mx-auto flex flex-col gap-4 p-4">
         <div className="flex gap-4 items-center">
-          <Button as={Link} href={backLink} color="success">
+          <Button as={Link} href={storeLink} color="success">
             Back
           </Button>
           <div
@@ -276,9 +260,10 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <form className="flex flex-col gap-3">
           <Input
             isRequired
+            required
             label="Name"
             placeholder="Enter your name"
             variant="bordered"
@@ -287,10 +272,14 @@ const Page = () => {
               inputWrapper: "bg-white",
               input: "text-black",
             }}
+            errorMessage={
+              data.name.length === 0 ? "Please enter your name" : ""
+            }
             onValueChange={(v) => handleChange("name", v)}
           />
           <Input
             isRequired
+            required
             label="Phone Number"
             placeholder="Phone Number"
             type="number"
@@ -373,12 +362,9 @@ const Page = () => {
           />
 
           <Button
+            type="submit"
             color="success"
-            as={Link}
-            href={whatsapp_uri}
-            onPress={() => {
-              resetCart({ store: store._id });
-            }}
+            onPress={() => handleCompleteOrder()}
           >
             Complete Order
           </Button>
@@ -408,7 +394,7 @@ const Page = () => {
               />
             </div>
           )}
-        </div>
+        </form>
       </div>
 
       {/* Show location modal */}
@@ -417,7 +403,7 @@ const Page = () => {
         onClose={() => setShowLocationModal(false)}
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="flex gap-1 items-center">
                 <PinIcon size={24} /> Location Permission

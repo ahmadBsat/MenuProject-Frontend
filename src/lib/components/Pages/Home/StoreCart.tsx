@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { getUrl, URLs } from "@/lib/constants/urls";
 import { useCart } from "@/lib/context/CartContext";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { Badge, Button, Textarea, useDisclosure } from "@nextui-org/react";
+import { Badge, Button, Textarea } from "@nextui-org/react";
 import { ChevronRight, Minus, Plus } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -18,11 +21,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "../../Common/drawer";
-import StoreCheckout from "./StoreCheckout";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { getUrl, URLs } from "@/lib/constants/urls";
 
 const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
   const [instructions, setInstructions] = useState(product.instructions || "");
@@ -167,10 +165,12 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
   const { cart, setCartOpen, cartOpen, resetCart } = useCart();
-  const { isOpen, onOpenChange } = useDisclosure();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const pathname = usePathname();
-
+  const origin = window.location.origin;
+  const storeLink =
+    store.custom_domain.length > 0
+      ? store.custom_domain
+      : origin + "/" + store.domain;
   const currencies = { USD: "$", LBP: "LBP" };
   return (
     <>
@@ -317,7 +317,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
               {cart.count !== 0 && (
                 <Button
                   as={Link}
-                  href={pathname + getUrl(URLs.checkout)}
+                  href={storeLink + getUrl(URLs.checkout)}
                   onPress={() => {
                     setCartOpen(false);
                   }}
