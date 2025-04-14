@@ -6,10 +6,14 @@ import { Button } from "@nextui-org/react";
 import { Home, Map, Search } from "lucide-react";
 import { Info } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const StoreAccessLinks = ({ store }: { store: StorePopulated }) => {
-  const pathname = usePathname();
+
+  const origin = window.location.origin;
+  const storeLink =
+    store.custom_domain.length > 0
+      ? store.custom_domain
+      : origin + "/" + store.domain;
 
   return (
     <div className="min-h-14 max-h-32 z-50">
@@ -25,7 +29,7 @@ const StoreAccessLinks = ({ store }: { store: StorePopulated }) => {
           <div className="flex items-center justify-center w-full">
             <Button
               as={Link}
-              href={pathname + getUrl(URLs.home)}
+              href={storeLink + getUrl(URLs.home)}
               isIconOnly
               variant="bordered"
               style={{
@@ -39,7 +43,7 @@ const StoreAccessLinks = ({ store }: { store: StorePopulated }) => {
           <div className="flex items-center justify-center w-full">
             <Button
               as={Link}
-              href={pathname + getUrl(URLs.search)}
+              href={storeLink + getUrl(URLs.search)}
               isIconOnly
               variant="bordered"
               style={{
@@ -53,7 +57,7 @@ const StoreAccessLinks = ({ store }: { store: StorePopulated }) => {
           <div className="flex items-center justify-center w-full">
             <Button
               as={Link}
-              href={pathname + getUrl(URLs.about)}
+              href={storeLink + getUrl(URLs.about)}
               isIconOnly
               variant="bordered"
               style={{
@@ -67,7 +71,7 @@ const StoreAccessLinks = ({ store }: { store: StorePopulated }) => {
           <div className="flex items-center justify-center w-full">
             <Button
               as={Link}
-              href={pathname + getUrl(URLs.branch)}
+              href={storeLink + getUrl(URLs.branch)}
               isIconOnly
               variant="bordered"
               style={{
