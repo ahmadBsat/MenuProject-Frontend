@@ -39,7 +39,8 @@ export const PRODUCT_VISIBLE_COL = [
 export const CATEGORY_COLUMNS = [
   { name: "id", uid: "_id", sortable: true },
   { name: "name", uid: "name", sortable: true },
-  // { name: "status", uid: "is_active", sortable: true },
+  { name: "order", uid: "order", sortable: false },
+  { name: "status", uid: "is_active", sortable: true },
   { name: "Created", uid: "createdAt", sortable: true },
   { name: "Updated", uid: "updatedAt", sortable: true },
   { name: "actions", uid: "actions" },
@@ -47,7 +48,7 @@ export const CATEGORY_COLUMNS = [
 
 export const CATEGORY_VISIBLE_COL = [
   "name",
-  // "is_active",
+  "order",
   "createdAt",
   "updatedAt",
   "actions",
@@ -118,6 +119,25 @@ export const BANNERS_COLUMNS = [
 
 export const BANNERS_VISIBLE_COL = [
   "images",
+  "is_active",
+  "createdAt",
+  "updatedAt",
+  "actions",
+];
+
+export const SECTIONS_COLUMNS = [
+  { name: "id", uid: "_id", sortable: true },
+  { name: "name", uid: "name", sortable: false },
+  { name: "order", uid: "order", sortable: false },
+  { name: "status", uid: "is_active", sortable: true },
+  { name: "Created", uid: "createdAt", sortable: true },
+  { name: "Updated", uid: "updatedAt", sortable: true },
+  { name: "actions", uid: "actions" },
+];
+
+export const SECTIONS_VISIBLE_COL = [
+  "name",
+  "order",
   "is_active",
   "createdAt",
   "updatedAt",

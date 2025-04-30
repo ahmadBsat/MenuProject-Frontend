@@ -68,6 +68,11 @@ export const URLs = {
       create: "/store/banners/create",
       get_id: "/store/banners/:id",
     },
+    sections: {
+      index: "/store/sections",
+      create: "/store/sections/create",
+      get_id: "/store/sections/:id",
+    }
   },
 };
 

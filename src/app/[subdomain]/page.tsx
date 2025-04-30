@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import StoreAccessLinks from "@/lib/components/Pages/Home/StoreAccessLinks";
 import StoreCategory from "@/lib/components/Pages/Home/StoreCategory";
 import StoreFooter from "@/lib/components/Pages/Home/StoreFooter";
 import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
@@ -51,6 +50,7 @@ const Page = () => {
     },
     products: [],
     vat_exclusive: false,
+    use_sections: false,
     vat_percentage: 0,
   });
   const {
@@ -157,8 +157,6 @@ const Page = () => {
       <div className="mt-auto">
         <StoreFooter store={store} />
       </div>
-
-      <StoreAccessLinks store={store} />
     </div>
   );
 };
