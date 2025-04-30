@@ -251,6 +251,12 @@
     height: 100% !important;
 }
 
+.section-swiper {
+    height: unset !important;
+}
+.section-swiper-slide{
+    height: 50% !important;
+}
 .autoplay-progress {
     position: absolute;
     right: 16px;

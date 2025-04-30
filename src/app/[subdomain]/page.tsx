@@ -48,6 +48,7 @@ const Page = () => {
     },
     products: [],
     vat_exclusive: false,
+    use_sections: false,
     vat_percentage: 0,
   });
   const {

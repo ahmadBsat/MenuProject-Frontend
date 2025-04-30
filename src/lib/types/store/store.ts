@@ -23,6 +23,7 @@ export type Store = {
   logoDefault: boolean;
   vat_exclusive: boolean;
   vat_percentage: number;
+  use_sections: boolean;
 };
 
 export type StoreForm = Omit<
@@ -39,12 +40,23 @@ export type StoreBranch = {
   updatedAt: string;
 };
 
+export type StoreSection = {
+  _id: string;
+  name: string;
+  order: number;
+  is_active: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+
 export type StoreBranchForm = Omit<
   StoreBranch,
   "_id" | "createdAt" | "updatedAt"
 >;
 
 export type StoreBranchTable = { data: StoreBranch[]; meta: Meta };
+export type StoreSectionTable = { data: StoreSection[]; meta: Meta };
 
 export type StoreTable = { data: Store[]; meta: Meta };
 
@@ -75,6 +87,7 @@ export type StorePopulated = {
   watermark: boolean;
   logoDefault: boolean;
   vat_exclusive: boolean;
+  use_sections: boolean;
   vat_percentage: number;
   settings?: { display_pricing: boolean };
 };

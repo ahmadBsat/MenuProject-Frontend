@@ -33,7 +33,7 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
   const banners = processBanners(breakpoints);
 
   return (
-    <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-12">
+    <div className="flex px-4 sm:px-8 items-center justify-center w-full py-6 sm:py-6">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
         {/* Store Logo */}
         {store.logo && (
@@ -66,7 +66,7 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
                   <Image
                     src={item.images[0]}
                     alt={`banner-${idx}`}
-                    className="w-[350px] h-[190px] rounded-2xl object-cover select-none"
+                    className="w-[350px] h-[120px] rounded-2xl object-cover object-center select-none"
                     width={350}
                     height={190}
                   />
@@ -76,7 +76,7 @@ const StoreCategory = ({ store }: { store: StorePopulated }) => {
           </div>
         )}
 
-        <p className="text-4xl font-bold px-1 -mb-16 sm:-mb-24 z-30">
+        <p className="text-4xl font-bold px-1 -mb-16 sm:-mb-12 z-30">
           {store.store_label ? store.store_label : "Menu"}
         </p>
       </div>

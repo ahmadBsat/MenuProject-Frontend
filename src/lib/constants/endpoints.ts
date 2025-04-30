@@ -91,3 +91,11 @@ export const BANNER_ENDPOINTS = {
   UPDATE: "/api/v1/banners/:id",
   DELETE: "/api/v1/banners/:id",
 };
+
+export const SECTION_ENDPOINTS = {
+  GET_ALL: "/api/v1/sections",
+  GET_ID: "/api/v1/sections/:id",
+  CREATE: "/api/v1/sections",
+  UPDATE: "/api/v1/sections/:id",
+  DELETE: "/api/v1/sections/:id",
+};

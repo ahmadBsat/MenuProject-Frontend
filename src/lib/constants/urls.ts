@@ -63,6 +63,11 @@ export const URLs = {
       index: "/store/banners",
       create: "/store/banners/create",
       get_id: "/store/banners/:id",
+    },
+    sections: {
+      index: "/store/sections",
+      create: "/store/sections/create",
+      get_id: "/store/sections/:id",
     }
   },
 };

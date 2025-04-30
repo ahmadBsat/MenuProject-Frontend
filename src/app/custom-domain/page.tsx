@@ -50,6 +50,7 @@ const Page = () => {
     },
     vat_exclusive: false,
     vat_percentage: 0,
+    use_sections: false,
   });
   const {
     branch,

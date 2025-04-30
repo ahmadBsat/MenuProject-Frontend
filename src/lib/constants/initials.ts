@@ -2,6 +2,7 @@ import { BannerForm } from "../types/store/banner";
 import { CategoryForm } from "../types/store/category";
 import { CurrencyForm } from "../types/store/currency";
 import { ProductForm, ProductItemForm } from "../types/store/product";
+import { SectionForm } from "../types/store/section";
 import { StoreBranchForm, StoreForm } from "../types/store/store";
 import { UserForm } from "../types/user/user";
 import { USER_ROLES } from "./variables";
@@ -45,6 +46,7 @@ export const STORE_INITIAL: StoreForm = {
   logoDefault: false,
   vat_exclusive: false,
   vat_percentage: 0,
+  use_sections: false,
 };
 
 export const USER_INITIAL: UserForm = {
@@ -79,6 +81,7 @@ export const BRANCH_INITIAL: StoreBranchForm = {
 
 export const CATEGORY_INITIAL: CategoryForm = {
   name: "",
+  section: [],
 };
 
 export const CURRENCY_INITIAL: CurrencyForm = {
@@ -97,4 +100,9 @@ export const BANNER_INITIAL: BannerForm = {
   images: [],
   branch: [],
   is_active: true,
+};
+
+export const SECTION_INITIAL: SectionForm = {
+  name: "",
+  order: 0,
 };
