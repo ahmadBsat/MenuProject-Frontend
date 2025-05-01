@@ -189,7 +189,7 @@ const StoreInformation = ({
           </div>
         </Switch>
 
-        {/* <Switch
+        <Switch
           classNames={SWITCH_STYLE}
           isDisabled={!editable}
           isSelected={data.use_sections}
@@ -197,11 +197,9 @@ const StoreInformation = ({
         >
           <div className="flex flex-col gap-1">
             <p className="text-medium">Section</p>
-            <p className="text-sm">
-              Enable to display sections on the website
-            </p>
+            <p className="text-sm">Enable to display sections on the website</p>
           </div>
-        </Switch> */}
+        </Switch>
 
         <Switch
           classNames={SWITCH_STYLE}

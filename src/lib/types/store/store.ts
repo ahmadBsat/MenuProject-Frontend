@@ -72,6 +72,9 @@ type Banner = {
   images: string[];
 };
 
+type Section = {
+  images: string[];
+}
 export type StorePopulated = {
   _id: string;
   name: string;
@@ -84,7 +87,7 @@ export type StorePopulated = {
   branches: StoreBranch[];
   products: ProductPopulated[];
   currencies: { name: string; rate_change: number }[];
-  categories: [];
+  categories: [Section[]] | CategoryPolulated[];
   banners: Banner[];
   watermark: boolean;
   logoDefault: boolean;

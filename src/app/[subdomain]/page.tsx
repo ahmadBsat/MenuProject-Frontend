@@ -80,6 +80,7 @@ const Page = () => {
       }
 
       const res = await API_STORE.getStoreByDomain(domain, query);
+      
       setStore(res);
       setStoreContext(res);
       setCurrentStore(res._id);

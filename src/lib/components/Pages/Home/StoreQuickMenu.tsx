@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ProductPopulated } from "@/lib/types/store/product";
 import { StorePopulated } from "@/lib/types/store/store";
-import { Button } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 import { GroupedCategory } from "./StoreProductList";
 import { usePreference } from "@/store/account";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,11 +11,13 @@ import "swiper/swiper-bundle.min.css";
 import "swiper/swiper.min.css";
 import { FreeMode } from "swiper";
 import { useWindowSize } from "@uidotdev/usehooks";
+import Image from "next/image";
 
 export type GroupedSection = {
   _id: string;
   name: string;
   order: number;
+  images: string[];
   categories: GroupedCategory[];
 };
 
@@ -49,19 +51,22 @@ export const group_sections = (
   products.forEach((product) => {
     product.category.forEach((category) => {
       const section =
-        typeof category.section?.[0] === "object" && category.section?.[0] !== null
+        typeof category.section?.[0] === "object" &&
+        category.section?.[0] !== null
           ? (category.section[0] as {
               _id: string;
               name: string;
               order: number;
+              images: string[];
             })
-          : { _id: "no-section", name: "All", order: 999 };
+          : { _id: "no-section", name: "All", order: 999, images: [] };
 
       if (!sectionMap[section._id]) {
         sectionMap[section._id] = {
           _id: section._id,
           name: section.name,
           order: section.order,
+          images: section.images,
           categories: [],
         };
       }
@@ -96,7 +101,9 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
 
   const categoryGroups = group_products(store.products);
   const sectionGroups = group_sections(store.products);
-  const hasSections = sectionGroups.some((section) => section._id !== "no-section");
+  const hasSections = sectionGroups.some(
+    (section) => section._id !== "no-section"
+  );
 
   const offset = is_mobile ? 200 : 320;
 
@@ -124,7 +131,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     }
   }, [sectionGroups, activeSectionId]);
 
-  return hasSections ? (
+  return hasSections && store.use_sections ? (
     <>
       {/* Desktop Section & Category Buttons */}
       <div className="hidden sm:flex flex-col gap-2 max-w-screen-lg w-full">
@@ -138,16 +145,34 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                 )
               }
               style={{ background: palette.primary }}
-              className={`rounded-xl border-none px-4 py-3 text-sm text-white ${
+              className={`rounded-none border-none px-4 h-full py-3 text-sm text-white ${
                 activeSectionId === section._id ? "opacity-100" : "opacity-80"
               }`}
             >
-              {section.name}
+              <div className="flex items-center flex-col">
+                {section.images[0] && (
+                  <Image
+                    src={section.images[0]}
+                    alt={section.name}
+                    width={72}
+                    height={32}
+                    className="!h-16 object-cover rounded-lg mb-2"
+                    priority={false}
+                    sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
+                    layout="fixed"
+                  />
+                )}
+
+                {section.name}
+              </div>
             </Button>
           ))}
         </div>
+
+        <Divider style={{ backgroundColor: palette.color }} />
+
         {activeSectionId && (
-          <div className="flex flex-wrap gap-2 mt-2 ">
+          <div className="flex flex-wrap gap-2 ">
             {sectionGroups
               .find((sec) => sec._id === activeSectionId)
               ?.categories.map((cat) => (
@@ -155,7 +180,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   key={cat._id}
                   onClick={() => handleScroll(cat.name)}
                   style={{ background: palette.primary }}
-                  className="rounded-xl border-none px-3 py-3 text-sm text-white"
+                  className=" border-none px-3 py-3 text-sm text-white"
                 >
                   {cat.name}
                 </Button>

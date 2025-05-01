@@ -105,4 +105,5 @@ export const BANNER_INITIAL: BannerForm = {
 export const SECTION_INITIAL: SectionForm = {
   name: "",
   order: 0,
+  images: [],
 };

@@ -2,6 +2,7 @@
 
 import { Input } from "@nextui-org/react";
 import React from "react";
+import SectionUpload from "./SectionUpload";
 
 const SectionInformation = ({ section, handleChange }) => {
   return (
@@ -24,6 +25,12 @@ const SectionInformation = ({ section, handleChange }) => {
         required
         value={section.order?.toString()}
         onValueChange={(e) => handleChange("order", Number(e))}
+      />
+
+      <SectionUpload
+        section={section}
+        type="section"
+        handleChange={handleChange}
       />
     </div>
   );
