@@ -105,7 +105,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-  const offset = is_mobile ? 200 : 320;
+  const offset = is_mobile ? 250 : 280;
 
   const handleScroll = (targetName: string) => {
     const targetElement = document.querySelector(
@@ -145,7 +145,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                 )
               }
               style={{ background: palette.primary }}
-              className={`rounded-none border-none px-4 h-full py-3 text-sm text-white ${
+              className={`rounded-none border-none px-4 flex flex-col items-center h-full py-3 text-sm text-white ${
                 activeSectionId === section._id ? "opacity-100" : "opacity-80"
               }`}
             >
@@ -200,7 +200,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className="section-swiper-slide"
+              className="section-swiper-slide !h-full"
               key={section._id}
               style={{ width: "auto" }}
             >
@@ -211,16 +211,30 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   )
                 }
                 style={{ background: palette.primary }}
-                className={`rounded-xl px-3 py-2 text-sm text-white whitespace-nowrap text-center cursor-pointer ${
+                className={`rounded-xl px-3 py-2 text-sm flex flex-col items-center justify-center  h-[100px] text-white whitespace-nowrap text-center cursor-pointer ${
                   activeSectionId === section._id ? "opacity-100" : "opacity-80"
                 }`}
+                
               >
+                {section.images[0] && (
+                  <Image
+                    src={section.images[0]}
+                    alt={section.name}
+                    width={64}
+                    height={32}
+                    className="!h-16 object-cover rounded-lg mb-2"
+                    priority={false}
+                    sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
+                    layout="fixed"
+                  />
+                )}
                 {section.name}
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
 
+        <Divider style={{ backgroundColor: palette.color }} />
         {activeSectionId && (
           <Swiper
             freeMode

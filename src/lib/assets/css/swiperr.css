@@ -254,8 +254,14 @@
 .section-swiper {
     height: unset !important;
 }
+
 .section-swiper-slide{
-    height: 50% !important;
+    height: 100% !important;
+}
+@media (min-width: 640px) {
+    .section-swiper-slide{
+        height: 50% !important;
+    }
 }
 .autoplay-progress {
     position: absolute;
