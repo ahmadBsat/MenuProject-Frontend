@@ -145,11 +145,19 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                 )
               }
               style={{ background: palette.primary }}
-              className={`rounded-none border-none px-4 flex flex-col items-center h-full py-3 text-sm text-white ${
-                activeSectionId === section._id ? "opacity-100" : "opacity-80"
+              className={`rounded-xl border-none px-4 flex flex-col items-center h-full py-3 text-sm text-white ${
+                activeSectionId === section._id
+                  ? "opacity-100 font-bold"
+                  : "opacity-80"
               }`}
             >
-              <div className="flex items-center flex-col">
+              <div
+                className={`flex items-center flex-col ${
+                  activeSectionId === section._id
+                    ? "opacity-100 font-bold"
+                    : "opacity-80"
+                }`}
+              >
                 {section.images[0] && (
                   <Image
                     src={section.images[0]}
@@ -214,7 +222,6 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                 className={`rounded-xl px-3 py-2 text-sm flex flex-col items-center justify-center  h-[100px] text-white whitespace-nowrap text-center cursor-pointer ${
                   activeSectionId === section._id ? "opacity-100" : "opacity-80"
                 }`}
-                
               >
                 {section.images[0] && (
                   <Image
