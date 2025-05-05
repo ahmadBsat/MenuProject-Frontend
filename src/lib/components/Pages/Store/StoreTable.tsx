@@ -2,41 +2,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { handleServerError } from "@/lib/api/_axios";
+import ModalInstance from "@/lib/components/Modal/Modal";
+import { INITIAL_META } from "@/lib/constants/initials";
+import { INPUT_STYLE } from "@/lib/constants/style";
+import { STORE_COLUMNS, STORE_VISIBLE_COL } from "@/lib/constants/tables";
+import { getUrl, URLs } from "@/lib/constants/urls";
+import useDebounce from "@/lib/hooks/debounce";
+import { API_STORE } from "@/lib/services/store/store_service";
+import { ErrorResponse } from "@/lib/types/common";
+import { Store, StoreTable } from "@/lib/types/store/store";
+import { build_path, formatDates } from "@/utils/common";
+import { DeleteIcon, EyeIcon } from "@/utils/icons";
 import {
   Button,
+  Chip,
   Input,
-  Tooltip,
-  SortDescriptor,
   Selection,
+  SortDescriptor,
+  Tooltip,
   useDisclosure,
   User,
-  Chip,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { DeleteIcon, EyeIcon } from "@/utils/icons";
-import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineSearch } from "react-icons/ai";
-import ModalInstance from "@/lib/components/Modal/Modal";
-import { getUrl, URLs } from "@/lib/constants/urls";
-import { INPUT_STYLE } from "@/lib/constants/style";
-import { INITIAL_META } from "@/lib/constants/initials";
-import { STORE_COLUMNS, STORE_VISIBLE_COL } from "@/lib/constants/tables";
-import { build_path, formatDates } from "@/utils/common";
 import {
   createSerializer,
   parseAsInteger,
   parseAsString,
   useQueryStates,
 } from "nuqs";
-import useDebounce from "@/lib/hooks/debounce";
-import GeneralizedTable from "../../Common/GeneralizedTable";
-import { handleServerError } from "@/lib/api/_axios";
-import { ErrorResponse } from "@/lib/types/common";
-import { useParams } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
 import { toast } from "sonner";
-import { Store, StoreTable } from "@/lib/types/store/store";
-import { API_STORE } from "@/lib/services/store/store_service";
+import GeneralizedTable from "../../Common/GeneralizedTable";
 
 const StoresTable = () => {
   const searchParams = {
@@ -86,7 +84,6 @@ const StoresTable = () => {
 
   const onSearchChange = useCallback((value: string) => {
     setQuery({ search: value !== "" ? value : null, page: 1 });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

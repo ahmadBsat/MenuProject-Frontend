@@ -168,9 +168,10 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const origin = window.location.origin;
   const storeLink =
-    store.custom_domain.length > 0
+    store?.custom_domain?.length > 0
       ? store.custom_domain
       : origin + "/" + store.domain;
+
   const currencies = { USD: "$", LBP: "LBP" };
   return (
     <>

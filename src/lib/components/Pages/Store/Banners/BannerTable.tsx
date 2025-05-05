@@ -125,26 +125,26 @@ const BannersTable = () => {
     }
   };
 
-  const topContent = useMemo(() => {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            size="lg"
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            classNames={INPUT_STYLE}
-            placeholder="Search by name"
-            startContent={<AiOutlineSearch />}
-            value={query.search ?? ""}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
-        </div>
-      </div>
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  // const topContent = useMemo(() => {
+  //   return (
+  //     <div className="flex flex-col gap-4">
+  //       <div className="flex justify-between gap-3 items-end">
+  //         <Input
+  //           size="lg"
+  //           isClearable
+  //           className="w-full sm:max-w-[44%]"
+  //           classNames={INPUT_STYLE}
+  //           placeholder="Search by name"
+  //           startContent={<AiOutlineSearch />}
+  //           value={query.search ?? ""}
+  //           onClear={() => onClear()}
+  //           onValueChange={onSearchChange}
+  //         />
+  //       </div>
+  //     </div>
+  //   );
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [query.search, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (banner: Banner, columnKey: React.Key) => {
@@ -280,7 +280,7 @@ const BannersTable = () => {
           setPage={(v) => setQuery({ page: v })}
           columns={headerColumns}
           data={banners?.data}
-          topContent={topContent}
+          // topContent={topContent}
           selectedKeys={selectedKeys}
           sortDescriptor={{
             column: query.sortField as any,

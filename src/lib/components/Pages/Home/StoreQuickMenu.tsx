@@ -105,7 +105,11 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-  const offset = is_mobile ? 250 : 280;
+
+  const offsetMobile = hasSections && store.use_sections ? 290 : 180;
+  const offsetDesktop = hasSections && store.use_sections ? 285 : 180;
+
+  const offset = is_mobile ? offsetMobile : offsetDesktop;
 
   const handleScroll = (targetName: string) => {
     const targetElement = document.querySelector(
@@ -188,7 +192,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   key={cat._id}
                   onClick={() => handleScroll(cat.name)}
                   style={{ background: palette.primary }}
-                  className=" border-none px-3 py-3 text-sm text-white"
+                  className=" border-none px-3 py-3 min-h-14 flex items-center text-sm text-white"
                 >
                   {cat.name}
                 </Button>
@@ -257,7 +261,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   <div
                     onClick={() => handleScroll(cat.name)}
                     style={{ background: palette.primary }}
-                    className="rounded-xl px-3 py-2 text-sm text-white whitespace-nowrap text-center cursor-pointer"
+                    className="rounded-xl px-3 py-2 text-sm h-14 flex items-center text-white whitespace-nowrap text-center cursor-pointer"
                   >
                     {cat.name}
                   </div>
@@ -269,15 +273,17 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     </>
   ) : (
     <div className="max-w-screen-lg w-full">
-      <div className="hidden sm:flex flex-wrap gap-2">
-        {categoryGroups.map((cat) => (
+      <div className="hidden sm:grid sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 items-center justify-between max-w-screen-lg w-full">
+        {categoryGroups.map((cat, idx) => (
           <Button
-            key={cat._id}
-            onClick={() => handleScroll(cat.name)}
+            key={idx}
             style={{ background: palette.primary }}
-            className="rounded-xl border-none px-3 py-3 text-sm text-white"
+            className="rounded-2xl border-none w-full h-20 text-base text-white"
+            onClick={() => handleScroll(cat.name)}
           >
-            {cat.name}
+            <span className="font-semibold text-wrap text-center">
+              {cat.name}
+            </span>
           </Button>
         ))}
       </div>
@@ -294,7 +300,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
               <div
                 onClick={() => handleScroll(cat.name)}
                 style={{ background: palette.primary }}
-                className="rounded-xl px-3 py-2 text-sm text-white whitespace-nowrap text-center cursor-pointer"
+                className="rounded-xl px-3 py-2 text-sm h-14 flex items-center text-white whitespace-nowrap text-center cursor-pointer"
               >
                 {cat.name}
               </div>
