@@ -19,7 +19,7 @@ const BranchInformation = ({ branch, handleChange }) => {
 
       <Input
         label="Phone Number"
-        type="text"
+        type="number"
         placeholder="Phone number"
         isRequired
         required

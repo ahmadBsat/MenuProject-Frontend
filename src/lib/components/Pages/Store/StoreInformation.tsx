@@ -50,6 +50,27 @@ const StoreInformation = ({
     getUsers();
   }, []);
 
+  const [error, setError] = useState("");
+
+  const isValidSubdomain = (value) => {
+    const regex = /^(?!-)[a-z0-9-]+(?<!-)$/;
+    return regex.test(value);
+  };
+
+  const handleDomainValueChange = (key, value) => {
+    const cleanedValue = value.toLowerCase();
+
+    if (!isValidSubdomain(cleanedValue)) {
+      setError(
+        "Only lowercase letters, numbers, and hyphens are allowed. No spaces or special characters."
+      );
+    } else {
+      setError("");
+    }
+
+    handleChange(key, cleanedValue);
+  };
+
   return (
     <div className="w-full flex flex-col gap-4 mt-5">
       <Card shadow="none" className={CARD_STYLE}>
@@ -75,10 +96,12 @@ const StoreInformation = ({
             required
             isDisabled={!editable}
             value={data.domain}
-            startContent={
-              <span className="text-sm text-default-400">fmcshops.com/</span>
+            isInvalid={!!error}
+            errorMessage={error}
+            endContent={
+              <span className="text-sm text-default-400">.fmcshops.com</span>
             }
-            onValueChange={(e) => handleChange("domain", e)}
+            onValueChange={(e) => handleDomainValueChange("domain", e)}
           />
 
           <Input
