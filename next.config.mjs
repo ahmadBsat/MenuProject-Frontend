@@ -11,6 +11,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "fmcstore.fsn1.your-objectstorage.com",
       },
+      {
+        protocol: "https",
+        hostname: "maps.googleapis.com",
+      },
     ],
   },
   async redirects() {

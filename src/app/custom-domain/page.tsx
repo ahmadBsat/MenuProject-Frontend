@@ -45,6 +45,10 @@ const Page = () => {
       category_color: "",
       clear_button_color: "",
       clear_button_background: "",
+      section_color: "",
+      section_background: "",
+      active_section_color: "",
+      active_section_background: "",
     },
     products: [],
     settings: {

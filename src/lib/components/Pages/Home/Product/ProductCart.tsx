@@ -2,7 +2,7 @@
 "use client";
 
 import { Button, Checkbox, CheckboxGroup, Divider } from "@nextui-org/react";
-import { ShoppingCartIcon } from "lucide-react";
+import { CheckIcon, ShoppingCartIcon } from "lucide-react";
 import {
   Drawer,
   DrawerTrigger,
@@ -31,9 +31,9 @@ const ProductCart = ({
   const { name, description, additions } = product;
   const { addToCart } = useCart();
   const { currency } = usePreference();
-
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Record<string, string[]>>({});
+  const [justAdded, setJustAdded] = useState(false); // state to control icon
 
   const flattened_values = Object.values(selected).flat();
   const currencies = { USD: "$", LBP: "LBP" };
@@ -172,9 +172,15 @@ const ProductCart = ({
           quantity: 1,
           store: store,
         });
+        setJustAdded(true);
+        setTimeout(() => setJustAdded(false), 1000); // reset icon after 1 second
       }}
     >
-      <ShoppingCartIcon size={20} className="stroke-white font-bold size-5" />
+      {justAdded ? (
+        <CheckIcon size={20} className="stroke-white font-bold size-5 animate-bounce" />
+      ) : (
+        <ShoppingCartIcon size={20} className="stroke-white font-bold size-5" />
+      )}
     </Button>
   );
 };

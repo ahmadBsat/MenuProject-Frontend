@@ -26,6 +26,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUrl, URLs } from "@/lib/constants/urls";
+import { stat } from "fs";
+import Image from "next/image";
 
 const Page = () => {
   const router = useRouter();
@@ -58,6 +60,8 @@ const Page = () => {
 
   const currencies = { USD: "$", LBP: "LBP" };
 
+  const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+
   const handleChange = (field: string, value: string | number) => {
     const temp = { ...data };
     set(temp, field, value);
@@ -76,31 +80,43 @@ const Page = () => {
     setLocationLink(defaultMapUrl);
 
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
+      async ({ coords: { latitude, longitude } }) => {
+        // 1) Update the map immediately with a Static Maps image
+        const staticMapUrl =
+          `https://maps.googleapis.com/maps/api/staticmap` +
+          `?center=${latitude},${longitude}` +
+          `&zoom=15&size=600x300` +
+          `&markers=color:red%7C${latitude},${longitude}` +
+          `&key=AIzaSyB6ra0zV-3k5GtOWv5Yi4L7qx2dLU8R3GQ`;
+        setLocationLink(staticMapUrl);
 
-        const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+        // const staticMapUrl =
+        //   `https://staticmap.openstreetmap.de/staticmap.php` +
+        //   `?center=${latitude},${longitude}` +
+        //   `&zoom=15&size=600x300&markers=${latitude},${longitude},red-pushpin`;
+        setLocationLink(staticMapUrl);
 
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-        );
-        const locationData = await response.json();
-
-        const fetchedAddress =
-          locationData.display_name || "Location not found";
-        const fetchedRegion = locationData.address?.city || "Unknown Region";
-
-        setData((prev) => ({
-          ...prev,
-          address: fetchedAddress,
-          region: fetchedRegion,
-        }));
-
-        setLocationLink(mapUrl);
+        console.log(staticMapUrl);
+        // 2) Now fetch the human-readable address in the background
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?` +
+              `format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const locationData = await res.json();
+          setData((prev) => ({
+            ...prev,
+            address: locationData.display_name || prev.address,
+            region: locationData.address?.city || prev.region,
+          }));
+        } catch (err) {
+          console.error("Reverse geocode failed:", err);
+        }
       },
       (error) => {
         alert("Unable to retrieve your location: " + error.message);
-      }
+      },
+      { timeout: 10_000 }
     );
   };
 
@@ -348,43 +364,6 @@ const Page = () => {
                 }}
                 onValueChange={(v) => handleChange("address", v)}
               />
-              <Accordion variant="light" isCompact>
-                <AccordionItem
-                  key={1}
-                  title="Check your location"
-                  indicator={<PinIcon />}
-                  className="text-xs text-white"
-                  classNames={{
-                    title: "text-white",
-                  }}
-                >
-                  {/* Show message if location permission is denied */}
-                  {!locationPermissionGranted && (
-                    <div className="text-red-500">
-                      Unable to retrieve your location. Please try again.
-                    </div>
-                  )}
-
-                  {locationPermissionGranted && locationLink && (
-                    <div className="w-full h-64 mt-2 rounded-xl overflow-hidden">
-                      <iframe
-                        src={
-                          locationLink.replace(
-                            "https://www.google.com/maps?q=",
-                            "https://maps.google.com/maps?q="
-                          ) + "&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                        }
-                        width="100%"
-                        height="100%"
-                        loading="lazy"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                      />
-                    </div>
-                  )}
-                </AccordionItem>
-              </Accordion>
             </>
           )}
 
@@ -406,6 +385,39 @@ const Page = () => {
           >
             Complete Order
           </Button>
+
+          {/* Show message if location permission is denied */}
+          {!locationPermissionGranted && (
+            <div className="text-red-500">
+              Unable to retrieve your location. Please try again.
+            </div>
+          )}
+
+          {/* Static map image */}
+          {locationPermissionGranted && locationLink && (
+            <Accordion variant="light" isCompact>
+              <AccordionItem
+                key={1}
+                title="Check your location"
+                indicator={<PinIcon />}
+                className="text-xs text-white"
+                classNames={{
+                  title: "text-white",
+                }}
+              >
+                <div className="w-full h-64 object-cover object-center mt-2 rounded-xl ">
+                  <Image
+                    src={locationLink}
+                    alt="Your location"
+                    loading="lazy"
+                    width={400}
+                    height={400}
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+              </AccordionItem>
+            </Accordion>
+          )}
         </form>
       </div>
 

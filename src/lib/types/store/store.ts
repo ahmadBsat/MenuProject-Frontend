@@ -115,4 +115,8 @@ export type StorePalette = {
   category_background: string;
   clear_button_color: string;
   clear_button_background: string;
+  section_color: string,
+  section_background: string,
+  active_section_color: string,
+  active_section_background: string,
 };

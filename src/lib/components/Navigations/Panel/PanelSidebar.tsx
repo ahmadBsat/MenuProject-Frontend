@@ -55,7 +55,7 @@ const PanelSidebar = ({ children }) => {
       (renewal_date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    let chip_color = "success"; // Default green
+    let chip_color: "success" | "danger" | "warning" | "default" | "primary" | "secondary" | undefined = "success"; // Default green
     let status_message = "Active";
 
     if (days_diff < 0) {
@@ -70,7 +70,7 @@ const PanelSidebar = ({ children }) => {
     }
 
     return (
-      <Chip variant="flat" color={chip_color as any}>
+      <Chip variant="flat" color={chip_color}>
         {status_message}
       </Chip>
     );

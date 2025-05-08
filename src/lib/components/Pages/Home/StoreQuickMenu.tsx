@@ -105,7 +105,6 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-
   const offsetMobile = hasSections && store.use_sections ? 290 : 180;
   const offsetDesktop = hasSections && store.use_sections ? 285 : 180;
 
@@ -138,8 +137,8 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
   return hasSections && store.use_sections ? (
     <>
       {/* Desktop Section & Category Buttons */}
-      <div className="hidden sm:flex flex-col gap-2 max-w-screen-lg w-full">
-        <div className="flex flex-wrap gap-2 items-center justify-start">
+      <div className="hidden sm:flex flex-col max-w-screen-lg w-full">
+        <div className="flex flex-wrap items-center justify-start">
           {sectionGroups.map((section) => (
             <Button
               key={section._id}
@@ -148,17 +147,26 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   prev === section._id ? null : section._id
                 )
               }
-              style={{ background: palette.primary }}
-              className={`rounded-xl border-none px-4 flex flex-col items-center h-full py-3 text-sm text-white ${
+              style={{
+                background:
+                  activeSectionId === section._id
+                    ? palette.active_section_background
+                    : palette.section_background,
+                color:
+                  activeSectionId === section._id
+                    ? palette.active_section_color
+                    : palette.section_color,
+              }}
+              className={`rounded-none rounded-t-xl  px-4 flex flex-col items-center h-full py-2 text-sm ${
                 activeSectionId === section._id
-                  ? "opacity-100 font-bold"
-                  : "opacity-80"
+                  ? "opacity-100 font-bold border-b-2"
+                  : "opacity-80  border-none"
               }`}
             >
               <div
-                className={`flex items-center flex-col ${
+                className={`flex items-center flex-row ${
                   activeSectionId === section._id
-                    ? "opacity-100 font-bold"
+                    ? "opacity-100 font-bold "
                     : "opacity-80"
                 }`}
               >
@@ -166,11 +174,11 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                   <Image
                     src={section.images[0]}
                     alt={section.name}
-                    width={72}
-                    height={32}
-                    className="!h-16 object-cover rounded-lg mb-2"
+                    width={32}
+                    height={14}
+                    className=" object-cover rounded-lg mr-2"
                     priority={false}
-                    sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
+                    // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
                     layout="fixed"
                   />
                 )}
@@ -181,7 +189,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           ))}
         </div>
 
-        <Divider style={{ backgroundColor: palette.color }} />
+        <Divider style={{ backgroundColor: palette.color }} className="mb-2" />
 
         {activeSectionId && (
           <div className="flex flex-wrap gap-2 ">
@@ -206,15 +214,25 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         <Swiper
           freeMode
           slidesPerView={3.5}
-          spaceBetween={8}
+          spaceBetween={0}
           modules={[FreeMode]}
           className="mySwiper px-1 section-swiper"
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className="section-swiper-slide !h-full"
+              className="section-swiper-slide rounded-t-xl"
               key={section._id}
-              style={{ width: "auto" }}
+              style={{
+                width: "auto",
+                background:
+                  activeSectionId === section._id
+                    ? palette.active_section_background
+                    : palette.section_background,
+                color:
+                  activeSectionId === section._id
+                    ? palette.active_section_color
+                    : palette.section_color,
+              }}
             >
               <div
                 onClick={() =>
@@ -222,24 +240,34 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     prev === section._id ? null : section._id
                   )
                 }
-                style={{ background: palette.primary }}
-                className={`rounded-xl px-3 py-2 text-sm flex flex-col items-center justify-center  h-[100px] text-white whitespace-nowrap text-center cursor-pointer ${
-                  activeSectionId === section._id ? "opacity-100" : "opacity-80"
+                className={`rounded-none rounded-t-xl px-4 py-2 text-sm ${
+                  activeSectionId === section._id
+                    ? "opacity-100 font-bold border-b-2"
+                    : "opacity-80  border-none"
                 }`}
               >
-                {section.images[0] && (
-                  <Image
-                    src={section.images[0]}
-                    alt={section.name}
-                    width={64}
-                    height={32}
-                    className="!h-16 object-cover rounded-lg mb-2"
-                    priority={false}
-                    sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
-                    layout="fixed"
-                  />
-                )}
-                {section.name}
+                <div
+                  className={`flex items-center flex-row ${
+                    activeSectionId === section._id
+                      ? "opacity-100 font-bold "
+                      : "opacity-80"
+                  }`}
+                >
+                  {section.images[0] && (
+                    <Image
+                      src={section.images[0]}
+                      alt={section.name}
+                      width={32}
+                      height={14}
+                      className=" object-cover rounded-lg mr-2"
+                      priority={false}
+                      // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
+                      layout="fixed"
+                    />
+                  )}
+
+                  {section.name}
+                </div>
               </div>
             </SwiperSlide>
           ))}

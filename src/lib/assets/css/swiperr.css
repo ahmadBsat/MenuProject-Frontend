@@ -256,7 +256,10 @@
 }
 
 .section-swiper-slide{
-    height: 100% !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 @media (min-width: 640px) {
     .section-swiper-slide{
