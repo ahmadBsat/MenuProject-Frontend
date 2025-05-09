@@ -21,6 +21,7 @@ export type GroupedSection = {
   categories: GroupedCategory[];
 };
 
+
 export const group_products = (
   products: ProductPopulated[]
 ): GroupedCategory[] => {
@@ -43,6 +44,7 @@ export const group_products = (
   return Object.values(categoryMap).sort((a, b) => a.order - b.order);
 };
 
+
 export const group_sections = (
   products: ProductPopulated[]
 ): GroupedSection[] => {
@@ -50,49 +52,48 @@ export const group_sections = (
 
   products.forEach((product) => {
     product.category.forEach((category) => {
-      const section =
-        typeof category.section?.[0] === "object" &&
-        category.section?.[0] !== null
-          ? (category.section[0] as {
-              _id: string;
-              name: string;
-              order: number;
-              images: string[];
-            })
-          : { _id: "no-section", name: "All", order: 999, images: [] };
+      const sections =
+        Array.isArray(category.section) && category.section.length > 0
+          ? category.section.filter((s): s is { _id: string; name: string; order: number; images: string[] } => typeof s === 'object' && s !== null)
+          : [{ _id: "no-section", name: "All", order: 999, images: [] }];
 
-      if (!sectionMap[section._id]) {
-        sectionMap[section._id] = {
-          _id: section._id,
-          name: section.name,
-          order: section.order,
-          images: section.images,
-          categories: [],
-        };
-      }
+      sections.forEach((section) => {
+        if (!sectionMap[section._id]) {
+          sectionMap[section._id] = {
+            _id: section._id,
+            name: section.name,
+            order: section.order,
+            images: section.images,
+            categories: [],
+          };
+        }
 
-      let categoryGroup = sectionMap[section._id].categories.find(
-        (c) => c._id === category._id
-      );
+        let categoryGroup = sectionMap[section._id].categories.find(
+          (c) => c._id === category._id
+        );
 
-      if (!categoryGroup) {
-        categoryGroup = {
-          _id: category._id,
-          name: category.name,
-          order: category.order || 1,
-          products: [],
-        };
-        sectionMap[section._id].categories.push(categoryGroup);
-      }
+        if (!categoryGroup) {
+          categoryGroup = {
+            _id: category._id,
+            name: category.name,
+            order: category.order || 1,
+            products: [],
+          };
+          sectionMap[section._id].categories.push(categoryGroup);
+        }
 
-      categoryGroup.products.push(product);
+        categoryGroup.products.push(product);
+      });
     });
   });
 
+  // Optionally sort sections and categories if needed
   return Object.values(sectionMap).sort((a, b) => a.order - b.order);
 };
 
+
 const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
+
   const { palette } = usePreference();
   const { width } = useWindowSize();
   const is_mobile = width && width <= 640;
@@ -105,7 +106,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-  const offsetMobile = hasSections && store.use_sections ? 290 : 180;
+  const offsetMobile = hasSections && store.use_sections ? 250 : 180;
   const offsetDesktop = hasSections && store.use_sections ? 285 : 180;
 
   const offset = is_mobile ? offsetMobile : offsetDesktop;
@@ -157,7 +158,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     ? palette.active_section_color
                     : palette.section_color,
               }}
-              className={`rounded-none rounded-t-xl  px-4 flex flex-col items-center h-full py-2 text-sm ${
+              className={`rounded-none rounded-t-xl mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
@@ -210,7 +211,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
       </div>
 
       {/* Mobile Swiper */}
-      <div className="max-w-screen-lg w-full sm:hidden space-y-2">
+      <div className="max-w-screen-lg w-full sm:hidden ">
         <Swiper
           freeMode
           slidesPerView={3.5}
@@ -220,7 +221,11 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className="section-swiper-slide rounded-t-xl"
+              className={`section-swiper-slide mr-2 rounded-t-xl ${
+                activeSectionId === section._id
+                  ? "opacity-100 font-bold border-b-2"
+                  : "opacity-80  border-none"
+              }`}
               key={section._id}
               style={{
                 width: "auto",
@@ -240,11 +245,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     prev === section._id ? null : section._id
                   )
                 }
-                className={`rounded-none rounded-t-xl px-4 py-2 text-sm ${
-                  activeSectionId === section._id
-                    ? "opacity-100 font-bold border-b-2"
-                    : "opacity-80  border-none"
-                }`}
+                className={`rounded-none rounded-t-xl px-4 py-2 text-sm `}
               >
                 <div
                   className={`flex items-center flex-row ${
@@ -280,7 +281,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
             slidesPerView="auto"
             spaceBetween={8}
             modules={[FreeMode]}
-            className="mySwiper px-1"
+            className="mySwiper px-1 mt-2"
           >
             {sectionGroups
               .find((sec) => sec._id === activeSectionId)
