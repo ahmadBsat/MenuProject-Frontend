@@ -21,7 +21,6 @@ export type GroupedSection = {
   categories: GroupedCategory[];
 };
 
-
 export const group_products = (
   products: ProductPopulated[]
 ): GroupedCategory[] => {
@@ -44,7 +43,6 @@ export const group_products = (
   return Object.values(categoryMap).sort((a, b) => a.order - b.order);
 };
 
-
 export const group_sections = (
   products: ProductPopulated[]
 ): GroupedSection[] => {
@@ -54,7 +52,16 @@ export const group_sections = (
     product.category.forEach((category) => {
       const sections =
         Array.isArray(category.section) && category.section.length > 0
-          ? category.section.filter((s): s is { _id: string; name: string; order: number; images: string[] } => typeof s === 'object' && s !== null)
+          ? category.section.filter(
+              (
+                s
+              ): s is {
+                _id: string;
+                name: string;
+                order: number;
+                images: string[];
+              } => typeof s === "object" && s !== null
+            )
           : [{ _id: "no-section", name: "All", order: 999, images: [] }];
 
       sections.forEach((section) => {
@@ -91,9 +98,7 @@ export const group_sections = (
   return Object.values(sectionMap).sort((a, b) => a.order - b.order);
 };
 
-
 const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
-
   const { palette } = usePreference();
   const { width } = useWindowSize();
   const is_mobile = width && width <= 640;
