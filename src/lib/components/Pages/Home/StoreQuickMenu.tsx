@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ProductPopulated } from "@/lib/types/store/product";
 import { StorePopulated } from "@/lib/types/store/store";
-import { Button, Divider } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { GroupedCategory } from "./StoreProductList";
 import { usePreference } from "@/store/account";
 import { Swiper, SwiperSlide } from "swiper/react";
