@@ -144,7 +144,10 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     <>
       {/* Desktop Section & Category Buttons */}
       <div className="hidden sm:flex flex-col max-w-screen-lg w-full">
-        <div className="flex flex-wrap items-center justify-start">
+        <div
+          className="flex flex-wrap items-center justify-start px-4 rounded-2xl mb-8 h-[48px]"
+          style={{ background: palette.section_background }}
+        >
           {sectionGroups.map((section) => (
             <Button
               key={section._id}
@@ -163,7 +166,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     ? palette.active_section_color
                     : palette.section_color,
               }}
-              className={`rounded-none rounded-t-xl mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
+              className={`rounded-none mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
@@ -176,7 +179,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     : "opacity-80"
                 }`}
               >
-                {section.images[0] && (
+                {activeSectionId === section._id && section.images[0] ? (
                   <Image
                     src={section.images[0]}
                     alt={section.name}
@@ -187,15 +190,13 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
                     layout="fixed"
                   />
-                )}
+                ) : null}
 
                 {section.name}
               </div>
             </Button>
           ))}
         </div>
-
-        <Divider style={{ backgroundColor: palette.color }} className="mb-2" />
 
         {activeSectionId && (
           <div className="flex flex-wrap gap-2 ">
@@ -222,11 +223,12 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           slidesPerView={3.5}
           spaceBetween={0}
           modules={[FreeMode]}
-          className="mySwiper px-1 section-swiper"
+          className="mySwiper px-1 section-swiper h-[48px] px-4"
+          style={{ background: palette.section_background }}
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className={`section-swiper-slide mr-2 rounded-t-xl ${
+              className={`section-swiper-slide ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
@@ -250,7 +252,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     prev === section._id ? null : section._id
                   )
                 }
-                className={`rounded-none rounded-t-xl px-4 py-2 text-sm `}
+                className={`rounded-none px-2 py-2 text-sm `}
               >
                 <div
                   className={`flex items-center flex-row ${
@@ -259,7 +261,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                       : "opacity-80"
                   }`}
                 >
-                  {section.images[0] && (
+                  {activeSectionId === section._id && section.images[0] ? (
                     <Image
                       src={section.images[0]}
                       alt={section.name}
@@ -270,16 +272,16 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                       // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
                       layout="fixed"
                     />
-                  )}
+                  ) : null}
 
                   {section.name}
                 </div>
               </div>
             </SwiperSlide>
           ))}
+          <SwiperSlide style={{ width: "16px", background: "transparent" }} />
         </Swiper>
 
-        <Divider style={{ backgroundColor: palette.color }} />
         {activeSectionId && (
           <Swiper
             freeMode
