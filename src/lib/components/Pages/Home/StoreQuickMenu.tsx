@@ -21,7 +21,6 @@ export type GroupedSection = {
   categories: GroupedCategory[];
 };
 
-
 export const group_products = (
   products: ProductPopulated[]
 ): GroupedCategory[] => {
@@ -44,7 +43,6 @@ export const group_products = (
   return Object.values(categoryMap).sort((a, b) => a.order - b.order);
 };
 
-
 export const group_sections = (
   products: ProductPopulated[]
 ): GroupedSection[] => {
@@ -54,7 +52,16 @@ export const group_sections = (
     product.category.forEach((category) => {
       const sections =
         Array.isArray(category.section) && category.section.length > 0
-          ? category.section.filter((s): s is { _id: string; name: string; order: number; images: string[] } => typeof s === "object" && s !== null)
+          ? category.section.filter(
+              (
+                s
+              ): s is {
+                _id: string;
+                name: string;
+                order: number;
+                images: string[];
+              } => typeof s === "object" && s !== null
+            )
           : [{ _id: "no-section", name: "All", order: 999, images: [] }];
 
       sections.forEach((section) => {
@@ -91,9 +98,7 @@ export const group_sections = (
   return Object.values(sectionMap).sort((a, b) => a.order - b.order);
 };
 
-
 const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
-
   const { palette } = usePreference();
   const { width } = useWindowSize();
   const is_mobile = width && width <= 640;
@@ -329,9 +334,11 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
               <div
                 onClick={() => handleScroll(cat.name)}
                 style={{ background: palette.primary }}
-                className="rounded-xl px-3 py-2 text-sm h-14 flex items-center text-white whitespace-nowrap text-center cursor-pointer"
+                className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white font-medium transition-all px-1"
               >
-                {cat.name}
+                <span className="font-semibold text-wrap text-center">
+                  {cat.name}
+                </span>
               </div>
             </SwiperSlide>
           ))}
