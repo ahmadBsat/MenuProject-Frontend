@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { ProductPopulated } from "@/lib/types/store/product";
 import { StorePopulated } from "@/lib/types/store/store";
-import { Button } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 import { GroupedCategory } from "./StoreProductList";
 import { usePreference } from "@/store/account";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,6 +20,7 @@ export type GroupedSection = {
   images: string[];
   categories: GroupedCategory[];
 };
+
 
 export const group_products = (
   products: ProductPopulated[]
@@ -43,6 +44,7 @@ export const group_products = (
   return Object.values(categoryMap).sort((a, b) => a.order - b.order);
 };
 
+
 export const group_sections = (
   products: ProductPopulated[]
 ): GroupedSection[] => {
@@ -52,16 +54,7 @@ export const group_sections = (
     product.category.forEach((category) => {
       const sections =
         Array.isArray(category.section) && category.section.length > 0
-          ? category.section.filter(
-              (
-                s
-              ): s is {
-                _id: string;
-                name: string;
-                order: number;
-                images: string[];
-              } => typeof s === "object" && s !== null
-            )
+          ? category.section.filter((s): s is { _id: string; name: string; order: number; images: string[] } => typeof s === "object" && s !== null)
           : [{ _id: "no-section", name: "All", order: 999, images: [] }];
 
       sections.forEach((section) => {
@@ -98,7 +91,9 @@ export const group_sections = (
   return Object.values(sectionMap).sort((a, b) => a.order - b.order);
 };
 
+
 const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
+
   const { palette } = usePreference();
   const { width } = useWindowSize();
   const is_mobile = width && width <= 640;
@@ -144,10 +139,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     <>
       {/* Desktop Section & Category Buttons */}
       <div className="hidden sm:flex flex-col max-w-screen-lg w-full">
-        <div
-          className="flex flex-wrap items-center justify-start px-4 rounded-2xl mb-8 h-[48px]"
-          style={{ background: palette.section_background }}
-        >
+        <div className="flex flex-wrap items-center justify-start h-[48px]">
           {sectionGroups.map((section) => (
             <Button
               key={section._id}
@@ -166,7 +158,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     ? palette.active_section_color
                     : palette.section_color,
               }}
-              className={`rounded-none mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
+              className={`rounded-none rounded-t-xl mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
@@ -179,7 +171,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     : "opacity-80"
                 }`}
               >
-                {activeSectionId === section._id && section.images[0] ? (
+                {section.images[0] && (
                   <Image
                     src={section.images[0]}
                     alt={section.name}
@@ -190,13 +182,15 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
                     layout="fixed"
                   />
-                ) : null}
+                )}
 
                 {section.name}
               </div>
             </Button>
           ))}
         </div>
+
+        <Divider style={{ backgroundColor: palette.color }} className="mb-2" />
 
         {activeSectionId && (
           <div className="flex flex-wrap gap-2 ">
@@ -223,12 +217,11 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           slidesPerView={3.5}
           spaceBetween={0}
           modules={[FreeMode]}
-          className="mySwiper px-1 section-swiper h-[48px] px-4"
-          style={{ background: palette.section_background }}
+          className="mySwiper px-1 section-swiper"
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className={`section-swiper-slide ${
+              className={`section-swiper-slide mr-2 rounded-t-xl ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
@@ -252,7 +245,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     prev === section._id ? null : section._id
                   )
                 }
-                className={`rounded-none px-2 py-2 text-sm `}
+                className={`rounded-none rounded-t-xl px-4 py-2 text-sm `}
               >
                 <div
                   className={`flex items-center flex-row ${
@@ -261,7 +254,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                       : "opacity-80"
                   }`}
                 >
-                  {activeSectionId === section._id && section.images[0] ? (
+                  {section.images[0] && (
                     <Image
                       src={section.images[0]}
                       alt={section.name}
@@ -272,16 +265,16 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                       // sizes="(max-width: 640px) 72px, (max-width: 768px) 72px, 72px"
                       layout="fixed"
                     />
-                  ) : null}
+                  )}
 
                   {section.name}
                 </div>
               </div>
             </SwiperSlide>
           ))}
-          <SwiperSlide style={{ width: "16px", background: "transparent" }} />
         </Swiper>
 
+        <Divider style={{ backgroundColor: palette.color }} />
         {activeSectionId && (
           <Swiper
             freeMode
