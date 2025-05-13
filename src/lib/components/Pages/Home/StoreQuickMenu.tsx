@@ -323,21 +323,27 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
       </div>
       <div className="sm:hidden">
         <Swiper
-          freeMode
-          slidesPerView="auto"
-          spaceBetween={8}
+          freeMode={true}
+          pagination={false}
+          autoplay={false}
+          allowTouchMove
+          slidesPerView={3.2}
+          spaceBetween={5}
           modules={[FreeMode]}
-          className="mySwiper px-1"
+          className="mySwiper"
+          breakpoints={{
+            310: { slidesPerView: 3.5, spaceBetween: 5 },
+          }}
         >
-          {categoryGroups.map((cat) => (
-            <SwiperSlide key={cat._id} style={{ width: "auto" }}>
+          {categoryGroups.map((item, idx) => (
+            <SwiperSlide key={idx}>
               <div
-                onClick={() => handleScroll(cat.name)}
                 style={{ background: palette.primary }}
                 className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white font-medium transition-all px-1"
+                onClick={() => handleScroll(item.name)}
               >
                 <span className="font-semibold text-wrap text-center">
-                  {cat.name}
+                  {item.name}
                 </span>
               </div>
             </SwiperSlide>
