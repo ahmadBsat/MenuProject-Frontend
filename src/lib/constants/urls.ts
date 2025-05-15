@@ -1,7 +1,7 @@
 export const URLs = {
   home: "/",
   checkout: "/checkout",
-  cart: "/checkout",
+  cart: "/cart",
   about: "/about",
   branch: "/branch",
   search: "/search",
