@@ -170,9 +170,11 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const currentHost = window.location.hostname;
   const currentOrigin = window.location.origin;
 
+  console.log(window.location)
   console.log(currentHost)
   console.log(currentOrigin)
 
+  
   console.log(store.custom_domain)
 
   console.log(currentHost.split(".").length > 2)
