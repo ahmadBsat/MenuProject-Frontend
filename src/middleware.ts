@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const forwardedHost = request.headers.get("x-forwarded-host");
   const forwardedProto = request.headers.get("x-forwarded-proto");
+  const pathname = request.nextUrl.pathname;
+
   const origin =
     forwardedHost && forwardedProto
       ? `${forwardedProto}://${forwardedHost}`
@@ -14,7 +16,8 @@ export function middleware(request: NextRequest) {
     origin !== "https://fmctest.xyz" &&
     origin !== "http://localhost:3000"
   ) {
-    const newUrl = `/custom-domain`;
+    const newUrl =
+      pathname !== "/" ? `/custom-domain${pathname}` : `/custom-domain`;
 
     // Perform the internal rewrite (without changing the URL in the address bar)
     return NextResponse.rewrite(new URL(newUrl, request.url));
