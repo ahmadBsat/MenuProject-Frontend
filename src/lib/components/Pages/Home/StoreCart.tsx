@@ -172,7 +172,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
 
   const storeLink = store?.custom_domain?.length > 0
     ? store.custom_domain
-    : currentHost.split('.').length > 2
+    : currentHost.split(".").length > 2
       ? currentHost // it's a subdomain like test.example.com
       : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
 
