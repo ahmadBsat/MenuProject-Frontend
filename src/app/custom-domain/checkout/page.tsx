@@ -47,13 +47,10 @@ const Page = () => {
     useState(false);
 
   useEffect(() => {
-    console.log("Store:", store);
     if (!store) {
-      console.error("Store is not available");
       const currentPath = window.location.pathname;
       const newPath = currentPath.replace(getUrl(URLs.checkout), "");
       router.push(newPath);
-      console.log(currentPath, newPath);
     }
   }, [store]);
 

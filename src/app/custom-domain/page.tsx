@@ -7,6 +7,7 @@ import StoreHeader from "@/lib/components/Pages/Home/StoreHeader";
 import StoreProductList from "@/lib/components/Pages/Home/StoreProductList";
 import StoreQuickMenu from "@/lib/components/Pages/Home/StoreQuickMenu";
 import NotFound from "@/lib/components/Pages/NotFound";
+import { useStore } from "@/lib/context/StoreContext";
 import { API_STORE } from "@/lib/services/store/store_service";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
@@ -58,6 +59,7 @@ const Page = () => {
     vat_percentage: 0,
     use_sections: false,
   });
+  const { setStore: setStoreContext } = useStore();
   const {
     branch,
     currency,
@@ -82,6 +84,7 @@ const Page = () => {
 
       const res = await API_STORE.getStoreByDomain(undefined, query);
       setStore(res);
+      setStoreContext(res);
       setCurrentStore(res._id);
       setPalette(res.palette);
       setBanners(res.banners.length > 0 ? res.banners[0] : { images: [] });
