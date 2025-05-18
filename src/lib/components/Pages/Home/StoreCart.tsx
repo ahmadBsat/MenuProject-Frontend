@@ -170,18 +170,18 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
   const currentHost = window.location.hostname;
   const currentOrigin = window.location.origin;
 
-  console.log(window.location)
-  console.log(currentHost)
-  console.log(currentOrigin)
+  console.log(window.location);
+  console.log(currentHost);
+  console.log(currentOrigin);
 
-  
-  console.log(store.custom_domain)
+  console.log(store.custom_domain);
 
-  console.log(currentHost.split(".").length > 2)
-  console.log(`${currentOrigin}/${store.domain}`)
-  const storeLink = store?.custom_domain?.length > 0
-    ? store.custom_domain
-    : currentHost.split(".").length > 2
+  console.log(currentHost.split(".").length > 2);
+  console.log(`${currentOrigin}/${store.domain}`);
+  const storeLink =
+    store?.custom_domain?.length > 0
+      ? store.custom_domain
+      : currentHost.split(".").length > 2
       ? currentHost // it's a subdomain like test.example.com
       : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
 
