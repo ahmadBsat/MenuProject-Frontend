@@ -223,11 +223,15 @@ const Page = () => {
     }
   };
 
-  const origin = window.location.origin;
+  const currentHost = window.location.hostname;
+  const currentOrigin = window.location.origin;
+
   const storeLink =
-    store.custom_domain.length > 0
+    store?.custom_domain?.length > 0
       ? store.custom_domain
-      : origin + "/" + store.domain;
+      : currentHost.split(".").length > 2
+      ? currentOrigin // it's a subdomain like test.example.com
+      : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
 
   const handleCompleteOrder = () => {
     resetCart({ store: store._id });

@@ -152,7 +152,7 @@ const Page = () => {
 
       <StoreCategory store={store} />
 
-      <div className="sticky top-0 z-10 bg-inherit pb-8 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
+      <div className="sticky top-0 z-10 bg-inherit pb-4 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
         <StoreQuickMenu store={store} />
       </div>
 

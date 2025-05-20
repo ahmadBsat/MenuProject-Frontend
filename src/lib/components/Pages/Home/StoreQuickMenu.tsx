@@ -111,8 +111,8 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-  const offsetMobile = hasSections && store.use_sections ? 250 : 180;
-  const offsetDesktop = hasSections && store.use_sections ? 285 : 180;
+  const offsetMobile = hasSections && store.use_sections ? 210 : 180;
+  const offsetDesktop = hasSections && store.use_sections ? 210 : 180;
 
   const offset = is_mobile ? offsetMobile : offsetDesktop;
 
@@ -226,14 +226,13 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         >
           {sectionGroups.map((section) => (
             <SwiperSlide
-              className={`section-swiper-slide mr-2 rounded-t-xl ${
+              className={`section-swiper-slide mr-2 rounded-t-xl bg-default ${
                 activeSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
               }`}
               key={section._id}
               style={{
-                width: "auto",
                 background:
                   activeSectionId === section._id
                     ? palette.active_section_background
@@ -250,7 +249,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
                     prev === section._id ? null : section._id
                   )
                 }
-                className={`rounded-none rounded-t-xl px-4 py-2 text-sm `}
+                className={`rounded-none rounded-t-xl px-4 text-sm `}
               >
                 <div
                   className={`flex items-center flex-row ${

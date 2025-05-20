@@ -177,7 +177,7 @@ const ProductCart = ({
       }}
     >
       {justAdded ? (
-        <CheckIcon size={20} className="stroke-white font-bold size-5 animate-bounce" />
+        <CheckIcon size={20} className="stroke-white font-bold size-5 " />
       ) : (
         <ShoppingCartIcon size={20} className="stroke-white font-bold size-5" />
       )}

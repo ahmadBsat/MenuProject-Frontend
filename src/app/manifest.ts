@@ -19,7 +19,7 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#ffffff",
     background_color: "#ffffff",
     display: "standalone",
-    description: "Agent is an all-in-one AI customer assistance tool.",
+    description: "FMC is a platform for creating and managing your own online store.",
     start_url: "/",
   };
 }
