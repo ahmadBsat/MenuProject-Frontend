@@ -111,8 +111,8 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
     (section) => section._id !== "no-section"
   );
 
-  const offsetMobile = hasSections && store.use_sections ? 210 : 180;
-  const offsetDesktop = hasSections && store.use_sections ? 210 : 180;
+  const offsetMobile = hasSections && store.use_sections ? 225 : 180;
+  const offsetDesktop = hasSections && store.use_sections ? 225 : 180;
 
   const offset = is_mobile ? offsetMobile : offsetDesktop;
 
