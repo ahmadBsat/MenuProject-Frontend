@@ -98,12 +98,18 @@ export const group_sections = (
   return Object.values(sectionMap).sort((a, b) => a.order - b.order);
 };
 
-const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
+const StoreQuickMenu = ({
+  store,
+  selectedSectionId,
+  setSelectedSectionId,
+}: {
+  store: StorePopulated;
+  selectedSectionId: string | null;
+  setSelectedSectionId: (id: string | null) => void;
+}) => {
   const { palette } = usePreference();
   const { width } = useWindowSize();
   const is_mobile = width && width <= 640;
-
-  const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
 
   const categoryGroups = group_products(store.products);
   const sectionGroups = group_sections(store.products);
@@ -135,10 +141,10 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
   };
 
   useEffect(() => {
-    if (sectionGroups.length > 0 && !activeSectionId) {
-      setActiveSectionId(sectionGroups[0]._id);
+    if (sectionGroups.length > 0 && !selectedSectionId) {
+      setSelectedSectionId(sectionGroups[0]._id);
     }
-  }, [sectionGroups, activeSectionId]);
+  }, [sectionGroups, selectedSectionId]);
 
   return hasSections && store.use_sections ? (
     <>
@@ -149,29 +155,29 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
             <Button
               key={section._id}
               onClick={() =>
-                setActiveSectionId((prev) =>
-                  prev === section._id ? null : section._id
+                setSelectedSectionId(
+                  selectedSectionId === section._id ? null : section._id
                 )
               }
               style={{
                 background:
-                  activeSectionId === section._id
+                  selectedSectionId === section._id
                     ? palette.active_section_background
                     : palette.section_background,
                 color:
-                  activeSectionId === section._id
+                  selectedSectionId === section._id
                     ? palette.active_section_color
                     : palette.section_color,
               }}
               className={`rounded-none rounded-t-xl mr-2 px-4 flex flex-col items-center h-full py-2 text-sm ${
-                activeSectionId === section._id
+                selectedSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
               }`}
             >
               <div
                 className={`flex items-center flex-row ${
-                  activeSectionId === section._id
+                  selectedSectionId === section._id
                     ? "opacity-100 font-bold "
                     : "opacity-80"
                 }`}
@@ -197,10 +203,10 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
 
         <Divider style={{ backgroundColor: palette.color }} className="mb-2" />
 
-        {activeSectionId && (
+        {selectedSectionId && (
           <div className="flex flex-wrap gap-2 ">
             {sectionGroups
-              .find((sec) => sec._id === activeSectionId)
+              .find((sec) => sec._id === selectedSectionId)
               ?.categories.map((cat) => (
                 <Button
                   key={cat._id}
@@ -227,33 +233,33 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
           {sectionGroups.map((section) => (
             <SwiperSlide
               className={`section-swiper-slide mr-2 rounded-t-xl bg-default ${
-                activeSectionId === section._id
+                selectedSectionId === section._id
                   ? "opacity-100 font-bold border-b-2"
                   : "opacity-80  border-none"
               }`}
               key={section._id}
               style={{
                 background:
-                  activeSectionId === section._id
+                  selectedSectionId === section._id
                     ? palette.active_section_background
                     : palette.section_background,
                 color:
-                  activeSectionId === section._id
+                  selectedSectionId === section._id
                     ? palette.active_section_color
                     : palette.section_color,
               }}
             >
               <div
                 onClick={() =>
-                  setActiveSectionId((prev) =>
-                    prev === section._id ? null : section._id
+                  setSelectedSectionId(
+                    selectedSectionId === section._id ? null : section._id
                   )
                 }
                 className={`rounded-none rounded-t-xl px-4 text-sm `}
               >
                 <div
                   className={`flex items-center flex-row ${
-                    activeSectionId === section._id
+                    selectedSectionId === section._id
                       ? "opacity-100 font-bold "
                       : "opacity-80"
                   }`}
@@ -279,7 +285,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
         </Swiper>
 
         <Divider style={{ backgroundColor: palette.color }} />
-        {activeSectionId && (
+        {selectedSectionId && (
           <Swiper
             freeMode
             slidesPerView="auto"
@@ -288,7 +294,7 @@ const StoreQuickMenu = ({ store }: { store: StorePopulated }) => {
             className="mySwiper px-1 mt-2"
           >
             {sectionGroups
-              .find((sec) => sec._id === activeSectionId)
+              .find((sec) => sec._id === selectedSectionId)
               ?.categories.map((cat) => (
                 <SwiperSlide key={cat._id} style={{ width: "auto" }}>
                   <div

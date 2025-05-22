@@ -1,6 +1,6 @@
 import ProductList from "./Product/ProductList";
 import { usePreference } from "@/store/account";
-import { group_products } from "./StoreQuickMenu";
+import { group_products, group_sections } from "./StoreQuickMenu";
 import { StorePopulated } from "@/lib/types/store/store";
 import { ProductPopulated } from "@/lib/types/store/product";
 
@@ -11,28 +11,31 @@ export type GroupedCategory = {
   products: ProductPopulated[];
 };
 
-const StoreProductList = ({ store }: { store: StorePopulated }) => {
+const StoreProductList = ({
+  store,
+  selectedSectionId
+}: {
+  store: StorePopulated;
+  selectedSectionId: string | null;
+}) => {
   const { palette } = usePreference();
 
-  const groups = group_products(store.products).sort(
-    (a, b) => a.order - b.order
-  );
+  // Group sections
+  const sectionGroups = group_sections(store.products);
+  const activeSection = sectionGroups.find(sec => sec._id === selectedSectionId);
+
+  // Fallback if no section selected
+  const categories = activeSection
+    ? activeSection.categories
+    : group_products(store.products); // show all if none selected
+
+  const groups = [...categories].sort((a, b) => a.order - b.order);
 
   return (
     <div className="flex items-center px-4 sm:px-8 justify-center w-full h-full pb-8">
       <div className="flex flex-col gap-2 w-full max-w-screen-lg">
         <div className="flex flex-col gap-3 w-full">
           {groups.map((category, idx) => {
-            // // Filter the products in the current category based on the search value
-            // const filteredProducts = category.products.filter((product) =>
-            //   product.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive search
-            // );
-
-            // // Only render category if there are filtered products
-            // if (filteredProducts.length === 0) {
-            //   return null; // Skip rendering this category if no products match the filter
-            // }
-
             return (
               <div
                 id={category.name}

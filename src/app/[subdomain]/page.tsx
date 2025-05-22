@@ -18,6 +18,10 @@ import { BounceLoader } from "react-spinners";
 const Page = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
+    null
+  );
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [store, setStore] = useState<StorePopulated>({
     _id: "",
@@ -51,7 +55,6 @@ const Page = () => {
       section_background: "",
       active_section_color: "",
       active_section_background: "",
-
     },
     products: [],
     vat_exclusive: false,
@@ -85,7 +88,7 @@ const Page = () => {
       }
 
       const res = await API_STORE.getStoreByDomain(domain, query);
-      
+
       setStore(res);
       setStoreContext(res);
       setCurrentStore(res._id);
@@ -153,11 +156,15 @@ const Page = () => {
       <StoreCategory store={store} />
 
       <div className="sticky top-0 z-10 bg-inherit pb-4 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
-        <StoreQuickMenu store={store} />
+        <StoreQuickMenu
+          store={store}
+          selectedSectionId={selectedSectionId}
+          setSelectedSectionId={setSelectedSectionId}
+        />
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store} />
+        <StoreProductList store={store} selectedSectionId={selectedSectionId} />
       </div>
 
       <div className="mt-auto">

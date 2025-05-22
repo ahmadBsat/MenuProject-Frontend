@@ -17,6 +17,9 @@ import { BounceLoader } from "react-spinners";
 const Page = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
+    null
+  );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [store, setStore] = useState<StorePopulated>({
     _id: "",
@@ -150,11 +153,15 @@ const Page = () => {
       <StoreCategory store={store} />
 
       <div className="sticky top-0 z-10 bg-inherit pb-8 pt-16 flex w-full justify-center items-center px-4 sm:px-8 flex-col">
-        <StoreQuickMenu store={store} />
+        <StoreQuickMenu
+          store={store}
+          selectedSectionId={selectedSectionId}
+          setSelectedSectionId={setSelectedSectionId}
+        />
       </div>
 
       <div className="flex-grow z-0">
-        <StoreProductList store={store} />
+        <StoreProductList store={store} selectedSectionId={selectedSectionId} />
       </div>
 
       <div className="mt-auto">
