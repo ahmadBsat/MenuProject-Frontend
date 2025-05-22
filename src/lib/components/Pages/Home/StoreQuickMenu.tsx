@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { ProductPopulated } from "@/lib/types/store/product";
 import { StorePopulated } from "@/lib/types/store/store";
 import { Button, Divider } from "@nextui-org/react";
