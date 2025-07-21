@@ -1,9 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ProductPopulated } from "@/lib/types/store/product";
 import { StorePopulated } from "@/lib/types/store/store";
-import { Button, Divider } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@nextui-org/react";
 import { GroupedCategory } from "./StoreProductList";
 import { usePreference } from "@/store/account";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +26,8 @@ export type GroupedSection = {
   _id: string;
   name: string;
   order: number;
+  is_promotive?: boolean;
+  promotive_message?: string;
   images: string[];
   categories: GroupedCategory[];
 };
@@ -59,6 +70,8 @@ export const group_sections = (
                 _id: string;
                 name: string;
                 order: number;
+                is_promotive?: boolean;
+                promotive_message?: string;
                 images: string[];
               } => typeof s === "object" && s !== null
             )
@@ -70,6 +83,8 @@ export const group_sections = (
             _id: section._id,
             name: section.name,
             order: section.order,
+            is_promotive: section.is_promotive || false,
+            promotive_message: section.promotive_message || "",
             images: section.images,
             categories: [],
           };
@@ -107,10 +122,11 @@ const StoreQuickMenu = ({
   selectedSectionId: string | null;
   setSelectedSectionId: (id: string | null) => void;
 }) => {
-  const { palette } = usePreference();
   const { width } = useWindowSize();
+  const { palette } = usePreference();
   const is_mobile = width && width <= 640;
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [promotiveSection, setPromotiveSection] = useState<GroupedSection>();
   const categoryGroups = group_products(store.products);
   const sectionGroups = group_sections(store.products);
   const hasSections = sectionGroups.some(
@@ -146,6 +162,17 @@ const StoreQuickMenu = ({
     }
   }, [sectionGroups, selectedSectionId]);
 
+  function SectionOnclick(section) {
+    if (section.is_promotive) {
+      setPromotiveSection(section);
+      onOpen();
+    } else {
+      setPromotiveSection(undefined);
+      setSelectedSectionId(
+        selectedSectionId === section._id ? null : section._id
+      );
+    }
+  }
   return hasSections && store.use_sections ? (
     <>
       {/* Desktop Section & Category Buttons */}
@@ -154,11 +181,7 @@ const StoreQuickMenu = ({
           {sectionGroups.map((section) => (
             <Button
               key={section._id}
-              onClick={() =>
-                setSelectedSectionId(
-                  selectedSectionId === section._id ? null : section._id
-                )
-              }
+              onPress={() => SectionOnclick(section)}
               style={{
                 background:
                   selectedSectionId === section._id
@@ -309,6 +332,39 @@ const StoreQuickMenu = ({
           </Swiper>
         )}
       </div>
+
+      <Modal isOpen={isOpen} size={"xl"} onClose={onClose}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {store.logo && (
+                  <div className="rounded-lg flex items-center w-full justify-center z-20">
+                    <Image
+                      src={store.logo}
+                      alt={store.name}
+                      width={200}
+                      height={200}
+                      className="max-h-48 object-cover rounded-2xl"
+                    />
+                  </div>
+                )}
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  {promotiveSection?.promotive_message ||
+                    "No promotional message available."}
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" variant="solid" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   ) : (
     <div className="max-w-screen-lg w-full">
