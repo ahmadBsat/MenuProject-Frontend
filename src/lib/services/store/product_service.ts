@@ -2,11 +2,13 @@
 import { Product, ProductTable } from "@/lib/types/store/product";
 import { handleErrors, _axios } from "../../api/_axios";
 import { PRODUCT_ENDPOINTS } from "../../constants/endpoints";
-import { SuccessResponse } from "../../types/common";
+import { BulkUploadResponse, SuccessResponse } from "../../types/common";
 import { build_path } from "@/utils/common";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace API_PRODUCT {
+
+
   export async function getAllProducts(query?: string) {
     try {
       let request = `${PRODUCT_ENDPOINTS.GET_ALL}`;
@@ -60,6 +62,26 @@ export namespace API_PRODUCT {
         build_path(PRODUCT_ENDPOINTS.DELETE, { id })
       );
       return response.data as SuccessResponse;
+    } catch (error: unknown) {
+      throw handleErrors(error);
+    }
+  }
+
+  export async function bulkCreateProducts(file: File) {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await _axios.post(
+        PRODUCT_ENDPOINTS.BULK_CREATE, // You'll need to add this endpoint
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data as BulkUploadResponse;
     } catch (error: unknown) {
       throw handleErrors(error);
     }

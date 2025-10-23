@@ -69,6 +69,17 @@ export type DeleteResponse = {
   success: boolean;
 };
 
+export interface UploadResult {
+  created: number;
+  errors?: Array<{
+    row: number;
+    message: string;
+  }>;
+}
+export interface BulkUploadResponse extends SuccessResponse {
+  data: UploadResult;
+}
+
 export type ResendResponse = SuccessResponse;
 
 export type ErrorMessageProps = { [key: string]: string };

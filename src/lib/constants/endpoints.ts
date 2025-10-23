@@ -42,6 +42,7 @@ export const PRODUCT_ENDPOINTS = {
   CREATE: "/api/v1/products",
   UPDATE: "/api/v1/products/:id",
   DELETE: "/api/v1/products/:id",
+  BULK_CREATE: "/api/v1/products/bulk",
 };
 
 export const PRODUCT_ITEMS_ENDPOINTS = {
