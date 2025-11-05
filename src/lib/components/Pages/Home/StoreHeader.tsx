@@ -4,13 +4,14 @@ import dynamic from "next/dynamic";
 import StoreBranches from "./StoreBranch";
 import { StorePopulated } from "@/lib/types/store/store";
 import StoreCart from "./StoreCart";
-
+import { usePreference } from "@/store/account";
 
 const StoreCurrency = dynamic(() => import("./StoreCurrency"), {
   ssr: false,
 });
 
 const StoreHeader = ({ store }: { store: StorePopulated }) => {
+  const { branch } = usePreference();
   return (
     <div className="min-h-14 max-h-32 z-50">
       <div
@@ -27,8 +28,12 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
           </div>
 
           <div className="flex items-center gap-2 justify-center">
-            <StoreCurrency currencies={store.currencies} />
-            <StoreCart store={store} />
+            {branch.display_cart && (
+              <>
+                <StoreCurrency currencies={store.currencies} />
+                <StoreCart store={store} />
+              </>
+            )}
           </div>
         </div>
       </div>

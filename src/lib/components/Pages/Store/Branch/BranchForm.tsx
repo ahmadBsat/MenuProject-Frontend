@@ -16,10 +16,13 @@ import HeaderContainer from "@/lib/components/Containers/HeaderContainer";
 import { toast } from "sonner";
 import { BRANCH_INITIAL } from "@/lib/constants/initials";
 import { API_BRANCH } from "@/lib/services/store/branch_service";
-import { StoreBranchForm } from "@/lib/types/store/store";
+import { Store, StoreBranchForm } from "@/lib/types/store/store";
+import { API_STORE } from "@/lib/services/store/store_service";
 
 const BranchFormPage = () => {
   const [branch, setBranch] = useState<StoreBranchForm>(BRANCH_INITIAL);
+  const [storeDetails, setStoreDetails] = useState<Store | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -27,6 +30,19 @@ const BranchFormPage = () => {
   const params = useParams();
   const router = useRouter();
   const buttonSize = width && width >= 640 ? "md" : "sm";
+
+  useEffect(() => {
+    const fetchStoreDetails = async () => {
+      try {
+        const response = await API_STORE.getStore();
+        setStoreDetails(response);
+      } catch (error) {
+        console.error("Failed to fetch store details:", error);
+      }
+    };
+
+    fetchStoreDetails();
+  }, []);
 
   useEffect(() => {
     getBranch();
@@ -146,7 +162,11 @@ const BranchFormPage = () => {
       </HeaderContainer>
 
       <Card shadow="none" className={CARD_STYLE}>
-        <BranchInformation branch={branch} handleChange={handleChange} />
+        <BranchInformation
+          branch={branch}
+          handleChange={handleChange}
+          storeDetails={storeDetails}
+        />
       </Card>
 
       <div className="w-full flex justify-end mt-2 px-4">

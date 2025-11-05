@@ -57,6 +57,7 @@ const Page = () => {
     products: [],
     settings: {
       display_pricing: true,
+      allow_branch_cart_modifications: false,
     },
     vat_exclusive: false,
     vat_percentage: 0,

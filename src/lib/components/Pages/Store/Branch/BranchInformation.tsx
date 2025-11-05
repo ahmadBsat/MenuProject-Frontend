@@ -1,8 +1,9 @@
 "use client";
 
-import { Input } from "@nextui-org/react";
+import { Input, Switch } from "@nextui-org/react";
+import { SWITCH_STYLE } from "@/lib/constants/style";
 
-const BranchInformation = ({ branch, handleChange }) => {
+const BranchInformation = ({ storeDetails, branch, handleChange }) => {
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="flex sm:flex-row flex-col gap-2">
@@ -34,6 +35,21 @@ const BranchInformation = ({ branch, handleChange }) => {
         value={branch.address}
         onValueChange={(e) => handleChange("address", e)}
       />
+
+      {storeDetails.settings.allow_branch_cart_modifications && (
+        <Switch
+          classNames={SWITCH_STYLE}
+          isSelected={branch.display_cart}
+          onValueChange={(val) => handleChange("display_cart", val)}
+        >
+          <div className="flex flex-col gap-1">
+            <p className="text-medium">Display cart</p>
+            <p className="text-sm">
+              Disable it to hide the cart icon from the current branch.
+            </p>
+          </div>
+        </Switch>
+      )}
     </div>
   );
 };

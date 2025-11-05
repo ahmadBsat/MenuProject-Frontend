@@ -25,7 +25,7 @@ const ProductCard = ({
   category: string;
   store: StorePopulated;
 }) => {
-  const { currency, palette } = usePreference();
+  const { currency, palette, branch } = usePreference();
 
   const [open, setOpen] = useState(false);
   const currencies = { USD: "$", LBP: "LBP" };
@@ -140,7 +140,9 @@ const ProductCard = ({
               </DrawerHeader>
             </div>
           </DrawerContent>
-          <ProductCart product={product} store_info={store} />
+          {branch.display_cart && (
+            <ProductCart product={product} store_info={store} />
+          )}
         </div>
 
         <p className="text-sm font-medium mt-2 line-clamp-1">

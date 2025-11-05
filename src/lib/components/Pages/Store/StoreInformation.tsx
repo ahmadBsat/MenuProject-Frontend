@@ -265,6 +265,22 @@ const StoreInformation = ({
                 </p>
               </div>
             </Switch>
+            <Switch
+              classNames={SWITCH_STYLE}
+              isDisabled={!editable}
+              isSelected={data?.settings?.allow_branch_cart_modifications}
+              onValueChange={(val) =>
+                handleChange("settings.allow_branch_cart_modifications", val)
+              }
+            >
+              <div className="flex flex-col gap-1">
+                <p className="text-medium">Allow branch cart modification</p>
+                <p className="text-sm">
+                  Enable to allow users to disable the cart from different
+                  branches
+                </p>
+              </div>
+            </Switch>
           </AccordionItem>
         </Accordion>
         <Divider className="my-1" />
@@ -638,7 +654,10 @@ const StoreInformation = ({
                   className="w-[200px]"
                   value={data.palette.active_section_background}
                   onChange={(e) =>
-                    handleChange("palette.active_section_background", e.target.value)
+                    handleChange(
+                      "palette.active_section_background",
+                      e.target.value
+                    )
                   }
                 />
               </div>
@@ -647,7 +666,9 @@ const StoreInformation = ({
                 <p className="text-lg">Active Section Font Color</p>{" "}
                 <HexColorPicker
                   color={data.palette.active_section_color}
-                  onChange={(c) => handleChange("palette.active_section_color", c)}
+                  onChange={(c) =>
+                    handleChange("palette.active_section_color", c)
+                  }
                 />{" "}
                 <Input
                   label=""

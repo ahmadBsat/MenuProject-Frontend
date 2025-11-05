@@ -43,7 +43,7 @@ export const STORE_INITIAL: StoreForm = {
     active_section_color: "",
     active_section_background: "",
   },
-  settings: { display_pricing: true },
+  settings: { display_pricing: true, allow_branch_cart_modifications: false },
   is_active: true,
   domain: "",
   renewal_cost: 100,
@@ -81,6 +81,7 @@ export const BRANCH_INITIAL: StoreBranchForm = {
   address: "",
   name: "",
   phone_number: "",
+  display_cart: true,
 };
 
 export const CATEGORY_INITIAL: CategoryForm = {

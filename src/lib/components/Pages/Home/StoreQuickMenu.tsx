@@ -273,11 +273,7 @@ const StoreQuickMenu = ({
               }}
             >
               <div
-                onClick={() =>
-                  setSelectedSectionId(
-                    selectedSectionId === section._id ? null : section._id
-                  )
-                }
+                onClick={() => SectionOnclick(section)}
                 className={`rounded-none rounded-t-xl px-4 text-sm `}
               >
                 <div

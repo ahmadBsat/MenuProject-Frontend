@@ -19,7 +19,10 @@ export type Store = {
   is_active: boolean;
   renewal_cost: number;
   watermark: boolean;
-  settings: { display_pricing: boolean };
+  settings: {
+    display_pricing: boolean;
+    allow_branch_cart_modifications: boolean;
+  };
   logoDefault: boolean;
   vat_exclusive: boolean;
   vat_percentage: number;
@@ -36,6 +39,7 @@ export type StoreBranch = {
   name: string;
   address: string;
   phone_number: string;
+  display_cart: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -48,7 +52,6 @@ export type StoreSection = {
   createdAt: string;
   updatedAt: string;
 };
-
 
 export type StoreBranchForm = Omit<
   StoreBranch,
@@ -74,7 +77,7 @@ type Banner = {
 
 type Section = {
   images: string[];
-}
+};
 export type StorePopulated = {
   _id: string;
   name: string;
@@ -94,7 +97,10 @@ export type StorePopulated = {
   vat_exclusive: boolean;
   use_sections: boolean;
   vat_percentage: number;
-  settings?: { display_pricing: boolean };
+  settings?: {
+    display_pricing: boolean;
+    allow_branch_cart_modifications: boolean;
+  };
 };
 
 export type StoreBanner = {
@@ -115,8 +121,8 @@ export type StorePalette = {
   category_background: string;
   clear_button_color: string;
   clear_button_background: string;
-  section_color: string,
-  section_background: string,
-  active_section_color: string,
-  active_section_background: string,
+  section_color: string;
+  section_background: string;
+  active_section_color: string;
+  active_section_background: string;
 };
