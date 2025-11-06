@@ -116,7 +116,7 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl max-h-[70vh]">
           <DrawerHeader>
             <DrawerTitle>Choose Branch</DrawerTitle>
             <DrawerDescription>
@@ -124,7 +124,7 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
             </DrawerDescription>
           </DrawerHeader>
 
-          <div className="p-4 pb-8 flex flex-col gap-6">
+          <div className="p-4 pb-8 flex flex-col gap-6 max-h-[60vh] overflow-y-auto">
             {data.map((branch) => {
               return (
                 <BranchCard
