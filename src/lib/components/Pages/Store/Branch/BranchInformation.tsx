@@ -36,7 +36,7 @@ const BranchInformation = ({ storeDetails, branch, handleChange }) => {
         onValueChange={(e) => handleChange("address", e)}
       />
 
-      {storeDetails.settings.allow_branch_cart_modifications && (
+      {storeDetails?.settings.allow_branch_cart_modifications && (
         <Switch
           classNames={SWITCH_STYLE}
           isSelected={branch.display_cart}
