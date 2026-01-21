@@ -45,6 +45,29 @@ const Page = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
+  const [hasUnsavedLocationChanges, setHasUnsavedLocationChanges] = useState(false);
+
+  // Load saved location on mount
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const savedLocation = localStorage.getItem('userLocation');
+      if (savedLocation) {
+        const { address, region, locationLink } = JSON.parse(savedLocation);
+        setData((prev) => ({
+          ...prev,
+          address: address || prev.address,
+          region: region || prev.region,
+        }));
+        if (locationLink) {
+          setLocationLink(locationLink);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading saved location:', error);
+    }
+  }, []);
 
   useEffect(() => {
     if (!store) {
@@ -62,6 +85,47 @@ const Page = () => {
     const temp = { ...data };
     set(temp, field, value);
     setData(temp);
+    
+    // Mark as having unsaved changes if address or region changes
+    if (field === 'address' || field === 'region') {
+      setHasUnsavedLocationChanges(true);
+    }
+  };
+
+  const saveLocationToStorage = () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const locationToSave = {
+        address: data.address,
+        region: data.region,
+        locationLink: locationLink,
+        timestamp: new Date().toISOString(),
+      };
+      localStorage.setItem('userLocation', JSON.stringify(locationToSave));
+      setHasUnsavedLocationChanges(false);
+      alert('Location saved successfully!');
+    } catch (error) {
+      console.error('Error saving location:', error);
+      alert('Failed to save location. Please try again.');
+    }
+  };
+
+  const clearSavedLocation = () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      localStorage.removeItem('userLocation');
+      setData((prev) => ({
+        ...prev,
+        address: "",
+        region: "",
+      }));
+      setLocationLink("");
+      setHasUnsavedLocationChanges(false);
+    } catch (error) {
+      console.error('Error clearing location:', error);
+    }
   };
 
   const getCurrentLocation = async () => {
@@ -97,6 +161,7 @@ const Page = () => {
         }));
 
         setLocationLink(mapUrl);
+        setHasUnsavedLocationChanges(true);
       },
       (error) => {
         alert("Unable to retrieve your location: " + error.message);
@@ -241,6 +306,7 @@ const Page = () => {
       console.error("WhatsApp URI is undefined. Cannot redirect.");
     }
   };
+
   return (
     <div
       style={{
@@ -352,6 +418,28 @@ const Page = () => {
                 }}
                 onValueChange={(v) => handleChange("address", v)}
               />
+              
+              {/* Save/Clear Location Buttons */}
+              <div className="flex gap-2">
+                <Button
+                  color={hasUnsavedLocationChanges ? "warning" : "success"}
+                  variant={hasUnsavedLocationChanges ? "solid" : "bordered"}
+                  onPress={saveLocationToStorage}
+                  className="flex-1"
+                  isDisabled={!data.address || !data.region}
+                >
+                  {hasUnsavedLocationChanges ? "Save Location" : "Location Saved"}
+                </Button>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={clearSavedLocation}
+                  isDisabled={typeof window !== 'undefined' && !localStorage.getItem('userLocation')}
+                >
+                  Clear
+                </Button>
+              </div>
+
               <Accordion variant="light" isCompact>
                 <AccordionItem
                   key={1}
