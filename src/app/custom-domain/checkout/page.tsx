@@ -23,7 +23,7 @@ import {
 import { set } from "lodash";
 import { PinIcon } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUrl, URLs } from "@/lib/constants/urls";
 
@@ -49,10 +49,10 @@ const Page = () => {
 
   // Load saved location on mount
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     try {
-      const savedLocation = localStorage.getItem('userLocation');
+      const savedLocation = localStorage.getItem("userLocation");
       if (savedLocation) {
         const { address, region, locationLink } = JSON.parse(savedLocation);
         setData((prev) => ({
@@ -65,7 +65,7 @@ const Page = () => {
         }
       }
     } catch (error) {
-      console.error('Error loading saved location:', error);
+      console.error("Error loading saved location:", error);
     }
   }, []);
 
@@ -87,13 +87,13 @@ const Page = () => {
     setData(temp);
     
     // Mark as having unsaved changes if address or region changes
-    if (field === 'address' || field === 'region') {
+    if (field === "address" || field === "region") {
       setHasUnsavedLocationChanges(true);
     }
   };
 
   const saveLocationToStorage = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     try {
       const locationToSave = {
@@ -102,20 +102,20 @@ const Page = () => {
         locationLink: locationLink,
         timestamp: new Date().toISOString(),
       };
-      localStorage.setItem('userLocation', JSON.stringify(locationToSave));
+      localStorage.setItem("userLocation", JSON.stringify(locationToSave));
       setHasUnsavedLocationChanges(false);
-      alert('Location saved successfully!');
+      alert("Location saved successfully!");
     } catch (error) {
-      console.error('Error saving location:', error);
-      alert('Failed to save location. Please try again.');
+      console.error("Error saving location:", error);
+      alert("Failed to save location. Please try again.");
     }
   };
 
   const clearSavedLocation = () => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     try {
-      localStorage.removeItem('userLocation');
+      localStorage.removeItem("userLocation");
       setData((prev) => ({
         ...prev,
         address: "",
@@ -124,7 +124,7 @@ const Page = () => {
       setLocationLink("");
       setHasUnsavedLocationChanges(false);
     } catch (error) {
-      console.error('Error clearing location:', error);
+      console.error("Error clearing location:", error);
     }
   };
 
@@ -169,7 +169,7 @@ const Page = () => {
     );
   };
 
-  const checkLocationPermission = async () => {
+  const checkLocationPermission = useCallback(async () => {
     try {
       const permission = await navigator.permissions.query({
         name: "geolocation",
@@ -184,13 +184,13 @@ const Page = () => {
     } catch (error) {
       console.error("Error checking location permission:", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (!locationPermissionAsked) {
       checkLocationPermission();
     }
-  }, [locationPermissionAsked]);
+  }, [locationPermissionAsked, checkLocationPermission]);
 
   if (!shouldRender) {
     return null;
@@ -434,7 +434,7 @@ const Page = () => {
                   color="danger"
                   variant="light"
                   onPress={clearSavedLocation}
-                  isDisabled={typeof window !== 'undefined' && !localStorage.getItem('userLocation')}
+                  isDisabled={typeof window !== "undefined" && !localStorage.getItem("userLocation")}
                 >
                   Clear
                 </Button>
