@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: false,
 
+  // Standalone output for optimized Docker deployments
+  output: "standalone",
+
   // Production optimizations
   compress: true,
   poweredByHeader: false,
@@ -60,6 +63,37 @@ const nextConfig = {
     maxInactiveAge: 60 * 1000,
     pagesBufferLength: 5,
   },
+
+  // Generate stable build ID using Coolify's SOURCE_COMMIT for version tracking
+  generateBuildId: async () => {
+    // Use SOURCE_COMMIT from Coolify, fallback to BUILD_ID or timestamp
+    return process.env.SOURCE_COMMIT || process.env.BUILD_ID || `build-${Date.now()}`;
+  },
+
+  // Headers to control caching and force refresh on deployment
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     return [
       {

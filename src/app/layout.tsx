@@ -13,6 +13,7 @@ import { AuthProvider } from "@/lib/context/AuthContext";
 import type { Viewport } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/lib/components/Common/Toaster";
+import DeploymentMonitor from "@/components/deployment-monitor";
 
 type Props = {
   children: React.ReactNode;
@@ -63,6 +64,7 @@ export default async function RootLayout({ children }: Props) {
       <body>
         <Toaster />
         <NextTopLoader color="#a41f13" showSpinner={false} />
+        <DeploymentMonitor />
 
         <AuthProvider>
           <NuqsAdapter>{children}</NuqsAdapter>

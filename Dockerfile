@@ -19,26 +19,29 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 # Set environment variables
 ARG NEXT_PUBLIC_BACKEND_HOST
+ARG SOURCE_COMMIT
 ENV NEXT_PUBLIC_BACKEND_HOST=${NEXT_PUBLIC_BACKEND_HOST}
-# Build the Next.js application
+ENV SOURCE_COMMIT=${SOURCE_COMMIT}
+# Build the Next.js application (will create standalone output)
 RUN npm run build
 
-# Stage 3: Runner
+# Stage 3: Runner (Standalone Mode)
 FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /usr/src/app
 # Set production environment
-ENV NODE_ENV production
+ENV NODE_ENV=production
+ARG SOURCE_COMMIT
+ENV SOURCE_COMMIT=${SOURCE_COMMIT}
 
-# Copy necessary files from builder
-COPY --from=builder /usr/src/app/next.config.mjs ./
+# Copy standalone output from builder
+COPY --from=builder /usr/src/app/.next/standalone ./
+COPY --from=builder /usr/src/app/.next/static ./.next/static
 COPY --from=builder /usr/src/app/public ./public
-COPY --from=builder /usr/src/app/.next ./.next
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package*.json ./
 
 # Create cache directory and set ownership to node user
 RUN mkdir -p .next/cache/images && \
-    chown -R node:node .next
+    chown -R node:node .next && \
+    chown -R node:node .
 
 # Run the application as a non-root user
 USER node
@@ -46,5 +49,5 @@ USER node
 # Expose the port that the application listens on
 EXPOSE 3000
 
-# Run the application
-CMD ["node_modules/.bin/next", "start"]
+# Run the standalone server
+CMD ["node", "server.js"]
