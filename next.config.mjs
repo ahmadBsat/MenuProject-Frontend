@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: false,
 
   // Standalone output for optimized Docker deployments
-  output: "standalone",
+  // TEMPORARILY DISABLED - Breaks subdomain routing
+  // output: "standalone",
 
   // Production optimizations
   compress: true,

@@ -25,7 +25,7 @@ ENV SOURCE_COMMIT=${SOURCE_COMMIT}
 # Build the Next.js application (will create standalone output)
 RUN npm run build
 
-# Stage 3: Runner (Standalone Mode)
+# Stage 3: Runner
 FROM node:${NODE_VERSION}-alpine AS runner
 WORKDIR /usr/src/app
 # Set production environment
@@ -33,15 +33,19 @@ ENV NODE_ENV=production
 ARG SOURCE_COMMIT
 ENV SOURCE_COMMIT=${SOURCE_COMMIT}
 
-# Copy standalone output from builder
-COPY --from=builder /usr/src/app/.next/standalone ./
-COPY --from=builder /usr/src/app/.next/static ./.next/static
+# Install curl for health checks (required by Coolify)
+RUN apk add --no-cache curl
+
+# Copy necessary files from builder
+COPY --from=builder /usr/src/app/next.config.mjs ./
 COPY --from=builder /usr/src/app/public ./public
+COPY --from=builder /usr/src/app/.next ./.next
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/package*.json ./
 
 # Create cache directory and set ownership to node user
 RUN mkdir -p .next/cache/images && \
-    chown -R node:node .next && \
-    chown -R node:node .
+    chown -R node:node .next
 
 # Run the application as a non-root user
 USER node
@@ -49,5 +53,10 @@ USER node
 # Expose the port that the application listens on
 EXPOSE 3000
 
-# Run the standalone server
-CMD ["node", "server.js"]
+# Add Docker health check for Coolify
+# Checks /api/health endpoint every 30s, allows 3 retries, 10s timeout
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Run the application
+CMD ["node_modules/.bin/next", "start"]
