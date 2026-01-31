@@ -16,13 +16,23 @@ _axios.interceptors.request.use(
     const preferredCurrency = getCookie("preferredCurrency");
 
     if (token) {
-      const parsedToken = JSON.parse(token);
-      config.headers["Authorization"] = `Bearer ${parsedToken}`;
+      try {
+        const parsedToken = JSON.parse(token);
+        config.headers["Authorization"] = `Bearer ${parsedToken}`;
+      } catch (error) {
+        console.error("Failed to parse FMC_token, clearing invalid token:", error);
+        localStorage.removeItem("FMC_token");
+      }
     }
 
     if (preference) {
-      const preference_parsed = JSON.parse(preference);
-      config.headers["X-Session-ID"] = preference_parsed?.state?.session_id || null;
+      try {
+        const preference_parsed = JSON.parse(preference);
+        config.headers["X-Session-ID"] = preference_parsed?.state?.session_id || null;
+      } catch (error) {
+        console.error("Failed to parse preferences-storage, clearing invalid data:", error);
+        localStorage.removeItem("preferences-storage");
+      }
     }
 
     if (preferredCurrency) {
