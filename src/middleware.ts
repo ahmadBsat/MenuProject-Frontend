@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
 
   if (
     origin !== "https://fmcshops.com" &&
-    origin !== "https://fmctest.xyz" &&
+    origin !== "https://fmc.solutions" &&
     origin !== "http://localhost:3000"
   ) {
     const newUrl = `/custom-domain`;

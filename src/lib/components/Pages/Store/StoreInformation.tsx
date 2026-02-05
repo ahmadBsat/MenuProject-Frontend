@@ -102,7 +102,7 @@ const StoreInformation = ({
             isInvalid={!!error}
             errorMessage={error}
             endContent={
-              <span className="text-sm text-default-400">.fmcshops.com</span>
+              <span className="text-sm text-default-400">.fmc.solutions</span>
             }
             onValueChange={(e) => handleDomainValueChange("domain", e)}
           />

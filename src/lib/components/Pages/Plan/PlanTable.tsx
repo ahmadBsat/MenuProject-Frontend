@@ -171,7 +171,7 @@ const PlansTable = () => {
         case "domain":
           return (
             <div className="flex flex-col gap-1 min-w-[230px]">
-              <p className="font-semibold">{`fmcshops.com/${store.domain}`}</p>
+              <p className="font-semibold">{`fmc.solutions/${store.domain}`}</p>
             </div>
           );
         case "is_active":
