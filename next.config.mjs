@@ -3,6 +3,10 @@ const nextConfig = {
   reactStrictMode: false,
   // Enable source maps in production for better error tracking
   productionBrowserSourceMaps: true,
+  // Enable instrumentation for process-level error handlers
+  experimental: {
+    instrumentationHook: true,
+  },
   images: {
     remotePatterns: [
       {

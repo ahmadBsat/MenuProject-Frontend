@@ -54,5 +54,9 @@ USER node
 # Expose the port that the application listens on
 EXPOSE 3000
 
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
 # Run the application
 CMD ["node_modules/.bin/next", "start"]
