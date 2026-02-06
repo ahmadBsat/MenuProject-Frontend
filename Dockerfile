@@ -48,6 +48,10 @@ COPY --from=builder /usr/src/app/.next ./.next
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package*.json ./
 
+# Create cache directories with proper permissions
+RUN mkdir -p .next/cache/images && \
+    chown -R node:node .next/cache
+
 # Run the application as a non-root user
 USER node
 
