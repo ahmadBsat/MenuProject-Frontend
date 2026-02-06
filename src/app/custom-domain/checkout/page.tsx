@@ -132,7 +132,7 @@ const Page = () => {
   }
 
   const get_whatsapp_message = () => {
-    if (!branch.phone_number) return;
+    if (!branch.phone_number || !String(branch.phone_number).trim()) return;
     const product_list = cart.products
       .map((product) => {
         const additions = product.additions
@@ -206,9 +206,9 @@ const Page = () => {
       .filter(Boolean)
       .join("\n\n");
 
-    return `${WHATSAPP_URI}?phone=${
+    return `${WHATSAPP_URI}?phone=${String(
       branch.phone_number
-    }&text=${encodeURIComponent(message)}`;
+    ).trim()}&text=${encodeURIComponent(message)}`;
   };
 
   const whatsapp_uri = get_whatsapp_message();

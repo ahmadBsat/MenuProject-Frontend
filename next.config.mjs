@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  // Enable source maps in production for better error tracking
+  productionBrowserSourceMaps: true,
   images: {
     remotePatterns: [
       {
