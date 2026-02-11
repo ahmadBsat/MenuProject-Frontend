@@ -62,10 +62,10 @@ const CategoriesTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(CATEGORY_VISIBLE_COL)
+    new Set(CATEGORY_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -77,7 +77,7 @@ const CategoriesTable = () => {
     if (visibleColumns === "all") return CATEGORY_COLUMNS;
 
     return CATEGORY_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -151,7 +151,7 @@ const CategoriesTable = () => {
                   href={getUrl(
                     build_path(URLs.store.category.get_id, {
                       id: category._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -178,7 +178,7 @@ const CategoriesTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (category: Category) => {
@@ -229,7 +229,7 @@ const CategoriesTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((category) =>
-        category.name.toLowerCase().includes(searchValue.toLowerCase())
+        category.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
@@ -265,10 +265,12 @@ const CategoriesTable = () => {
     setCategories({
       data: paginatedCategories,
       meta: {
+        count: filteredCategories.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredCategories.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedCategories, filteredCategories, query.page, query.limit]);

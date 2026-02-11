@@ -60,10 +60,10 @@ const ProductItemsTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(BRANCH_VISIBLE_COL)
+    new Set(BRANCH_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -74,7 +74,7 @@ const ProductItemsTable = () => {
     if (visibleColumns === "all") return BRANCH_COLUMNS;
 
     return BRANCH_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -139,7 +139,7 @@ const ProductItemsTable = () => {
                   href={getUrl(
                     build_path(URLs.store.product_items.get_id, {
                       id: item._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -166,7 +166,7 @@ const ProductItemsTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (item: ProductItem) => {
@@ -180,7 +180,7 @@ const ProductItemsTable = () => {
     try {
       setProcessing(true);
       const result = await API_PRODUCT_ITEMS.deleteProductItem(
-        selectedProductItem._id
+        selectedProductItem._id,
       );
 
       if (result.success) {
@@ -219,7 +219,7 @@ const ProductItemsTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((item) =>
-        item.name.toLowerCase().includes(searchValue.toLowerCase())
+        item.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
@@ -255,10 +255,12 @@ const ProductItemsTable = () => {
     setItems({
       data: paginatedItems,
       meta: {
+        count: filteredItems.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredItems.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedItems, filteredItems, query.page, query.limit]);

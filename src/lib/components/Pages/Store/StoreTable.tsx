@@ -62,10 +62,10 @@ const StoresTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(STORE_VISIBLE_COL)
+    new Set(STORE_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ const StoresTable = () => {
     if (visibleColumns === "all") return STORE_COLUMNS;
 
     return STORE_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -193,7 +193,7 @@ const StoresTable = () => {
                   href={getUrl(
                     build_path(URLs.admin.stores.get_id, {
                       store_id: store._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -220,7 +220,7 @@ const StoresTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (store: Store) => {
@@ -272,7 +272,7 @@ const StoresTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((store) =>
-        store.name.toLowerCase().includes(searchValue.toLowerCase())
+        store.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
@@ -308,10 +308,12 @@ const StoresTable = () => {
     setStores({
       data: paginatedStores,
       meta: {
+        count: filteredStores.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredStores.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedStores, filteredStores, query.page, query.limit]);

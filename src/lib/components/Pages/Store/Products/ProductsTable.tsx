@@ -62,10 +62,10 @@ const ProductsTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(PRODUCT_VISIBLE_COL)
+    new Set(PRODUCT_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -79,7 +79,7 @@ const ProductsTable = () => {
     if (visibleColumns === "all") return PRODUCT_COLUMNS;
 
     return PRODUCT_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -198,7 +198,7 @@ const ProductsTable = () => {
                   href={getUrl(
                     build_path(URLs.store.products.get_id, {
                       id: product._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -225,7 +225,7 @@ const ProductsTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (product: Product) => {
@@ -277,7 +277,7 @@ const ProductsTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchValue.toLowerCase())
+        product.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
@@ -313,10 +313,12 @@ const ProductsTable = () => {
     setProducts({
       data: paginatedProducts,
       meta: {
+        count: filteredProducts.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredProducts.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedProducts, filteredProducts, query.page, query.limit]);

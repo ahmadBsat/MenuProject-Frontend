@@ -276,6 +276,7 @@ const SectionsTable = () => {
         const aValue = a[query.sortField as keyof Section];
         const bValue = b[query.sortField as keyof Section];
 
+        if (aValue === undefined || bValue === undefined) return 0;
         if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
         if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
         return 0;
@@ -302,10 +303,12 @@ const SectionsTable = () => {
     setSections({
       data: paginatedSections,
       meta: {
+        count: filteredSections.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredSections.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedSections, filteredSections, query.page, query.limit]);

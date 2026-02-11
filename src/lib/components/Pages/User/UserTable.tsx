@@ -61,10 +61,10 @@ const UsersTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(USER_VISIBLE_COL)
+    new Set(USER_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -78,7 +78,7 @@ const UsersTable = () => {
     if (visibleColumns === "all") return USER_COLUMNS;
 
     return USER_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -177,7 +177,7 @@ const UsersTable = () => {
                   href={getUrl(
                     build_path(URLs.admin.users.get_id, {
                       user_id: user._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -204,7 +204,7 @@ const UsersTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (user: User) => {
@@ -257,8 +257,10 @@ const UsersTable = () => {
     if (searchValue) {
       filtered = filtered.filter((user) => {
         const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
-        return fullName.includes(searchValue.toLowerCase()) ||
-               user.email?.toLowerCase().includes(searchValue.toLowerCase());
+        return (
+          fullName.includes(searchValue.toLowerCase()) ||
+          user.email?.toLowerCase().includes(searchValue.toLowerCase())
+        );
       });
     }
 
@@ -294,10 +296,12 @@ const UsersTable = () => {
     setUsers({
       data: paginatedUsers,
       meta: {
+        count: filteredUsers.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredUsers.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedUsers, filteredUsers, query.page, query.limit]);

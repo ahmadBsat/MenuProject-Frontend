@@ -137,7 +137,7 @@ const BannersTable = () => {
             isClearable
             className="w-full sm:max-w-[44%]"
             classNames={INPUT_STYLE}
-            placeholder="Search by name"
+            placeholder="Search by ID"
             startContent={<AiOutlineSearch />}
             value={searchValue}
             onClear={() => onClear()}
@@ -263,7 +263,7 @@ const BannersTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((banner) =>
-        banner.name?.toLowerCase().includes(searchValue.toLowerCase())
+        banner._id.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
@@ -299,10 +299,12 @@ const BannersTable = () => {
     setBanners({
       data: paginatedBanners,
       meta: {
+        count: filteredBanners.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredBanners.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedBanners, filteredBanners, query.page, query.limit]);

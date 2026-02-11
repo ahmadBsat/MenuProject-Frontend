@@ -255,10 +255,12 @@ const BranchesTable = () => {
     setBranchs({
       data: paginatedBranches,
       meta: {
+        count: filteredBranches.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredBranches.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedBranches, filteredBranches, query.page, query.limit]);

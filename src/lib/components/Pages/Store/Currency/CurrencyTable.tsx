@@ -60,10 +60,10 @@ const CurrenciesTable = () => {
     },
     {
       history: "push",
-    }
+    },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(BRANCH_VISIBLE_COL)
+    new Set(BRANCH_VISIBLE_COL),
   );
 
   const [loading, setLoading] = useState(true);
@@ -74,7 +74,7 @@ const CurrenciesTable = () => {
     if (visibleColumns === "all") return BRANCH_COLUMNS;
 
     return BRANCH_COLUMNS.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -139,7 +139,7 @@ const CurrenciesTable = () => {
                   href={getUrl(
                     build_path(URLs.store.currencies.get_id, {
                       id: currency._id,
-                    })
+                    }),
                   )}
                   isIconOnly
                   size="sm"
@@ -166,7 +166,7 @@ const CurrenciesTable = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen]
+    [onOpen],
   );
 
   const deleteModal = (currency: Currency) => {
@@ -217,7 +217,7 @@ const CurrenciesTable = () => {
     // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((currency) =>
-        currency.name.toLowerCase().includes(searchValue.toLowerCase())
+        currency.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
@@ -253,10 +253,12 @@ const CurrenciesTable = () => {
     setCurrencies({
       data: paginatedCurrencies,
       meta: {
+        count: filteredCurrencies.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredCurrencies.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedCurrencies, filteredCurrencies, query.page, query.limit]);

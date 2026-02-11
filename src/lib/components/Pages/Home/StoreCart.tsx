@@ -3,6 +3,7 @@
 
 import { getUrl, URLs } from "@/lib/constants/urls";
 import { useCart } from "@/lib/context/CartContext";
+import { CartProduct } from "@/lib/types/cart";
 import { StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { format_pricing } from "@/utils/common";
@@ -22,7 +23,16 @@ import {
   DrawerTrigger,
 } from "../../Common/drawer";
 
-const CartItem = memo(({ product, additions, store, index, open, setOpenIndex }) => {
+interface CartItemProps {
+  product: CartProduct;
+  additions: string[];
+  store: StorePopulated;
+  index: number;
+  open: boolean;
+  setOpenIndex: (index: number | null) => void;
+}
+
+const CartItem = memo(({ product, additions, store, index, open, setOpenIndex }: CartItemProps) => {
   const [instructions, setInstructions] = useState(product.instructions || "");
 
   const { currency } = usePreference();
@@ -33,11 +43,11 @@ const CartItem = memo(({ product, additions, store, index, open, setOpenIndex })
   // Submit function
   const handleSubmit = useCallback(async (index: number, updatedInstructions: string) => {
     try {
-      await updateCart({ store, index, instructions: updatedInstructions });
+      await updateCart({ store: store._id, index, instructions: updatedInstructions });
     } catch (error) {
       console.error("Error updating cart:", error);
     }
-  }, [updateCart, store]);
+  }, [updateCart, store._id]);
 
   // Auto-save effect (debounced)
   useEffect(() => {
@@ -163,6 +173,8 @@ const CartItem = memo(({ product, additions, store, index, open, setOpenIndex })
     </div>
   );
 });
+
+CartItem.displayName = "CartItem";
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();

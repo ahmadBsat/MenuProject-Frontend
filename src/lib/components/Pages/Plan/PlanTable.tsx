@@ -328,10 +328,12 @@ const PlansTable = () => {
     setStores({
       data: paginatedStores,
       meta: {
+        count: filteredStores.length,
         page: query.page,
-        total_pages: totalPages,
-        total_items: filteredStores.length,
         limit: limit,
+        total_pages: totalPages,
+        has_next: query.page < totalPages,
+        has_previous: query.page > 1,
       },
     });
   }, [paginatedStores, filteredStores, query.page, query.limit]);
