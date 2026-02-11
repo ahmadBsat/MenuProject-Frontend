@@ -11,7 +11,7 @@ import { Badge, Button, Textarea } from "@nextui-org/react";
 import { ChevronRight, Minus, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -22,13 +22,22 @@ import {
   DrawerTrigger,
 } from "../../Common/drawer";
 
-const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
+const CartItem = memo(({ product, additions, store, index, open, setOpenIndex }) => {
   const [instructions, setInstructions] = useState(product.instructions || "");
 
   const { currency } = usePreference();
   const { addToCart, removeFromCart, updateCart } = useCart();
 
   const currencies = { USD: "$", LBP: "LBP" };
+
+  // Submit function
+  const handleSubmit = useCallback(async (index: number, updatedInstructions: string) => {
+    try {
+      await updateCart({ store, index, instructions: updatedInstructions });
+    } catch (error) {
+      console.error("Error updating cart:", error);
+    }
+  }, [updateCart, store]);
 
   // Auto-save effect (debounced)
   useEffect(() => {
@@ -39,16 +48,7 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
     }, 1000); // Adjust delay as needed (1s)
 
     return () => clearTimeout(delaySave); // Cleanup function on re-typing
-  }, [instructions]); // Runs only when `instructions` change
-
-  // Submit function
-  const handleSubmit = async (index: number, updatedInstructions: string) => {
-    try {
-      await updateCart({ store, index, instructions: updatedInstructions });
-    } catch (error) {
-      console.error("Error updating cart:", error);
-    }
-  };
+  }, [instructions, product.instructions, index, handleSubmit]); // Runs only when `instructions` change
 
   return (
     <div className="flex gap-4 w-full items-center">
@@ -119,6 +119,7 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
               isIconOnly
               color="primary"
               variant="ghost"
+              isDisabled={open}
               onClick={() => {
                 removeFromCart(product._id, store._id, additions);
               }}
@@ -133,6 +134,7 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
               isIconOnly
               color="primary"
               variant="ghost"
+              isDisabled={open}
               onClick={() => {
                 addToCart({
                   store: store._id,
@@ -160,11 +162,11 @@ const CartItem = ({ product, additions, store, index, open, setOpenIndex }) => {
       </div>
     </div>
   );
-};
+});
 
 const StoreCart = ({ store }: { store: StorePopulated }) => {
   const { currency } = usePreference();
-  const { cart, setCartOpen, cartOpen, resetCart } = useCart();
+  const { cart, setCartOpen, cartOpen, resetCart, subLoading } = useCart();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const currentHost = window.location.hostname;
@@ -215,6 +217,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   color:
                     store.palette.clear_button_color || store.palette.color,
                 }}
+                isDisabled={subLoading}
                 // isIconOnly
                 onClick={async () => {
                   await resetCart({ store: store._id });
@@ -327,6 +330,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                   onPress={() => {
                     setCartOpen(false);
                   }}
+                  isDisabled={subLoading}
                   color="success"
                 >
                   Checkout

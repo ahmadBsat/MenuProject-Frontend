@@ -49,11 +49,12 @@ const ProductItemsTable = () => {
     data: [],
     meta: INITIAL_META,
   });
+  const [allItems, setAllItems] = useState<ProductItem[]>([]); // Store all data for client-side filtering
+  const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
-      search: parseAsString,
       sortField: parseAsString.withDefault("createdAt"),
       sortOrder: parseAsString.withDefault("ascending"),
     },
@@ -78,13 +79,15 @@ const ProductItemsTable = () => {
   }, [visibleColumns]);
 
   const onSearchChange = useCallback((value: string) => {
-    setQuery({ search: value !== "" ? value : null, page: 1 });
+    setSearchValue(value);
+    setQuery({ page: 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClear = useCallback(() => {
-    setQuery({ search: null, page: 1 });
+    setSearchValue("");
+    setQuery({ page: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -108,7 +111,7 @@ const ProductItemsTable = () => {
             classNames={INPUT_STYLE}
             placeholder="Search by name"
             startContent={<AiOutlineSearch />}
-            value={query.search ?? ""}
+            value={searchValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
@@ -116,7 +119,7 @@ const ProductItemsTable = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (item: ProductItem, columnKey: React.Key) => {
@@ -191,14 +194,14 @@ const ProductItemsTable = () => {
     }
   };
 
+  // Fetch all items once on mount
   const getProductItemes = async () => {
     try {
       setLoading(true);
-      const serialize = createSerializer(searchParams);
-      const request = serialize(query);
+      // Fetch all items without pagination for client-side filtering
+      const res = await API_PRODUCT_ITEMS.getAllProductItems();
 
-      const res = await API_PRODUCT_ITEMS.getAllProductItems(request);
-
+      setAllItems(res.data);
       setItems(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
@@ -209,19 +212,62 @@ const ProductItemsTable = () => {
     }
   };
 
-  useDebounce(
-    () => {
-      getProductItemes();
-    },
-    [query.search],
-    1200
-  );
+  // Client-side filtering and pagination
+  const filteredItems = useMemo(() => {
+    let filtered = [...allItems];
+
+    // Apply search filter
+    if (searchValue) {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (query.sortField) {
+      filtered.sort((a, b) => {
+        const aValue = a[query.sortField as keyof ProductItem];
+        const bValue = b[query.sortField as keyof ProductItem];
+
+        if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
+        if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [allItems, searchValue, query.sortField, query.sortOrder]);
+
+  // Client-side pagination
+  const paginatedItems = useMemo(() => {
+    const limit = parseInt(query.limit);
+    const startIndex = (query.page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return filteredItems.slice(startIndex, endIndex);
+  }, [filteredItems, query.page, query.limit]);
+
+  // Update items state when filtered/paginated data changes
+  useEffect(() => {
+    const limit = parseInt(query.limit);
+    const totalPages = Math.ceil(filteredItems.length / limit);
+
+    setItems({
+      data: paginatedItems,
+      meta: {
+        page: query.page,
+        total_pages: totalPages,
+        total_items: filteredItems.length,
+        limit: limit,
+      },
+    });
+  }, [paginatedItems, filteredItems, query.page, query.limit]);
 
   useEffect(() => {
     getProductItemes();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.page, query.sortField, query.sortOrder]);
+  }, []);
 
   return (
     <>

@@ -52,11 +52,12 @@ const BannersTable = () => {
     data: [],
     meta: INITIAL_META,
   });
+  const [allBanners, setAllBanners] = useState<Banner[]>([]); // Store all data for client-side filtering
+  const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
-      search: parseAsString,
       sortField: parseAsString.withDefault("createdAt"),
       sortOrder: parseAsString.withDefault("ascending"),
     },
@@ -84,13 +85,15 @@ const BannersTable = () => {
   }, [visibleColumns]);
 
   const onSearchChange = useCallback((value: string) => {
-    setQuery({ search: value !== "" ? value : null, page: 1 });
+    setSearchValue(value);
+    setQuery({ page: 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClear = useCallback(() => {
-    setQuery({ search: null, page: 1 });
+    setSearchValue("");
+    setQuery({ page: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,26 +128,26 @@ const BannersTable = () => {
     }
   };
 
-  // const topContent = useMemo(() => {
-  //   return (
-  //     <div className="flex flex-col gap-4">
-  //       <div className="flex justify-between gap-3 items-end">
-  //         <Input
-  //           size="lg"
-  //           isClearable
-  //           className="w-full sm:max-w-[44%]"
-  //           classNames={INPUT_STYLE}
-  //           placeholder="Search by name"
-  //           startContent={<AiOutlineSearch />}
-  //           value={query.search ?? ""}
-  //           onClear={() => onClear()}
-  //           onValueChange={onSearchChange}
-  //         />
-  //       </div>
-  //     </div>
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between gap-3 items-end">
+          <Input
+            size="lg"
+            isClearable
+            className="w-full sm:max-w-[44%]"
+            classNames={INPUT_STYLE}
+            placeholder="Search by name"
+            startContent={<AiOutlineSearch />}
+            value={searchValue}
+            onClear={() => onClear()}
+            onValueChange={onSearchChange}
+          />
+        </div>
+      </div>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (banner: Banner, columnKey: React.Key) => {
@@ -234,14 +237,14 @@ const BannersTable = () => {
     }
   };
 
+  // Fetch all banners once on mount
   const getBanners = async () => {
     try {
       setLoading(true);
-      const serialize = createSerializer(searchParams);
-      const request = serialize(query);
+      // Fetch all banners without pagination for client-side filtering
+      const res = await API_BANNER.getAllBanners();
 
-      const res = await API_BANNER.getAllBanners(request);
-
+      setAllBanners(res.data);
       setBanners(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
@@ -253,19 +256,62 @@ const BannersTable = () => {
     }
   };
 
-  useDebounce(
-    () => {
-      getBanners();
-    },
-    [query.search],
-    1200
-  );
+  // Client-side filtering and pagination
+  const filteredBanners = useMemo(() => {
+    let filtered = [...allBanners];
+
+    // Apply search filter
+    if (searchValue) {
+      filtered = filtered.filter((banner) =>
+        banner.name?.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (query.sortField) {
+      filtered.sort((a, b) => {
+        const aValue = a[query.sortField as keyof Banner];
+        const bValue = b[query.sortField as keyof Banner];
+
+        if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
+        if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [allBanners, searchValue, query.sortField, query.sortOrder]);
+
+  // Client-side pagination
+  const paginatedBanners = useMemo(() => {
+    const limit = parseInt(query.limit);
+    const startIndex = (query.page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return filteredBanners.slice(startIndex, endIndex);
+  }, [filteredBanners, query.page, query.limit]);
+
+  // Update banners state when filtered/paginated data changes
+  useEffect(() => {
+    const limit = parseInt(query.limit);
+    const totalPages = Math.ceil(filteredBanners.length / limit);
+
+    setBanners({
+      data: paginatedBanners,
+      meta: {
+        page: query.page,
+        total_pages: totalPages,
+        total_items: filteredBanners.length,
+        limit: limit,
+      },
+    });
+  }, [paginatedBanners, filteredBanners, query.page, query.limit]);
 
   useEffect(() => {
     getBanners();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.page, query.sortField, query.sortOrder]);
+  }, []);
 
   return (
     <>
@@ -280,7 +326,7 @@ const BannersTable = () => {
           setPage={(v) => setQuery({ page: v })}
           columns={headerColumns}
           data={banners?.data}
-          // topContent={topContent}
+          topContent={topContent}
           selectedKeys={selectedKeys}
           sortDescriptor={{
             column: query.sortField as any,

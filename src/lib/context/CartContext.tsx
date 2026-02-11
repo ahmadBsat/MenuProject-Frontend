@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
     setSubLoading(false);
   };
 
-  const addToCart = async (item: {
+  const addToCart = useCallback(async (item: {
     product_id: string;
     product_additions: any[];
     quantity: number;
@@ -107,9 +107,9 @@ export const CartProvider = ({ children }) => {
     } finally {
       setSubLoading(false);
     }
-  };
+  }, []);
 
-  const resetCart = async (data: { store: string }) => {
+  const resetCart = useCallback(async (data: { store: string }) => {
     setSubLoading(true);
 
     try {
@@ -120,9 +120,9 @@ export const CartProvider = ({ children }) => {
     } finally {
       setSubLoading(false);
     }
-  };
+  }, []);
 
-  const removeFromCart = async (
+  const removeFromCart = useCallback(async (
     product_id: string,
     store_id: string,
     options?: string[]
@@ -143,9 +143,9 @@ export const CartProvider = ({ children }) => {
     } finally {
       handleOpenClose();
     }
-  };
+  }, []);
 
-  const updateCart = async (data: {
+  const updateCart = useCallback(async (data: {
     index: number;
     store: string;
     instructions: string;
@@ -160,7 +160,7 @@ export const CartProvider = ({ children }) => {
     } finally {
       setSubLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     getUserCart();

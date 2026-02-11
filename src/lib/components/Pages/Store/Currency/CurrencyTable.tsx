@@ -49,11 +49,12 @@ const CurrenciesTable = () => {
     data: [],
     meta: INITIAL_META,
   });
+  const [allCurrencies, setAllCurrencies] = useState<Currency[]>([]); // Store all data for client-side filtering
+  const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
-      search: parseAsString,
       sortField: parseAsString,
       sortOrder: parseAsString,
     },
@@ -78,13 +79,15 @@ const CurrenciesTable = () => {
   }, [visibleColumns]);
 
   const onSearchChange = useCallback((value: string) => {
-    setQuery({ search: value !== "" ? value : null, page: 1 });
+    setSearchValue(value);
+    setQuery({ page: 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClear = useCallback(() => {
-    setQuery({ search: null, page: 1 });
+    setSearchValue("");
+    setQuery({ page: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -108,7 +111,7 @@ const CurrenciesTable = () => {
             classNames={INPUT_STYLE}
             placeholder="Search by name"
             startContent={<AiOutlineSearch />}
-            value={query.search ?? ""}
+            value={searchValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
@@ -116,7 +119,7 @@ const CurrenciesTable = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (currency: Currency, columnKey: React.Key) => {
@@ -189,14 +192,14 @@ const CurrenciesTable = () => {
     }
   };
 
+  // Fetch all currencies once on mount
   const getCurrencyes = async () => {
     try {
       setLoading(true);
-      const serialize = createSerializer(searchParams);
-      const request = serialize(query);
+      // Fetch all currencies without pagination for client-side filtering
+      const res = await API_CURRENCY.getAllCurrencies();
 
-      const res = await API_CURRENCY.getAllCurrencies(request);
-
+      setAllCurrencies(res.data);
       setCurrencies(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
@@ -207,19 +210,62 @@ const CurrenciesTable = () => {
     }
   };
 
-  useDebounce(
-    () => {
-      getCurrencyes();
-    },
-    [query.search],
-    1200
-  );
+  // Client-side filtering and pagination
+  const filteredCurrencies = useMemo(() => {
+    let filtered = [...allCurrencies];
+
+    // Apply search filter
+    if (searchValue) {
+      filtered = filtered.filter((currency) =>
+        currency.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (query.sortField) {
+      filtered.sort((a, b) => {
+        const aValue = a[query.sortField as keyof Currency];
+        const bValue = b[query.sortField as keyof Currency];
+
+        if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
+        if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [allCurrencies, searchValue, query.sortField, query.sortOrder]);
+
+  // Client-side pagination
+  const paginatedCurrencies = useMemo(() => {
+    const limit = parseInt(query.limit);
+    const startIndex = (query.page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return filteredCurrencies.slice(startIndex, endIndex);
+  }, [filteredCurrencies, query.page, query.limit]);
+
+  // Update currencies state when filtered/paginated data changes
+  useEffect(() => {
+    const limit = parseInt(query.limit);
+    const totalPages = Math.ceil(filteredCurrencies.length / limit);
+
+    setCurrencies({
+      data: paginatedCurrencies,
+      meta: {
+        page: query.page,
+        total_pages: totalPages,
+        total_items: filteredCurrencies.length,
+        limit: limit,
+      },
+    });
+  }, [paginatedCurrencies, filteredCurrencies, query.page, query.limit]);
 
   useEffect(() => {
     getCurrencyes();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.page, query.sortField, query.sortOrder]);
+  }, []);
 
   return (
     <>

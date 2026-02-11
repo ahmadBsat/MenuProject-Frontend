@@ -29,7 +29,7 @@ const ProductCart = ({
 }) => {
   const { palette, store } = usePreference();
   const { name, description, additions } = product;
-  const { addToCart } = useCart();
+  const { addToCart, subLoading } = useCart();
   const { currency } = usePreference();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Record<string, string[]>>({});
@@ -142,6 +142,7 @@ const ProductCart = ({
             </DrawerClose>
             <Button
               color="success"
+              isDisabled={subLoading}
               onClick={() => {
                 setOpen(false);
                 addToCart({
@@ -164,6 +165,7 @@ const ProductCart = ({
     <Button
       isIconOnly
       style={{ background: palette.primary }}
+      isDisabled={subLoading}
       onPress={() => {
         setOpen(false);
         addToCart({

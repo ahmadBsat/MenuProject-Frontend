@@ -50,11 +50,12 @@ const UsersTable = () => {
     data: [],
     meta: INITIAL_META,
   });
+  const [allUsers, setAllUsers] = useState<User[]>([]); // Store all data for client-side filtering
+  const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
-      search: parseAsString,
       sortField: parseAsString.withDefault("createdAt"),
       sortOrder: parseAsString.withDefault("ascending"),
     },
@@ -82,13 +83,15 @@ const UsersTable = () => {
   }, [visibleColumns]);
 
   const onSearchChange = useCallback((value: string) => {
-    setQuery({ search: value !== "" ? value : null, page: 1 });
+    setSearchValue(value);
+    setQuery({ page: 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClear = useCallback(() => {
-    setQuery({ search: null, page: 1 });
+    setSearchValue("");
+    setQuery({ page: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -134,7 +137,7 @@ const UsersTable = () => {
             classNames={INPUT_STYLE}
             placeholder="Search by name"
             startContent={<AiOutlineSearch />}
-            value={query.search ?? ""}
+            value={searchValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
@@ -142,7 +145,7 @@ const UsersTable = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (user: User, columnKey: React.Key) => {
@@ -227,14 +230,14 @@ const UsersTable = () => {
     }
   };
 
+  // Fetch all users once on mount
   const getUsers = async () => {
     try {
       setLoading(true);
-      const serialize = createSerializer(searchParams);
-      const request = serialize(query);
+      // Fetch all users without pagination for client-side filtering
+      const res = await API_USER.getAllUsers();
 
-      const res = await API_USER.getAllUsers(request);
-
+      setAllUsers(res.data);
       setUsers(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
@@ -246,19 +249,63 @@ const UsersTable = () => {
     }
   };
 
-  useDebounce(
-    () => {
-      getUsers();
-    },
-    [query.search],
-    1200
-  );
+  // Client-side filtering and pagination
+  const filteredUsers = useMemo(() => {
+    let filtered = [...allUsers];
+
+    // Apply search filter
+    if (searchValue) {
+      filtered = filtered.filter((user) => {
+        const fullName = `${user.firstname} ${user.lastname}`.toLowerCase();
+        return fullName.includes(searchValue.toLowerCase()) ||
+               user.email?.toLowerCase().includes(searchValue.toLowerCase());
+      });
+    }
+
+    // Apply sorting
+    if (query.sortField) {
+      filtered.sort((a, b) => {
+        const aValue = a[query.sortField as keyof User];
+        const bValue = b[query.sortField as keyof User];
+
+        if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
+        if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [allUsers, searchValue, query.sortField, query.sortOrder]);
+
+  // Client-side pagination
+  const paginatedUsers = useMemo(() => {
+    const limit = parseInt(query.limit);
+    const startIndex = (query.page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return filteredUsers.slice(startIndex, endIndex);
+  }, [filteredUsers, query.page, query.limit]);
+
+  // Update users state when filtered/paginated data changes
+  useEffect(() => {
+    const limit = parseInt(query.limit);
+    const totalPages = Math.ceil(filteredUsers.length / limit);
+
+    setUsers({
+      data: paginatedUsers,
+      meta: {
+        page: query.page,
+        total_pages: totalPages,
+        total_items: filteredUsers.length,
+        limit: limit,
+      },
+    });
+  }, [paginatedUsers, filteredUsers, query.page, query.limit]);
 
   useEffect(() => {
     getUsers();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.page, query.sortField, query.sortOrder]);
+  }, []);
 
   return (
     <>

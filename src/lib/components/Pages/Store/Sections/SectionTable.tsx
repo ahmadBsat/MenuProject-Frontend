@@ -52,11 +52,12 @@ const SectionsTable = () => {
     data: [],
     meta: INITIAL_META,
   });
+  const [allSections, setAllSections] = useState<Section[]>([]); // Store all data for client-side filtering
+  const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
       limit: parseAsString.withDefault("25"),
-      search: parseAsString,
       sortField: parseAsString.withDefault("createdAt"),
       sortOrder: parseAsString.withDefault("ascending"),
     },
@@ -84,13 +85,15 @@ const SectionsTable = () => {
   }, [visibleColumns]);
 
   const onSearchChange = useCallback((value: string) => {
-    setQuery({ search: value !== "" ? value : null, page: 1 });
+    setSearchValue(value);
+    setQuery({ page: 1 });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onClear = useCallback(() => {
-    setQuery({ search: null, page: 1 });
+    setSearchValue("");
+    setQuery({ page: 1 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -136,7 +139,7 @@ const SectionsTable = () => {
             classNames={INPUT_STYLE}
             placeholder="Search by name"
             startContent={<AiOutlineSearch />}
-            value={query.search ?? ""}
+            value={searchValue}
             onClear={() => onClear()}
             onValueChange={onSearchChange}
           />
@@ -144,7 +147,7 @@ const SectionsTable = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.search, onSearchChange, status, visibleColumns, onClear]);
+  }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
   const renderCell = useCallback(
     (section: Section, columnKey: React.Key) => {
@@ -237,14 +240,14 @@ const SectionsTable = () => {
     }
   };
 
+  // Fetch all sections once on mount
   const getSections = async () => {
     try {
       setLoading(true);
-      const serialize = createSerializer(searchParams);
-      const request = serialize(query);
+      // Fetch all sections without pagination for client-side filtering
+      const res = await API_SECTION.getAllSections();
 
-      const res = await API_SECTION.getAllSections(request);
-
+      setAllSections(res.data);
       setSections(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
@@ -256,19 +259,62 @@ const SectionsTable = () => {
     }
   };
 
-  useDebounce(
-    () => {
-      getSections();
-    },
-    [query.search],
-    1200
-  );
+  // Client-side filtering and pagination
+  const filteredSections = useMemo(() => {
+    let filtered = [...allSections];
+
+    // Apply search filter
+    if (searchValue) {
+      filtered = filtered.filter((section) =>
+        section.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (query.sortField) {
+      filtered.sort((a, b) => {
+        const aValue = a[query.sortField as keyof Section];
+        const bValue = b[query.sortField as keyof Section];
+
+        if (aValue < bValue) return query.sortOrder === "ascending" ? -1 : 1;
+        if (aValue > bValue) return query.sortOrder === "ascending" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [allSections, searchValue, query.sortField, query.sortOrder]);
+
+  // Client-side pagination
+  const paginatedSections = useMemo(() => {
+    const limit = parseInt(query.limit);
+    const startIndex = (query.page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    return filteredSections.slice(startIndex, endIndex);
+  }, [filteredSections, query.page, query.limit]);
+
+  // Update sections state when filtered/paginated data changes
+  useEffect(() => {
+    const limit = parseInt(query.limit);
+    const totalPages = Math.ceil(filteredSections.length / limit);
+
+    setSections({
+      data: paginatedSections,
+      meta: {
+        page: query.page,
+        total_pages: totalPages,
+        total_items: filteredSections.length,
+        limit: limit,
+      },
+    });
+  }, [paginatedSections, filteredSections, query.page, query.limit]);
 
   useEffect(() => {
     getSections();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query.page, query.sortField, query.sortOrder]);
+  }, []);
 
   return (
     <>
