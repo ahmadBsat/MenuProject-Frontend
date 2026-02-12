@@ -71,6 +71,7 @@ export const PRODUCT_INITIAL: ProductForm = {
   category: [],
   description: "",
   extra_information: "",
+  notes: "",
   images: [],
   is_active: true,
   name: "",

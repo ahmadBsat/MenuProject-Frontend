@@ -126,6 +126,11 @@ const ProductCard = ({
                       <div className="font-normal text-zinc-500 mt-5">
                         {product.description}
                       </div>
+                      {product.notes && (
+                        <div className="font-normal text-zinc-400 mt-2 text-sm italic">
+                          {product.notes}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </DrawerTitle>
@@ -148,6 +153,11 @@ const ProductCard = ({
         <p className="text-sm font-medium mt-2 line-clamp-1">
           {product.description}
         </p>
+        {product.notes && (
+          <p className="text-xs font-normal mt-1 text-zinc-400 line-clamp-1 italic">
+            {product.notes}
+          </p>
+        )}
       </div>
     </Drawer>
   );
