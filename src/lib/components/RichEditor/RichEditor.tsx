@@ -14,7 +14,6 @@ import Paragraph from "@tiptap/extension-paragraph";
 
 interface RichEditorProps {
   label?: string;
-  placeholder?: string;
   value: string;
   onChange: (content: string) => void;
 }
@@ -60,7 +59,6 @@ const CustomEnter = Extension.create({
 
 export default function RichEditor({
   label,
-  placeholder,
   value,
   onChange,
 }: RichEditorProps) {

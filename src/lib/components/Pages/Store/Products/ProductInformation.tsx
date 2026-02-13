@@ -46,7 +46,6 @@ const ProductInformation = ({ product, handleChange }) => {
 
       <RichEditor
         label="Notes XD"
-        placeholder="Enter notes"
         value={product.notes}
         onChange={(value) => handleChange("notes", value)}
       />
