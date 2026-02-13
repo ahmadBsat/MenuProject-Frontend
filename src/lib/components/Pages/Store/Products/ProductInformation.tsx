@@ -4,6 +4,7 @@ import { Input, Textarea } from "@nextui-org/react";
 import ProductRelation from "./ProductRelation";
 import ProductPricing from "./ProductPricing";
 import ProductUpload from "./ProductUpload";
+import RichEditor from "@/lib/components/RichEditor/RichEditor";
 
 const ProductInformation = ({ product, handleChange }) => {
   return (
@@ -36,11 +37,18 @@ const ProductInformation = ({ product, handleChange }) => {
         onValueChange={(e) => handleChange("extra_information", e)}
       />
 
-      <Textarea
+      {/* <Textarea
         label="Notes"
         placeholder="Enter notes"
         value={product.notes}
         onValueChange={(e) => handleChange("notes", e)}
+      /> */}
+
+      <RichEditor
+        label="Notes XD"
+        placeholder="Enter notes"
+        value={product.notes}
+        onChange={(value) => handleChange("notes", value)}
       />
 
       <ProductPricing product={product} handleChange={handleChange} />
