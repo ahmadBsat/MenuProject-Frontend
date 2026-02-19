@@ -4,7 +4,9 @@ import { Input, Textarea } from "@nextui-org/react";
 import ProductRelation from "./ProductRelation";
 import ProductPricing from "./ProductPricing";
 import ProductUpload from "./ProductUpload";
-import RichEditor from "@/lib/components/RichEditor/RichEditor";
+import dynamic from "next/dynamic";
+
+const RichEditor = dynamic(() => import("@/lib/components/RichEditor/RichEditor"), { ssr: false });
 
 const ProductInformation = ({ product, handleChange }) => {
   return (

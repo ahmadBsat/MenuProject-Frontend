@@ -154,7 +154,7 @@ const GeneralizedTable = ({
       disabledKeys={disabledKeys}
       color="primary"
       sortDescriptor={sortDescriptor}
-      selectedKeys={selectedKeys}
+      {...(selectedKeys !== undefined && { selectedKeys })}
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
       shadow="none"

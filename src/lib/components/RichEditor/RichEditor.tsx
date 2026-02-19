@@ -71,7 +71,6 @@ export default function RichEditor({
     extensions: [
       StarterKit.configure({
         hardBreak: false,
-        bold: false, // Disable bold
       }),
       Paragraph,
       HardBreak.configure({
@@ -143,16 +142,28 @@ export default function RichEditor({
 
       {/* Toolbar */}
       <div className="flex flex-wrap gap-3 border p-3 rounded-md bg-gray-50 items-start">
+        {/* Bold */}
+        <button
+          type="button"
+          onMouseDown={handleButtonMouseDown}
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`px-3 py-1 border rounded font-bold ${
+            editor.isActive("bold") ? "bg-gray-300" : ""
+          }`}
+        >
+          B
+        </button>
+
         {/* Italic */}
         <button
           type="button"
           onMouseDown={handleButtonMouseDown}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-3 py-1 border rounded ${
+          className={`px-3 py-1 border rounded italic ${
             editor.isActive("italic") ? "bg-gray-300" : ""
           }`}
         >
-          Italic
+          I
         </button>
 
         {/* Underline */}
@@ -160,25 +171,11 @@ export default function RichEditor({
           type="button"
           onMouseDown={handleButtonMouseDown}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`px-3 py-1 border rounded ${
+          className={`px-3 py-1 border rounded underline ${
             editor.isActive("underline") ? "bg-gray-300" : ""
           }`}
         >
-          Underline
-        </button>
-
-        {/* Heading */}
-        <button
-          type="button"
-          onMouseDown={handleButtonMouseDown}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={`px-3 py-1 border rounded ${
-            editor.isActive("heading", { level: 2 }) ? "bg-gray-300" : ""
-          }`}
-        >
-          H2
+          U
         </button>
 
         {/* Bullet List */}
@@ -190,7 +187,7 @@ export default function RichEditor({
             editor.isActive("bulletList") ? "bg-gray-300" : ""
           }`}
         >
-          Bullet List
+          • List
         </button>
 
         {/* Font Size Dropdown */}

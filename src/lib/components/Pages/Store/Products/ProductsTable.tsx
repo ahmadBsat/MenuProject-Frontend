@@ -19,7 +19,6 @@ import { AiOutlineSearch } from "react-icons/ai";
 import ModalInstance from "@/lib/components/Modal/Modal";
 import { getUrl, URLs } from "@/lib/constants/urls";
 import { INPUT_STYLE } from "@/lib/constants/style";
-import { INITIAL_META } from "@/lib/constants/initials";
 import { PRODUCT_COLUMNS, PRODUCT_VISIBLE_COL } from "@/lib/constants/tables";
 import { build_path, formatDates } from "@/utils/common";
 import {
@@ -33,7 +32,7 @@ import GeneralizedTable from "../../../Common/GeneralizedTable";
 import { handleServerError } from "@/lib/api/_axios";
 import { ErrorResponse } from "@/lib/types/common";
 import { toast } from "sonner";
-import { Product, ProductTable } from "@/lib/types/store/product";
+import { Product } from "@/lib/types/store/product";
 import { API_PRODUCT } from "@/lib/services/store/product_service";
 
 const ProductsTable = () => {
@@ -47,11 +46,7 @@ const ProductsTable = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [products, setProducts] = useState<ProductTable>({
-    data: [],
-    meta: INITIAL_META,
-  });
-  const [allProducts, setAllProducts] = useState<Product[]>([]); // Store all data for client-side filtering
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [query, setQuery] = useQueryStates(
     {
@@ -61,7 +56,7 @@ const ProductsTable = () => {
       sortOrder: parseAsString.withDefault("ascending"),
     },
     {
-      history: "push",
+      history: "replace",
     },
   );
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
@@ -72,7 +67,6 @@ const ProductsTable = () => {
   const [error, setError] = useState("");
   const [processing, setProcessing] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [status, setStatus] = useState<Selection>("all");
 
   const headerColumns = useMemo(() => {
@@ -86,7 +80,6 @@ const ProductsTable = () => {
   const onSearchChange = useCallback((value: string) => {
     setSearchValue(value);
     setQuery({ page: 1 });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -97,34 +90,10 @@ const ProductsTable = () => {
   }, []);
 
   const onSortChange = (sort: SortDescriptor) => {
-    const temp = {
+    setQuery({
       sortField: sort.column as string,
       sortOrder: sort.direction as string,
-    };
-
-    setQuery({ ...temp });
-  };
-
-  const handleSelectionChange = (newSelection: Selection) => {
-    if (newSelection === "all" && products) {
-      const currentPageKeys = products.data.map((product) => product._id);
-
-      setSelectedKeys((prevKeys) => {
-        const updatedKeys = new Set(prevKeys);
-        currentPageKeys.forEach((key) => updatedKeys.add(key));
-        return updatedKeys;
-      });
-    } else if (Array.from(newSelection).length === 0 && products) {
-      const currentPageKeys = products.data.map((product) => product._id);
-
-      setSelectedKeys((prevKeys) => {
-        const updatedKeys = new Set(prevKeys);
-        currentPageKeys.forEach((key) => updatedKeys.delete(key));
-        return updatedKeys;
-      });
-    } else {
-      setSelectedKeys(newSelection);
-    }
+    });
   };
 
   const topContent = useMemo(() => {
@@ -148,6 +117,11 @@ const ProductsTable = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue, onSearchChange, status, visibleColumns, onClear]);
 
+  const deleteModal = useCallback((product: Product) => {
+    onOpen();
+    setSelectedProduct(product);
+  }, [onOpen]);
+
   const renderCell = useCallback(
     (product: Product, columnKey: React.Key) => {
       const cellValue = product[`${columnKey}`];
@@ -159,6 +133,8 @@ const ProductsTable = () => {
               avatarProps={{
                 radius: "md",
                 src: product.images.length > 0 ? product.images[0] : "",
+                imgProps: { loading: "lazy" },
+                showFallback: true,
               }}
               name={product.name}
               description={
@@ -224,14 +200,8 @@ const ProductsTable = () => {
           return cellValue;
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onOpen],
+    [deleteModal],
   );
-
-  const deleteModal = (product: Product) => {
-    onOpen();
-    setSelectedProduct(product);
-  };
 
   const deleteProduct = async () => {
     if (!selectedProduct) return;
@@ -251,15 +221,11 @@ const ProductsTable = () => {
     }
   };
 
-  // Fetch all products once on mount
   const getProducts = async () => {
     try {
       setLoading(true);
-      // Fetch all products without pagination for client-side filtering
       const res = await API_PRODUCT.getAllProducts();
-
       setAllProducts(res.data);
-      setProducts(res);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
         toast.error(err_msg);
@@ -270,18 +236,15 @@ const ProductsTable = () => {
     }
   };
 
-  // Client-side filtering and pagination
   const filteredProducts = useMemo(() => {
     let filtered = [...allProducts];
 
-    // Apply search filter
     if (searchValue) {
       filtered = filtered.filter((product) =>
         product.name.toLowerCase().includes(searchValue.toLowerCase()),
       );
     }
 
-    // Apply sorting
     if (query.sortField) {
       filtered.sort((a, b) => {
         const aValue = a[query.sortField as keyof Product];
@@ -296,22 +259,14 @@ const ProductsTable = () => {
     return filtered;
   }, [allProducts, searchValue, query.sortField, query.sortOrder]);
 
-  // Client-side pagination
-  const paginatedProducts = useMemo(() => {
+  const products = useMemo(() => {
     const limit = parseInt(query.limit);
     const startIndex = (query.page - 1) * limit;
-    const endIndex = startIndex + limit;
-
-    return filteredProducts.slice(startIndex, endIndex);
-  }, [filteredProducts, query.page, query.limit]);
-
-  // Update products state when filtered/paginated data changes
-  useEffect(() => {
-    const limit = parseInt(query.limit);
     const totalPages = Math.ceil(filteredProducts.length / limit);
+    const pageData = filteredProducts.slice(startIndex, startIndex + limit);
 
-    setProducts({
-      data: paginatedProducts,
+    return {
+      data: pageData,
       meta: {
         count: filteredProducts.length,
         page: query.page,
@@ -320,12 +275,11 @@ const ProductsTable = () => {
         has_next: query.page < totalPages,
         has_previous: query.page > 1,
       },
-    });
-  }, [paginatedProducts, filteredProducts, query.page, query.limit]);
+    };
+  }, [filteredProducts, query.page, query.limit]);
 
   useEffect(() => {
     getProducts();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -343,13 +297,12 @@ const ProductsTable = () => {
           columns={headerColumns}
           data={products?.data}
           topContent={topContent}
-          selectedKeys={selectedKeys}
           sortDescriptor={{
             column: query.sortField as any,
             direction: query.sortOrder as any,
           }}
+          showSelectionCheckboxes={false}
           setSortDescriptor={onSortChange}
-          setSelectedKeys={handleSelectionChange}
           renderCell={renderCell}
         />
       </div>
