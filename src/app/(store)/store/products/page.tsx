@@ -22,6 +22,8 @@ import { toast } from "sonner"; // or your toast library
 import { handleServerError } from "@/lib/api/_axios";
 import { ErrorResponse } from "@/lib/types/common";
 import { API_PRODUCT } from "@/lib/services/store/product_service";
+import { API_CATEGORY } from "@/lib/services/store/category_service";
+import { API_BRANCH } from "@/lib/services/store/branch_service";
 
 interface UploadResult {
   created: number;
@@ -37,6 +39,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [result, setResult] = useState<UploadResult | null>(null);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -167,6 +170,91 @@ const Page = () => {
       "Template downloaded. Categories will be auto-created if they don't exist."
     );
   };
+
+  const exportProducts = async (products: any[]) => {
+    if (products.length === 0) {
+      toast.error("No products to export");
+      return;
+    }
+
+    const exportId = "export-products";
+    toast.loading("Preparing export...", { id: exportId });
+
+    try {
+      // Fetch categories and branches to map IDs to names
+      const [categoriesRes, branchesRes] = await Promise.all([
+        API_CATEGORY.getAllCategories("?page=1&limit=10000"),
+        API_BRANCH.getAllBranches("?page=1&limit=10000"),
+      ]);
+
+      // Create lookup maps
+      const categoryMap = new Map(
+        categoriesRes.data.map((cat: any) => [cat._id, cat.name])
+      );
+      const branchMap = new Map(
+        branchesRes.data.map((branch: any) => [branch._id, branch.name])
+      );
+
+      // Create CSV header with ID first
+      const headers = ["id", "name", "category", "price", "branch", "description", "notes", "image", "status"];
+
+      // Debug: Log first product to check structure
+      if (products.length > 0) {
+        console.log("First product sample:", products[0]);
+      }
+
+      // Convert products to CSV rows
+      const rows = products.map((product) => {
+        // Map category IDs to names
+        const categoryNames = Array.isArray(product.category)
+          ? product.category
+              .map((id: string) => categoryMap.get(id) || id)
+              .join(", ")
+          : "";
+
+        // Map branch IDs to names
+        const branchNames = Array.isArray(product.branch)
+          ? product.branch
+              .map((id: string) => branchMap.get(id) || id)
+              .join(", ")
+          : "";
+
+        const row = [
+          product._id || product.id || "",
+          product.name || "",
+          categoryNames,
+          product.price?.toString() || "",
+          branchNames,
+          product.description || "",
+          product.notes || "",
+          product.images?.length > 0 ? product.images[0] : "",
+          product.is_active ? "active" : "inactive",
+        ];
+
+        return row;
+      });
+
+      // Combine headers and rows
+      const csvContent = [headers, ...rows]
+        .map((row) => row.map((cell) => `"${cell}"`).join(","))
+        .join("\n");
+
+      // Create and download the file
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `products_export_${new Date().toISOString().split("T")[0]}.csv`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+      toast.success(`${products.length} products exported successfully`, { id: exportId });
+    } catch (error) {
+      handleServerError(error as ErrorResponse, (msg) => {
+        toast.error(`Export failed: ${msg}`, { id: exportId });
+      });
+    }
+  };
   return (
     <>
       <HeaderContainer
@@ -174,6 +262,15 @@ const Page = () => {
         description="Manage your products from here"
       >
         <div className="flex gap-2">
+          <Button
+            onPress={() => exportProducts(allProducts)}
+            color="secondary"
+            startContent={<Download size={18} />}
+            variant="flat"
+            isDisabled={allProducts.length === 0}
+          >
+            Export
+          </Button>
           <Button
             onPress={onOpen}
             color="secondary"
@@ -188,7 +285,7 @@ const Page = () => {
         </div>
       </HeaderContainer>
 
-      <ProductsTable />
+      <ProductsTable onProductsLoaded={setAllProducts} />
 
       {/* Bulk Upload Modal */}
       <Modal

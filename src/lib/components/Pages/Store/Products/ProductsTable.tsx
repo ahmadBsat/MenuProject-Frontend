@@ -35,7 +35,11 @@ import { toast } from "sonner";
 import { Product } from "@/lib/types/store/product";
 import { API_PRODUCT } from "@/lib/services/store/product_service";
 
-const ProductsTable = () => {
+type ProductsTableProps = {
+  onProductsLoaded?: (products: Product[]) => void;
+};
+
+const ProductsTable = ({ onProductsLoaded }: ProductsTableProps) => {
   const searchParams = {
     page: parseAsInteger,
     limit: parseAsString,
@@ -226,6 +230,7 @@ const ProductsTable = () => {
       setLoading(true);
       const res = await API_PRODUCT.getAllProducts();
       setAllProducts(res.data);
+      onProductsLoaded?.(res.data);
     } catch (error) {
       handleServerError(error as ErrorResponse, (err_msg) => {
         toast.error(err_msg);
