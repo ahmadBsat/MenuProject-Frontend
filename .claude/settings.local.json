@@ -4,7 +4,8 @@
       "Bash(npm run lint:*)",
       "Bash(test:*)",
       "Bash(curl:*)",
-      "Bash(npm run dev)"
+      "Bash(npm run dev)",
+      "Bash(npx eslint ./src/app/(store)/store/products/page.tsx --format=compact)"
     ],
     "deny": [],
     "ask": []

@@ -24,6 +24,7 @@ import { ErrorResponse } from "@/lib/types/common";
 import { API_PRODUCT } from "@/lib/services/store/product_service";
 import { API_CATEGORY } from "@/lib/services/store/category_service";
 import { API_BRANCH } from "@/lib/services/store/branch_service";
+import { Product } from "@/lib/types/store/product";
 
 interface UploadResult {
   created: number;
@@ -39,7 +40,7 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [result, setResult] = useState<UploadResult | null>(null);
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -171,7 +172,7 @@ const Page = () => {
     );
   };
 
-  const exportProducts = async (products: any[]) => {
+  const exportProducts = async (products: Product[]) => {
     if (products.length === 0) {
       toast.error("No products to export");
       return;
@@ -189,10 +190,10 @@ const Page = () => {
 
       // Create lookup maps
       const categoryMap = new Map(
-        categoriesRes.data.map((cat: any) => [cat._id, cat.name])
+        categoriesRes.data.map((cat) => [cat._id, cat.name])
       );
       const branchMap = new Map(
-        branchesRes.data.map((branch: any) => [branch._id, branch.name])
+        branchesRes.data.map((branch) => [branch._id, branch.name])
       );
 
       // Create CSV header with ID first
@@ -220,7 +221,7 @@ const Page = () => {
           : "";
 
         const row = [
-          product._id || product.id || "",
+          product._id || "",
           product.name || "",
           categoryNames,
           product.price?.toString() || "",
