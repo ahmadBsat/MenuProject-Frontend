@@ -131,35 +131,39 @@ const Page = () => {
         "description",
         "notes",
         "price",
+        "status",
         "category",
         "branch",
         "image",
-        "status",
+        "additions",
       ],
       [
         "Sample Product 1",
         "Product description",
         "Water proof",
         "30",
+        "active",
         "Electronics",
         "Tripoli",
         "https://example.com/image.jpg",
-        "active",
+        "",
       ],
       [
         "Sample Product 2",
         "Another description",
         "Original",
         "29.99",
+        "active",
         "Clothing",
         "Beirut",
         "",
-        "active",
+        "",
       ],
     ];
 
     const csvContent = templateData.map((row) => row.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv" });
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
