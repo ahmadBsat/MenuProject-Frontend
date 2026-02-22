@@ -240,8 +240,9 @@ const Page = () => {
         .map((row) => row.map((cell) => `"${cell}"`).join(","))
         .join("\n");
 
-      // Create and download the file
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      // Create and download the file with UTF-8 BOM for proper Arabic encoding
+      const BOM = "\uFEFF";
+      const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
