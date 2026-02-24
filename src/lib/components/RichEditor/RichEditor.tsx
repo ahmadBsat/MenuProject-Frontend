@@ -73,7 +73,7 @@ export default function RichEditor({
         hardBreak: false,
         bold: {
           HTMLAttributes: {
-            class: 'font-bold',
+            class: "font-bold",
           },
         },
       }),
@@ -139,7 +139,23 @@ export default function RichEditor({
   };
 
   // Font size options
-  const fontSizes = ["8", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "48", "64", "72", "96"];
+  const fontSizes = [
+    "8",
+    "10",
+    "12",
+    "14",
+    "16",
+    "18",
+    "20",
+    "24",
+    "28",
+    "32",
+    "36",
+    "48",
+    "64",
+    "72",
+    "96",
+  ];
 
   return (
     <div className="space-y-2">
