@@ -71,6 +71,11 @@ export default function RichEditor({
     extensions: [
       StarterKit.configure({
         hardBreak: false,
+        bold: {
+          HTMLAttributes: {
+            class: 'font-bold',
+          },
+        },
       }),
       Paragraph,
       HardBreak.configure({
@@ -90,7 +95,7 @@ export default function RichEditor({
     editorProps: {
       attributes: {
         class:
-          "min-h-[200px] w-full rounded-md border p-4 focus:outline-none prose max-w-none",
+          "min-h-[200px] w-full rounded-md border p-4 focus:outline-none prose prose-strong:font-bold max-w-none",
       },
     },
 

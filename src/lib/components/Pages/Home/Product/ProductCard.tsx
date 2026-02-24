@@ -128,9 +128,9 @@ const ProductCard = ({
                       </div>
                       {product.notes && (
                         <>
-                          <div className="font-normal text-zinc-400 mt-2 text-sm italic">
-                            {product.notes}
-                          </div>
+                          <div
+                            dangerouslySetInnerHTML={{ __html: product.notes }}
+                          />
                         </>
                       )}
                     </div>
@@ -141,7 +141,11 @@ const ProductCard = ({
                     <label className="mt-5 font-bold pb-2">
                       Extra Information
                     </label>
-                    <div>{product.extra_information}</div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: product.extra_information,
+                      }}
+                    />
                   </DrawerDescription>
                 )}
               </DrawerHeader>

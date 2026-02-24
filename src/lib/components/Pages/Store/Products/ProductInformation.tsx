@@ -32,11 +32,16 @@ const ProductInformation = ({ product, handleChange }) => {
         onValueChange={(e) => handleChange("description", e)}
       />
 
-      <Textarea
+      {/* <Textarea
         label="Extra Information"
         placeholder="Enter extra information"
         value={product.extra_information}
         onValueChange={(e) => handleChange("extra_information", e)}
+      /> */}
+      <RichEditor
+        label="Extra Information"
+        value={product.extra_information}
+        onChange={(value) => handleChange("extra_information", value)}
       />
 
       {/* <Textarea
@@ -47,7 +52,7 @@ const ProductInformation = ({ product, handleChange }) => {
       /> */}
 
       <RichEditor
-        label="Notes XD"
+        label="Notes"
         value={product.notes}
         onChange={(value) => handleChange("notes", value)}
       />
