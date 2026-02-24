@@ -73,7 +73,7 @@ export default function RichEditor({
         hardBreak: false,
         bold: {
           HTMLAttributes: {
-            class: "font-bold",
+            style: "font-weight: bold;",
           },
         },
       }),
@@ -95,7 +95,7 @@ export default function RichEditor({
     editorProps: {
       attributes: {
         class:
-          "min-h-[200px] w-full rounded-md border p-4 focus:outline-none prose prose-strong:font-bold max-w-none",
+          "min-h-[200px] w-full rounded-md border p-4 focus:outline-none max-w-none [&_strong]:font-bold [&_strong]:inherit",
       },
     },
 

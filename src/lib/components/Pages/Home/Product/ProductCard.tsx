@@ -127,11 +127,10 @@ const ProductCard = ({
                         {product.description}
                       </div>
                       {product.notes && (
-                        <>
-                          <div
-                            dangerouslySetInnerHTML={{ __html: product.notes }}
-                          />
-                        </>
+                        <div
+                          className="mt-3 [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"
+                          dangerouslySetInnerHTML={{ __html: product.notes }}
+                        />
                       )}
                     </div>
                   </div>
@@ -142,6 +141,7 @@ const ProductCard = ({
                       Extra Information
                     </label>
                     <div
+                      className="[&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"
                       dangerouslySetInnerHTML={{
                         __html: product.extra_information,
                       }}
@@ -160,9 +160,10 @@ const ProductCard = ({
           {product.description}
         </p>
         {product.notes && (
-          <div className="">
-            <div dangerouslySetInnerHTML={{ __html: product.notes }} />
-          </div>
+          <div
+            className="text-sm mt-1 [&_strong]:font-bold [&_em]:italic [&_u]:underline [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 line-clamp-2"
+            dangerouslySetInnerHTML={{ __html: product.notes }}
+          />
         )}
       </div>
     </Drawer>
