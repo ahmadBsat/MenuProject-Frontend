@@ -5,11 +5,12 @@ export type Currency = {
   name: string;
   rate_change: number;
   is_active: boolean;
+  is_default: boolean;
   createdAt: string;
   updatedAt: string;
 };
 
-export type CurrencyForm = Pick<Currency, "is_active" | "name" | "rate_change">;
+export type CurrencyForm = Pick<Currency, "is_active" | "is_default" | "name" | "rate_change">;
 
 export type CurrencyTable = {
   data: Currency[];

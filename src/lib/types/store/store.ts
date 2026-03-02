@@ -89,7 +89,7 @@ export type StorePopulated = {
   background_image: string;
   branches: StoreBranch[];
   products: ProductPopulated[];
-  currencies: { name: string; rate_change: number }[];
+  currencies: { name: string; rate_change: number; is_default?: boolean }[];
   categories: [Section[]] | CategoryPolulated[];
   banners: Banner[];
   watermark: boolean;

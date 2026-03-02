@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@nextui-org/react";
+import { Input, Switch } from "@nextui-org/react";
 
 const CurrencyInformation = ({ currency, handleChange }) => {
   return (
@@ -26,6 +26,13 @@ const CurrencyInformation = ({ currency, handleChange }) => {
         value={currency.rate_change.toString()}
         onValueChange={(e) => handleChange("rate_change", Number(e))}
       />
+
+       <Switch
+        isSelected={!!currency.is_default}
+        onValueChange={(val) => handleChange("is_default", val)}
+      >
+        Default Currency
+      </Switch>
     </div>
   );
 };

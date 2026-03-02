@@ -16,10 +16,14 @@ import { useEffect, useState } from "react";
 const StoreCurrency = ({
   currencies,
 }: {
-  currencies: { name: string; rate_change: number }[];
+  currencies: { name: string; rate_change: number; is_default?: boolean }[];
 }) => {
   const flags = { USD: "us", LBP: "lb" };
-  const default_currency = [{ name: "USD", rate_change: 1 }];
+
+  // Always include USD, and add other currencies from backend (avoid duplicate USD)
+  const usdCurrency = { name: "USD", rate_change: 1 };
+  const otherCurrencies = currencies.filter((c) => c.name !== "USD");
+  const currencyList = [usdCurrency, ...otherCurrencies];
 
   const { setCurrency, palette, currency } = usePreference();
   const [selected, setSelected] = useState<Selection>(new Set([currency.name]));
@@ -35,6 +39,21 @@ const StoreCurrency = ({
       // window.location.reload();
     }
   };
+
+  useEffect(() => {
+    // Set default currency on initial load only
+    const defaultCurrency = currencies.find((c) => c.is_default === true);
+
+    // Check if user still has the initial default USD (hasn't selected anything yet)
+    const isInitialState = currency.name === "USD" && currency.rate_change === 1;
+
+    if (isInitialState && defaultCurrency) {
+      // Use the backend's default currency
+      setCurrency({ name: defaultCurrency.name, rate_change: defaultCurrency.rate_change });
+    }
+    // If no default from backend, USD remains selected (already set in store)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setSelected(new Set([currency.name]));
@@ -59,7 +78,7 @@ const StoreCurrency = ({
         onSelectionChange={setSelected}
         disallowEmptySelection
       >
-        {[...default_currency, ...currencies].map((currency) => (
+        {currencyList.map((currency) => (
           <DropdownItem
             key={currency.name}
             value={currency.name}
