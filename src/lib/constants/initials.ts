@@ -94,6 +94,7 @@ export const CURRENCY_INITIAL: CurrencyForm = {
   name: "",
   rate_change: 0.0,
   is_active: true,
+  is_default: false,
 };
 
 export const ITEM_INITIAL: ProductItemForm = {
