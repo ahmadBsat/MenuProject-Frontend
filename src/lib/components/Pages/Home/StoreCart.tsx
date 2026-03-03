@@ -32,147 +32,161 @@ interface CartItemProps {
   setOpenIndex: (index: number | null) => void;
 }
 
-const CartItem = memo(({ product, additions, store, index, open, setOpenIndex }: CartItemProps) => {
-  const [instructions, setInstructions] = useState(product.instructions || "");
+const CartItem = memo(
+  ({ product, additions, store, index, open, setOpenIndex }: CartItemProps) => {
+    const [instructions, setInstructions] = useState(
+      product.instructions || "",
+    );
 
-  const { currency } = usePreference();
-  const { addToCart, removeFromCart, updateCart } = useCart();
+    const { currency } = usePreference();
+    const { addToCart, removeFromCart, updateCart } = useCart();
 
-  const currencies = { USD: "$", LBP: "LBP" };
+    const currencies = { USD: "$", LBP: "LBP" };
 
-  // Submit function
-  const handleSubmit = useCallback(async (index: number, updatedInstructions: string) => {
-    try {
-      await updateCart({ store: store._id, index, instructions: updatedInstructions });
-    } catch (error) {
-      console.error("Error updating cart:", error);
-    }
-  }, [updateCart, store._id]);
+    // Submit function
+    const handleSubmit = useCallback(
+      async (index: number, updatedInstructions: string) => {
+        try {
+          await updateCart({
+            store: store._id,
+            index,
+            instructions: updatedInstructions,
+          });
+        } catch (error) {
+          console.error("Error updating cart:", error);
+        }
+      },
+      [updateCart, store._id],
+    );
 
-  // Auto-save effect (debounced)
-  useEffect(() => {
-    if (instructions === product.instructions) return; // Prevent unnecessary API calls
+    // Auto-save effect (debounced)
+    useEffect(() => {
+      if (instructions === product.instructions) return; // Prevent unnecessary API calls
 
-    const delaySave = setTimeout(() => {
-      handleSubmit(index, instructions);
-    }, 1000); // Adjust delay as needed (1s)
+      const delaySave = setTimeout(() => {
+        handleSubmit(index, instructions);
+      }, 1000); // Adjust delay as needed (1s)
 
-    return () => clearTimeout(delaySave); // Cleanup function on re-typing
-  }, [instructions, product.instructions, index, handleSubmit]); // Runs only when `instructions` change
+      return () => clearTimeout(delaySave); // Cleanup function on re-typing
+    }, [instructions, product.instructions, index, handleSubmit]); // Runs only when `instructions` change
 
-  return (
-    <div className="flex gap-4 w-full items-center">
-      {product.images.length > 0 && (
-        <Image
-          src={product.images[0]}
-          alt={product.name}
-          width={400}
-          height={400}
-          className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
-        />
-      )}
+    return (
+      <div className="flex gap-4 w-full items-center">
+        {product.images.length > 0 && (
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            width={400}
+            height={400}
+            className="rounded-lg w-20 h-20 min-w-20 min-h-20 object-cover"
+          />
+        )}
 
-      <div className="flex flex-col gap-2 w-full">
-        <p className="text-lg font-bold">{product.name}</p>
-        <div className="flex flex-col">
-          {product.additions.map((group, index) => {
-            return (
-              <div
-                key={`g${index}`}
-                className="flex flex-row gap-1 text-sm text-default-400"
-              >
-                <span className="text-black font-medium">{group.name}</span>
+        <div className="flex flex-col gap-2 w-full">
+          <p className="text-lg font-bold">{product.name}</p>
+          <div className="flex flex-col">
+            {product.additions.map((group, index) => {
+              return (
+                <div
+                  key={`g${index}`}
+                  className="flex flex-row gap-1 text-sm text-default-400"
+                >
+                  <span className="text-black font-medium">{group.name}</span>
 
-                {group.items.map((item) => item.name).join(", ")}
-              </div>
-            );
-          })}
-        </div>
+                  {group.items.map((item) => item.name).join(", ")}
+                </div>
+              );
+            })}
+          </div>
 
-        <div className="flex items-center gap-2">
-          <p>
-            <strong>QTY</strong> {product.quantity}
-          </p>
+          <div className="flex items-center gap-2">
+            <p>
+              <strong>QTY</strong> {product.quantity}
+            </p>
 
-          {store?.settings?.display_pricing && (
-            <p className="font-medium text-base">
-              <strong> {currencies[currency.name]}</strong>{" "}
-              {currency.name === "USD"
-                ? product.price.toFixed(2)
-                : format_pricing(product.price * currency.rate_change)}
+            {store?.settings?.display_pricing && (
+              <p className="font-medium text-base">
+                <strong> {currencies[currency.name]}</strong>{" "}
+                {currency.name === "USD"
+                  ? product.price.toFixed(2)
+                  : format_pricing(
+                      Math.ceil((product.price * currency.rate_change) / 1000) *
+                        1000,
+                    )}
+              </p>
+            )}
+          </div>
+
+          {product.instructions && (
+            <p className="text-sm">
+              <b>Instructions:</b> {product.instructions}
             </p>
           )}
+
+          <div className="flex w-full justify-between">
+            <div>
+              <Button
+                size="sm"
+                color="primary"
+                className="text-xs text-primary bg-transparent px-2"
+                isDisabled={open}
+                onClick={() => setOpenIndex(open ? null : index)}
+              >
+                {product.instructions ? "Edit" : "Add"} instructions
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-center gap-4">
+              <Button
+                size="sm"
+                isIconOnly
+                color="primary"
+                variant="ghost"
+                isDisabled={open}
+                onClick={() => {
+                  removeFromCart(product._id, store._id, additions);
+                }}
+              >
+                <Minus />
+              </Button>
+
+              <p className="text-base font-bold">{product.quantity}</p>
+
+              <Button
+                size="sm"
+                isIconOnly
+                color="primary"
+                variant="ghost"
+                isDisabled={open}
+                onClick={() => {
+                  addToCart({
+                    store: store._id,
+                    product_id: product._id,
+                    quantity: 1,
+                    product_additions: additions,
+                  });
+                }}
+              >
+                <Plus />
+              </Button>
+            </div>
+          </div>
+
+          {open && (
+            <div className="flex w-full flex-col gap-2">
+              <Textarea
+                placeholder="Instructions"
+                aria-label="Instructions"
+                value={instructions}
+                onValueChange={setInstructions} // Updates state on change
+              />
+            </div>
+          )}
         </div>
-
-        {product.instructions && (
-          <p className="text-sm">
-            <b>Instructions:</b> {product.instructions}
-          </p>
-        )}
-
-        <div className="flex w-full justify-between">
-          <div>
-            <Button
-              size="sm"
-              color="primary"
-              className="text-xs text-primary bg-transparent px-2"
-              isDisabled={open}
-              onClick={() => setOpenIndex(open ? null : index)}
-            >
-              {product.instructions ? "Edit" : "Add"} instructions
-            </Button>
-          </div>
-
-          <div className="flex items-center justify-center gap-4">
-            <Button
-              size="sm"
-              isIconOnly
-              color="primary"
-              variant="ghost"
-              isDisabled={open}
-              onClick={() => {
-                removeFromCart(product._id, store._id, additions);
-              }}
-            >
-              <Minus />
-            </Button>
-
-            <p className="text-base font-bold">{product.quantity}</p>
-
-            <Button
-              size="sm"
-              isIconOnly
-              color="primary"
-              variant="ghost"
-              isDisabled={open}
-              onClick={() => {
-                addToCart({
-                  store: store._id,
-                  product_id: product._id,
-                  quantity: 1,
-                  product_additions: additions,
-                });
-              }}
-            >
-              <Plus />
-            </Button>
-          </div>
-        </div>
-
-        {open && (
-          <div className="flex w-full flex-col gap-2">
-            <Textarea
-              placeholder="Instructions"
-              aria-label="Instructions"
-              value={instructions}
-              onValueChange={setInstructions} // Updates state on change
-            />
-          </div>
-        )}
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 CartItem.displayName = "CartItem";
 
@@ -188,8 +202,8 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
     store?.custom_domain?.length > 0
       ? store.custom_domain
       : currentHost.split(".").length > 2
-      ? currentOrigin // it's a subdomain like test.example.com
-      : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
+        ? currentOrigin // it's a subdomain like test.example.com
+        : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
 
   const currencies = { USD: "$", LBP: "LBP" };
   return (
@@ -269,7 +283,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                         {currency.name === "USD"
                           ? cart.total_price.toFixed(2)
                           : format_pricing(
-                              cart.total_price * currency.rate_change
+                              Math.ceil(cart.total_price * currency.rate_change / 1000) * 1000,
                             )}
                       </p>
                     </div>
@@ -284,10 +298,10 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                               100
                             ).toFixed(2)
                           : format_pricing(
-                              (cart.total_price *
+                              Math.ceil((cart.total_price *
                                 currency.rate_change *
                                 store.vat_percentage) /
-                                100
+                                100 / 1000) * 1000,
                             )}
                       </p>
                     </div>
@@ -302,9 +316,9 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                               (1 + store.vat_percentage / 100)
                             ).toFixed(2)
                           : format_pricing(
-                              cart.total_price *
+                              Math.ceil(cart.total_price *
                                 currency.rate_change *
-                                (1 + store.vat_percentage / 100)
+                                (1 + store.vat_percentage / 100) / 1000) * 1000,
                             )}
                       </p>
                     </div>
@@ -323,7 +337,7 @@ const StoreCart = ({ store }: { store: StorePopulated }) => {
                       {currency.name === "USD"
                         ? cart.total_price.toFixed(2)
                         : format_pricing(
-                            cart.total_price * currency.rate_change
+                            Math.ceil(cart.total_price * currency.rate_change / 1000) * 1000,
                           )}
                     </p>
                   </div>

@@ -40,7 +40,7 @@ const ProductCart = ({
   const handle_change = (
     group_id: string,
     is_multiple: boolean,
-    new_value: string[]
+    new_value: string[],
   ) => {
     setSelected((prev) => {
       const updated_group_values = is_multiple
@@ -54,7 +54,7 @@ const ProductCart = ({
     });
   };
 
-  const selectedItemsPrice = product.additions
+  const selectedItemsPrice = (product.additions || [])
     .flatMap(
       (addition) =>
         selected[addition.group]?.flatMap((selectedItemId) =>
@@ -63,15 +63,16 @@ const ProductCart = ({
             .map((item) =>
               currency.name === "USD"
                 ? item.additional_price
-                : item.additional_price * currency.rate_change
-            )
-        ) || []
+                : Math.ceil((item.additional_price * currency.rate_change) / 1000) * 1000,
+            ),
+        ) || [],
     )
     .reduce((sum, price) => sum + price, 0); // Sum all prices
 
   const currentSubTotal =
-    product.price * currency.rate_change + selectedItemsPrice;
-
+    currency.name === "USD"
+      ? product.price * currency.rate_change + selectedItemsPrice
+      : Math.ceil((product.price * currency.rate_change) / 1000) * 1000 + selectedItemsPrice;
   return additions.length > 0 ? (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>

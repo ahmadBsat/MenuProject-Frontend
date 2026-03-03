@@ -72,6 +72,9 @@ export const URLs = {
       index: "/store/sections",
       create: "/store/sections/create",
       get_id: "/store/sections/:id",
+    },
+    settings: {
+      general: "/store/settings/general",
     }
   },
 };

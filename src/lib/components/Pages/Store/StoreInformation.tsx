@@ -282,6 +282,41 @@ const StoreInformation = ({
               </div>
             </Switch>
           </AccordionItem>
+            <AccordionItem
+            key={2}
+            title="Pop Up Messages"
+            subtitle="Configuration pop up messages for the store"
+            indicator={<Settings size={24} />}
+            classNames={{
+              title: "text-xl font-semibold",
+              content: "flex flex-col gap-4",
+            }}
+          >
+            <Input
+              label="Branch Pop Up Title"
+              type="text"
+              placeholder="Branch Pop Up Title"
+              // isRequired
+              // required
+              isDisabled={!editable}
+              value={data?.settings?.branch_popup?.title}
+              onValueChange={(e) =>
+                handleChange("settings.branch_popup.title", e)
+              }
+            />
+            <Input
+              label="Branch Pop Up Description"
+              type="text"
+              placeholder="Branch Pop Up Description"
+              // isRequired
+              // required
+              isDisabled={!editable}
+              value={data?.settings?.branch_popup?.description}
+              onValueChange={(e) =>
+                handleChange("settings.branch_popup.description", e)
+              }
+            />
+          </AccordionItem>
         </Accordion>
         <Divider className="my-1" />
         <div className="text-lg sm:text-xl px-1">Color Settings</div>

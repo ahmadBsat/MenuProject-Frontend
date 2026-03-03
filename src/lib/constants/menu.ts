@@ -93,6 +93,12 @@ export const STORE_NAVIGATION = [
         link: URLs.store.sections.index,
         icon: QueueListIcon,
       },
+      {
+        key: "general_settings",
+        name: "General Settings",
+        link: URLs.store.settings.general,
+        icon: InboxIcon,
+      }
     ],
   },
 ];

@@ -18,7 +18,7 @@ const Page = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(
-    null
+    null,
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [store, setStore] = useState<StorePopulated>({
@@ -58,6 +58,10 @@ const Page = () => {
     settings: {
       display_pricing: true,
       allow_branch_cart_modifications: false,
+      branch_popup: {
+        title: "",
+        description: "",
+      },
     },
     vat_exclusive: false,
     vat_percentage: 0,
@@ -102,7 +106,7 @@ const Page = () => {
       }
 
       const current_currency = res.currencies.find(
-        (c) => c.name === currency.name
+        (c) => c.name === currency.name,
       );
 
       if (current_currency) {

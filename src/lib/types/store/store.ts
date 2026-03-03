@@ -22,6 +22,7 @@ export type Store = {
   settings: {
     display_pricing: boolean;
     allow_branch_cart_modifications: boolean;
+    branch_popup: StoreBranchPopUp;
   };
   logoDefault: boolean;
   vat_exclusive: boolean;
@@ -60,7 +61,6 @@ export type StoreBranchForm = Omit<
 
 export type StoreBranchTable = { data: StoreBranch[]; meta: Meta };
 export type StoreSectionTable = { data: StoreSection[]; meta: Meta };
-
 export type StoreTable = { data: Store[]; meta: Meta };
 
 export type StorePopulatedOLD = {
@@ -100,6 +100,7 @@ export type StorePopulated = {
   settings?: {
     display_pricing: boolean;
     allow_branch_cart_modifications: boolean;
+    branch_popup: StoreBranchPopUp;
   };
 };
 
@@ -126,3 +127,8 @@ export type StorePalette = {
   active_section_color: string;
   active_section_background: string;
 };
+
+export type StoreBranchPopUp = {
+  title: string;
+  description: string;
+}

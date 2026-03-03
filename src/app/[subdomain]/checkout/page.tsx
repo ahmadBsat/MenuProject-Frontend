@@ -45,7 +45,8 @@ const Page = () => {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [locationPermissionGranted, setLocationPermissionGranted] =
     useState(false);
-  const [hasUnsavedLocationChanges, setHasUnsavedLocationChanges] = useState(false);
+  const [hasUnsavedLocationChanges, setHasUnsavedLocationChanges] =
+    useState(false);
 
   // Load saved location on mount
   useEffect(() => {
@@ -85,7 +86,7 @@ const Page = () => {
     const temp = { ...data };
     set(temp, field, value);
     setData(temp);
-    
+
     // Mark as having unsaved changes if address or region changes
     if (field === "address" || field === "region") {
       setHasUnsavedLocationChanges(true);
@@ -146,7 +147,7 @@ const Page = () => {
         const mapUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
 
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
         );
         const locationData = await response.json();
 
@@ -165,7 +166,7 @@ const Page = () => {
       },
       (error) => {
         alert("Unable to retrieve your location: " + error.message);
-      }
+      },
     );
   };
 
@@ -205,7 +206,7 @@ const Page = () => {
             (addition) =>
               `  - ${addition.name}: ${addition.items
                 .map((item) => item.name)
-                .join(", ")}`
+                .join(", ")}`,
           )
           .join("\n");
 
@@ -213,7 +214,10 @@ const Page = () => {
           ? `${
               currency.name === "USD"
                 ? product.price.toFixed(2)
-                : format_pricing(product.price * currency.rate_change)
+                : format_pricing(
+                    Math.ceil((product.price * currency.rate_change) / 1000) *
+                      1000,
+                  )
             } ${currencies[currency.name]}`
           : "";
 
@@ -234,7 +238,9 @@ const Page = () => {
     const formattedTotalPrice =
       currency.name === "USD"
         ? totalPrice.toFixed(2)
-        : format_pricing(totalPrice * currency.rate_change);
+        : format_pricing(
+            Math.ceil((totalPrice * currency.rate_change) / 1000) * 1000,
+          );
 
     const is_delivery = data.orderMethod === "delivery";
 
@@ -295,8 +301,8 @@ const Page = () => {
     store?.custom_domain?.length > 0
       ? store.custom_domain
       : currentHost.split(".").length > 2
-      ? currentOrigin // it's a subdomain like test.example.com
-      : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
+        ? currentOrigin // it's a subdomain like test.example.com
+        : `${currentOrigin}/${store.domain}`; // path-based like example.com/test
 
   const handleCompleteOrder = () => {
     resetCart({ store: store._id });
@@ -418,7 +424,7 @@ const Page = () => {
                 }}
                 onValueChange={(v) => handleChange("address", v)}
               />
-              
+
               {/* Save/Clear Location Buttons */}
               <div className="flex gap-2">
                 <Button
@@ -428,13 +434,18 @@ const Page = () => {
                   className="flex-1"
                   isDisabled={!data.address || !data.region}
                 >
-                  {hasUnsavedLocationChanges ? "Save Location" : "Location Saved"}
+                  {hasUnsavedLocationChanges
+                    ? "Save Location"
+                    : "Location Saved"}
                 </Button>
                 <Button
                   color="danger"
                   variant="light"
                   onPress={clearSavedLocation}
-                  isDisabled={typeof window !== "undefined" && !localStorage.getItem("userLocation")}
+                  isDisabled={
+                    typeof window !== "undefined" &&
+                    !localStorage.getItem("userLocation")
+                  }
                 >
                   Clear
                 </Button>
@@ -463,7 +474,7 @@ const Page = () => {
                         src={
                           locationLink.replace(
                             "https://www.google.com/maps?q=",
-                            "https://maps.google.com/maps?q="
+                            "https://maps.google.com/maps?q=",
                           ) + "&t=&z=15&ie=UTF8&iwloc=&output=embed"
                         }
                         width="100%"

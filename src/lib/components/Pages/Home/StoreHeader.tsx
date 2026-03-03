@@ -24,7 +24,7 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
       >
         <div className="flex items-center justify-between max-w-screen-lg px-6 w-full">
           <div className="w-40">
-            <StoreBranches data={store.branches} />
+            <StoreBranches data={store.branches} store={store} />
           </div>
 
           <div className="flex items-center gap-2 justify-center">

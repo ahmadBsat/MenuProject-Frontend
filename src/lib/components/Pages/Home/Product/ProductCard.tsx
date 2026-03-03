@@ -80,7 +80,11 @@ const ProductCard = ({
                     {currencies[currency.name]}{" "}
                     {currency.name === "USD"
                       ? (product.price * currency.rate_change).toFixed(2)
-                      : format_pricing(product.price * currency.rate_change)}
+                      : format_pricing(
+                          Math.ceil(
+                            (product.price * currency.rate_change) / 1000,
+                          ) * 1000,
+                        )}
                   </p>
                 )}
               </div>
@@ -117,7 +121,10 @@ const ProductCard = ({
                                   2,
                                 )
                               : format_pricing(
-                                  product.price * currency.rate_change,
+                                  Math.ceil(
+                                    (product.price * currency.rate_change) /
+                                      1000,
+                                  ) * 1000,
                                 )}
                           </p>
                         )}

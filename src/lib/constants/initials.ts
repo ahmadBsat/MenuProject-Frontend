@@ -43,7 +43,11 @@ export const STORE_INITIAL: StoreForm = {
     active_section_color: "",
     active_section_background: "",
   },
-  settings: { display_pricing: true, allow_branch_cart_modifications: false },
+  settings: {
+    display_pricing: true,
+    allow_branch_cart_modifications: false,
+    branch_popup: { title: "Choose Branch", description: "Select one of the available branches." },
+  },
   is_active: true,
   domain: "",
   renewal_cost: 100,

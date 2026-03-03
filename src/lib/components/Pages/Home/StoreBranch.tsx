@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { StoreBranch } from "@/lib/types/store/store";
+import { StoreBranch, StorePopulated } from "@/lib/types/store/store";
 import { usePreference } from "@/store/account";
 import { Button, cn } from "@nextui-org/react";
 import { ChevronRight } from "lucide-react";
@@ -33,7 +33,7 @@ const BranchCard = ({
       }}
       className={cn(
         selected._id === branch._id && "border-primary",
-        "flex flex-col font-medium gap-1 w-full items-center justify-center text-center p-4 rounded-2xl border-3 cursor-pointer hover:bg-default-50 transition-colors"
+        "flex flex-col font-medium gap-1 w-full items-center justify-center text-center p-4 rounded-2xl border-3 cursor-pointer hover:bg-default-50 transition-colors",
       )}
     >
       <h2 className="text-lg font-bold">{branch.name}</h2>
@@ -42,7 +42,13 @@ const BranchCard = ({
   );
 };
 
-const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
+const StoreBranches = ({
+  data,
+  store,
+}: {
+  data: StoreBranch[];
+  store: StorePopulated;
+}) => {
   const { branch, palette, setBranch } = usePreference();
   const [open, setOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -61,7 +67,7 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
           b._id === branchParam ||
           b.name.toLowerCase() === branchParam.toLowerCase() ||
           b.name.toLowerCase().replace(/\s+/g, "-") ===
-            branchParam.toLowerCase()
+            branchParam.toLowerCase(),
       );
 
       if (branchFromUrl) {
@@ -82,7 +88,7 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
 
     // Check if current branch exists in available branches
     const exist = data.some(
-      (stored_branch) => stored_branch._id === branch._id
+      (stored_branch) => stored_branch._id === branch._id,
     );
 
     // Only auto-open if no valid branch is selected
@@ -118,9 +124,12 @@ const StoreBranches = ({ data }: { data: StoreBranch[] }) => {
       <DrawerContent>
         <div className="mx-auto w-full max-w-2xl max-h-[70vh]">
           <DrawerHeader>
-            <DrawerTitle>Choose Branch</DrawerTitle>
+            <DrawerTitle>
+              {store?.settings?.branch_popup?.title || "Choose Branch"}
+            </DrawerTitle>
             <DrawerDescription>
-              Select one of the available branches.
+              {store?.settings?.branch_popup?.description ||
+                "Select one of the available branches."}
             </DrawerDescription>
           </DrawerHeader>
 
