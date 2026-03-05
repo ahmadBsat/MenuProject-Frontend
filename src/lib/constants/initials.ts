@@ -80,6 +80,7 @@ export const PRODUCT_INITIAL: ProductForm = {
   is_active: true,
   name: "",
   price: 0,
+  order: 0,
 };
 
 export const BRANCH_INITIAL: StoreBranchForm = {

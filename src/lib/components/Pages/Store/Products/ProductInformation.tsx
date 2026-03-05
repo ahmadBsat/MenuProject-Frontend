@@ -21,6 +21,14 @@ const ProductInformation = ({ product, handleChange }) => {
           value={product.name}
           onValueChange={(e) => handleChange("name", e)}
         />
+        <Input
+          label="Order"
+          type="number"
+          placeholder="Order"
+          description="Higher values appear first"
+          value={product.order?.toString() || "0"}
+          onValueChange={(e) => handleChange("order", parseInt(e) || 0)}
+        />
       </div>
 
       <Textarea

@@ -11,6 +11,7 @@ export type Product = {
   images: string[];
   description: string;
   extra_information: string;
+  order: number;
   notes: string;
   name: string;
   is_active: boolean;

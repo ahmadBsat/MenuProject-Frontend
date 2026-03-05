@@ -11,15 +11,13 @@ const ProductList = ({
   category: string;
   store: StorePopulated;
 }) => {
-  // Filter the products based on the value (search term)
-  // const filteredData = data.filter((product) =>
-  //   product.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive search
-  // );
+  // Sort products by order (highest first)
+  const sortedData = [...data].sort((a, b) => (b.order || 0) - (a.order || 0));
 
   return (
     <div className="flex flex-col divide-y-1 divide-default-300 w-full">
-      {data.length > 0 ? (
-        data.map((product, idx) => (
+      {sortedData.length > 0 ? (
+        sortedData.map((product, idx) => (
           <ProductCard
             key={idx}
             category={category}
