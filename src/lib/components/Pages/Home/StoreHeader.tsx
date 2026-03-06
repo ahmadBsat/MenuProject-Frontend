@@ -30,10 +30,10 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
           <div className="flex items-center gap-2 justify-center">
             {branch.display_cart && (
               <>
-                <StoreCurrency currencies={store.currencies} />
+                <StoreCart store={store} />
               </>
             )}
-             <StoreCart store={store} />
+            <StoreCurrency currencies={store.currencies} />
           </div>
         </div>
       </div>
