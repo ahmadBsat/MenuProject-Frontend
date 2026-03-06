@@ -31,9 +31,9 @@ const StoreHeader = ({ store }: { store: StorePopulated }) => {
             {branch.display_cart && (
               <>
                 <StoreCurrency currencies={store.currencies} />
-                <StoreCart store={store} />
               </>
             )}
+             <StoreCart store={store} />
           </div>
         </div>
       </div>
