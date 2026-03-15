@@ -15,6 +15,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       richColors
       expand
       pauseWhenPageIsHidden
+      position="top-right"
       visibleToasts={4}
       theme={theme as ToasterProps["theme"]}
       className="toaster group"

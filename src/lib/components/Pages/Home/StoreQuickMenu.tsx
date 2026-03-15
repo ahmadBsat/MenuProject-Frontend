@@ -235,7 +235,7 @@ const StoreQuickMenu = ({
                   key={cat._id}
                   onClick={() => handleScroll(cat.name)}
                   style={{ background: palette.primary }}
-                  className=" border-none px-3 py-3 min-h-14 flex items-center text-sm text-white"
+                  className=" border-none px-3 py-3 min-h-14 flex items-center text-sm"
                 >
                   {cat.name}
                 </Button>
@@ -319,7 +319,7 @@ const StoreQuickMenu = ({
                   <div
                     onClick={() => handleScroll(cat.name)}
                     style={{ background: palette.primary }}
-                    className="rounded-xl px-3 py-2 text-sm h-14 flex items-center text-white whitespace-nowrap text-center cursor-pointer"
+                    className="rounded-xl px-3 py-2 text-sm h-14 flex items-center  whitespace-nowrap text-center cursor-pointer"
                   >
                     {cat.name}
                   </div>
@@ -369,10 +369,10 @@ const StoreQuickMenu = ({
           <Button
             key={idx}
             style={{ background: palette.primary }}
-            className="rounded-2xl border-none w-full h-20 text-base text-white"
+            className="rounded-2xl border-none w-full h-20 text-base"
             onClick={() => handleScroll(cat.name)}
           >
-            <span className="font-semibold text-wrap text-center">
+            <span className="font-semibold text-wrap text-center" >
               {cat.name}
             </span>
           </Button>
@@ -396,7 +396,7 @@ const StoreQuickMenu = ({
             <SwiperSlide key={idx}>
               <div
                 style={{ background: palette.primary }}
-                className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base text-white font-medium transition-all px-1"
+                className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base  font-medium transition-all px-1"
                 onClick={() => handleScroll(item.name)}
               >
                 <span className="font-semibold text-wrap text-center">

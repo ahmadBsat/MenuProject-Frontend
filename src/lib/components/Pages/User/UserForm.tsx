@@ -19,10 +19,9 @@ import { UserForm } from "@/lib/types/user/user";
 import { API_USER } from "@/lib/services/user/user_service";
 
 const UsersForm = () => {
-  const [user, setUser] = useState<UserForm>(USER_INITIAL);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [user, setUser] = useState<UserForm>(USER_INITIAL);
 
   const params = useParams();
   const router = useRouter();
