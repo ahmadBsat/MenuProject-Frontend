@@ -35,6 +35,7 @@ export const STORE_INITIAL: StoreForm = {
     checkout_content: "",
     checkout_background: "",
     category_color: "",
+    secondary: "",
     category_background: "",
     clear_button_color: "",
     clear_button_background: "",

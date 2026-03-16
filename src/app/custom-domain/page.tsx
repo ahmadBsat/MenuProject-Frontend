@@ -47,6 +47,7 @@ const Page = () => {
       checkout_background: "",
       category_background: "",
       category_color: "",
+      secondary: "",
       clear_button_color: "",
       clear_button_background: "",
       section_color: "",

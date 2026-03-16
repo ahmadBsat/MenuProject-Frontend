@@ -33,7 +33,7 @@ export type GroupedSection = {
 };
 
 export const group_products = (
-  products: ProductPopulated[]
+  products: ProductPopulated[],
 ): GroupedCategory[] => {
   const categoryMap: Record<string, GroupedCategory> = {};
 
@@ -55,7 +55,7 @@ export const group_products = (
 };
 
 export const group_sections = (
-  products: ProductPopulated[]
+  products: ProductPopulated[],
 ): GroupedSection[] => {
   const sectionMap: Record<string, GroupedSection> = {};
 
@@ -65,7 +65,7 @@ export const group_sections = (
         Array.isArray(category.section) && category.section.length > 0
           ? category.section.filter(
               (
-                s
+                s,
               ): s is {
                 _id: string;
                 name: string;
@@ -73,7 +73,7 @@ export const group_sections = (
                 is_promotive?: boolean;
                 promotive_message?: string;
                 images: string[];
-              } => typeof s === "object" && s !== null
+              } => typeof s === "object" && s !== null,
             )
           : [{ _id: "no-section", name: "All", order: 999, images: [] }];
 
@@ -91,7 +91,7 @@ export const group_sections = (
         }
 
         let categoryGroup = sectionMap[section._id].categories.find(
-          (c) => c._id === category._id
+          (c) => c._id === category._id,
         );
 
         if (!categoryGroup) {
@@ -130,7 +130,7 @@ const StoreQuickMenu = ({
   const categoryGroups = group_products(store.products);
   const sectionGroups = group_sections(store.products);
   const hasSections = sectionGroups.some(
-    (section) => section._id !== "no-section"
+    (section) => section._id !== "no-section",
   );
 
   const offsetMobile = hasSections && store.use_sections ? 225 : 180;
@@ -140,7 +140,7 @@ const StoreQuickMenu = ({
 
   const handleScroll = (targetName: string) => {
     const targetElement = document.querySelector(
-      `[data-scroll-target="${targetName}"]`
+      `[data-scroll-target="${targetName}"]`,
     );
     const container = document.querySelector(".h-screen");
 
@@ -169,7 +169,7 @@ const StoreQuickMenu = ({
     } else {
       setPromotiveSection(undefined);
       setSelectedSectionId(
-        selectedSectionId === section._id ? null : section._id
+        selectedSectionId === section._id ? null : section._id,
       );
     }
   }
@@ -368,11 +368,11 @@ const StoreQuickMenu = ({
         {categoryGroups.map((cat, idx) => (
           <Button
             key={idx}
-            style={{ background: palette.primary }}
+            style={{ background: palette.primary, color: palette.secondary }}
             className="rounded-2xl border-none w-full h-20 text-base"
             onClick={() => handleScroll(cat.name)}
           >
-            <span className="font-semibold text-wrap text-center" >
+            <span className="font-semibold text-wrap text-center">
               {cat.name}
             </span>
           </Button>
@@ -395,11 +395,15 @@ const StoreQuickMenu = ({
           {categoryGroups.map((item, idx) => (
             <SwiperSlide key={idx}>
               <div
-                style={{ background: palette.primary }}
+                style={{
+                  background: palette.primary,
+                  color: palette.secondary,
+                }}
                 className="rounded-2xl border-none text-center flex items-center justify-center w-full h-20 text-base  font-medium transition-all px-1"
                 onClick={() => handleScroll(item.name)}
               >
                 <span className="font-semibold text-wrap text-center">
+                  Ana
                   {item.name}
                 </span>
               </div>

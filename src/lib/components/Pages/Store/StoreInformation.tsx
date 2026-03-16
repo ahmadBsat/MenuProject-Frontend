@@ -496,7 +496,7 @@ const StoreInformation = ({
           >
             <div className="mt-2 grid gap-4 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">
               <div className="flex flex-col gap-2">
-                <p className="text-lg">Buttons Font Color</p>{" "}
+                <p className="text-lg">Buttons Background Color</p>{" "}
                 <HexColorPicker
                   color={data.palette.primary}
                   onChange={(c) => handleChange("palette.primary", c)}
@@ -509,6 +509,23 @@ const StoreInformation = ({
                   value={data.palette.primary}
                   onChange={(e) =>
                     handleChange("palette.primary", e.target.value)
+                  }
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <p className="text-lg">Buttons Font Color</p>{" "}
+                <HexColorPicker
+                  color={data.palette.secondary}
+                  onChange={(c) => handleChange("palette.secondary", c)}
+                />{" "}
+                <Input
+                  label=""
+                  type="text"
+                  placeholder="Buttons Font Color"
+                  className="w-[200px]"
+                  value={data.palette.secondary}
+                  onChange={(e) =>
+                    handleChange("palette.secondary", e.target.value)
                   }
                 />
               </div>

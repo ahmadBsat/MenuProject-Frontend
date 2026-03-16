@@ -42,6 +42,7 @@ const Page = () => {
       border: "",
       color: "",
       primary: "",
+      secondary: "",
       header_background: "",
       header_text_color: "",
       price_color: "",
