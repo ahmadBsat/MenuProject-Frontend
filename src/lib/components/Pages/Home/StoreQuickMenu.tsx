@@ -403,7 +403,6 @@ const StoreQuickMenu = ({
                 onClick={() => handleScroll(item.name)}
               >
                 <span className="font-semibold text-wrap text-center">
-                  Ana
                   {item.name}
                 </span>
               </div>
