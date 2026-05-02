@@ -51,12 +51,11 @@ RUN mkdir -p .next/cache/images && \
 USER node
 
 # Expose the port that the application listens on
+USER node
+
 EXPOSE 3000
 
-# Add Docker health check for Coolify
-# Checks /api/health endpoint every 30s, allows 3 retries, 10s timeout
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -f http://localhost:3000/api/health || exit 1
+  CMD curl -f http://localhost:3000/ || exit 1
 
-# Run the application
-CMD ["node_modules/.bin/next", "start"]
+CMD ["node_modules/.bin/next", "start", "-H", "0.0.0.0", "-p", "3000"]
