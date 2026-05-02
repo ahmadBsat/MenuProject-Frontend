@@ -24,6 +24,10 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "fmc-store.fsn1.your-objectstorage.com",
+      },
+      {
+        protocol: "https",
         hostname: "maps.googleapis.com",
       },
       {
